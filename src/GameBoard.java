@@ -4,11 +4,11 @@ import java.util.List;
 // GB-8-AWS
 public class GameBoard {
     private char[][] board;
-   /* private List<Ship> ships;*/
+    private List<Ship> ships;
 
     public GameBoard(){
         board = new char[10][10];
-    /*    ships = new ArrayList<>();*/
+        ships = new ArrayList<>();
         initializeBoard();
 
     }
