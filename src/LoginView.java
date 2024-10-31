@@ -8,19 +8,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 
 public class LoginView extends Application{//Sara har skapat klassen och kodat in det i
 
     public Stage window;
     private Button clientButton;
     private Button serverButton;
-    //private Label choosePlayer;
     private Scene loginView;
-    private final Text choosePlayer2 = new Text("Choose player");
+    private final Text choosePlayer = new Text("Choose player");
+    private final Text titel = new Text("Battleship");
 
     //@Override
     public void start(Stage primaryStage) throws Exception {
@@ -28,27 +24,11 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         window.setResizable(false);
         window.setTitle("Login View");
 
-        //BorderPane borderPane = new BorderPane();
-        //borderPane.setPadding(new Insets(20,20,20,20));
+        choosePlayer.setFill(Color.WHITE);
+        choosePlayer.setFont(Font.font("Arial", 30));
 
-        //GridPane gridBottom = new GridPane();
-        //gridBottom.setPadding(new Insets(20));
-        //gridBottom.setHgap(50);
-        //gridBottom.setVgap(50);
-
-        //BorderPane borderPane = new BorderPane();
-        //borderPane.setPadding(new Insets(20));
-
-        //GridPane gridPane = new GridPane();
-        //choosePlayer = new Label();
-        //choosePlayer.setText("Choose player");
-
-        choosePlayer2.setFill(Color.WHITE);
-        choosePlayer2.setFont(Font.font("Courier New", 30));
-        //GridPane.setConstraints(choosePlayer2, 15, 10);
-
-
-        //GridPane.setConstraints(choosePlayer, 13,15);
+        titel.setFill(Color.WHITE);
+        titel.setFont(Font.font("Arial",30));
 
 
         clientButton = new Button();
@@ -56,13 +36,13 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         clientButton.setTextFill(Color.BLUE);
         clientButton.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
         clientButton.setFont(Font.font("Courier New", 14));
-        //GridPane.setConstraints(player1,13,11);
+
         serverButton = new Button();
         serverButton.setText("Player 2");
         serverButton.setTextFill(Color.GREEN);
         serverButton.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
         serverButton.setFont(Font.font("Courier New",14));
-        //GridPane.setConstraints(player2, 20,11);
+
 
 /*
         clientButton.setOnAction(e->{
@@ -91,9 +71,12 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 */
 
         AnchorPane anchorPane = new AnchorPane();
-        anchorPane.getChildren().addAll(choosePlayer2, clientButton, serverButton);
-        //anchorPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+        anchorPane.getChildren().addAll(choosePlayer, clientButton, serverButton, titel);
         Image startScreen = new Image(getClass().getResourceAsStream("sprite_0.png"));
+        //Kan inte lägga till någon annan bild alls, då kraschar det....
+        //Image startScreen = new Image(getClass().getResourceAsStream("sprite_1.png"));
+
+
 
 
         anchorPane.setBackground(
@@ -108,22 +91,18 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
                 )
         );
 
-        //gridBottom.getChildren().addAll(player1, player2);
-        //gridCenter.getChildren().addAll(choosePlayer);
-        //borderPane.setCenter(choosePlayer2);
 
 
+        titel.setLayoutX(180);
+        titel.setLayoutY(100);
 
-        //HBox HBottom = new HBox(20);
-        //HBottom.getChildren().addAll(player1, player2);
-        //borderPane.setBottom(HBottom);
-        choosePlayer2.setLayoutX(135);
-        choosePlayer2.setLayoutY(125);
+        choosePlayer.setLayoutX(150);
+        choosePlayer.setLayoutY(140);
 
-        clientButton.setLayoutX(150);
+        clientButton.setLayoutX(160);
         clientButton.setLayoutY(200);
 
-        serverButton.setLayoutX(250);
+        serverButton.setLayoutX(260);
         serverButton.setLayoutY(200);
 
 
