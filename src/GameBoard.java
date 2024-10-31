@@ -93,20 +93,21 @@ public class GameBoard {
 
             }
         }
+
         return isAreaAvailable(row,col,size,horizontal);
     }
     //GB-8-AWS
     private boolean isAreaAvailable(int row, int col, int size, boolean horizontal) {
-        for (int i = -1; i <= size; i++) {
-            for (int j = -1; j <= 1; j++) {
-                int checkRow = horizontal ? row : row + i;
-                int checkCol = horizontal ? col + i : col;
+        for (int i = 0; i < size; i++) {
+            int shipRow = horizontal ? row : row + i;
+            int shipCol = horizontal ? col + i : col;
 
-                checkCol += j;
-
-                if(checkRow >= 0 && checkRow < 10 && checkCol >= 0 && checkCol < 10){
-                    if (board[checkRow][checkCol] != ' '){
-                        return false;
+            for (int r = shipRow - 1; r <= shipRow + 1; r++) {
+                for (int c = shipCol -1; c <= shipCol + 1; c++) {
+                    if (r >= 0 && c < 10 && c >= 0 && r < 10) {
+                        if (board[r][c] != ' ') {
+                            return false;
+                        }
                     }
                 }
             }
