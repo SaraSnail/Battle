@@ -44,31 +44,15 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         serverButton.setFont(Font.font("Courier New",14));
 
 
-/*
+
         clientButton.setOnAction(e->{
-            System.out.println("Creating Socket");
-            try{
-                Socket socketClient = new Socket("localhost", 8886);
-
-                //Communication clientCom = new Communication(socketClient);
-
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-
+            System.out.println("Player 1");
         });
 
         serverButton.setOnAction(e->{
-            System.out.println("Creating serverSocket");
-            try(ServerSocket serverSocket = new ServerSocket(8886)){
-                Socket socketServer = serverSocket.accept();
-                //Communication clientCom = new Communication(socketServer);
-
-            }catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            System.out.println("Player 2");
         });
-*/
+
 
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.getChildren().addAll(choosePlayer, clientButton, serverButton, titel);
