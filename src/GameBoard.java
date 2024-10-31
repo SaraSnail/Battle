@@ -13,7 +13,6 @@ public class GameBoard {
         initializeBoard();
         initializeFleet();
         placeAllShips();
-
     }
            // GB-8-AWS
     private void initializeBoard(){
@@ -23,7 +22,7 @@ public class GameBoard {
             }
         }
     }
-        // GB-8-AWS-P2
+        // GB-8-AWS-
     private void initializeFleet(){
         ships.add( new Ship("Hangarfartyg", 5, false, 0));
         ships.add( new Ship("Slagskepp", 4, false, 0));
@@ -54,7 +53,6 @@ public class GameBoard {
    // GB-8-AWS
     private void placeAllShips(){
         Random random = new Random();
-
         ships.sort((s1, s2) -> Integer.compare(s2.getSize(), s1.getSize()));
 
         for (Ship ship: ships){
@@ -68,36 +66,20 @@ public class GameBoard {
                 int col = random.nextInt(10);
                 boolean horizontal = random.nextBoolean();
 
-
-                if(canPlaceShip(ship,row,col,horizontal)) {
+                if(isAreaAvailable(row,col,ship.getSize(),horizontal)){
                     placeShip(ship, row, col, horizontal);
-                    System.out.println("Placed " + ship.getKind() + " at (" + row + ", " + col + ") " + (horizontal ? "horizontally" : "vertically"));
+                    System.out.println("Placed " + ship.getKind() + " at (" + row + ", " + col + ") " + (horizontal ? "horizontally" : "vertically"));      // använder för kontroll atm kommer försvinna
                     placed = true;
                 }
             }
         }
     }
-        //GB-8-AWS
-    private boolean canPlaceShip(Ship ship, int row, int col, boolean horizontal){
-        int size = ship.getSize();
 
-        if(horizontal){
-            if(col + size > 10) return false;
-            for (int i = 0; i < size; i++) {
-                if(board[row][col + i] != ' ')return false;
-            }
-        }else{
-            if(row + size > 10) return false;
-            for (int i = 0; i < size; i++) {
-                if(board[row + i][col] != ' ')return false;
-
-            }
-        }
-
-        return isAreaAvailable(row,col,size,horizontal);
-    }
     //GB-8-AWS
     private boolean isAreaAvailable(int row, int col, int size, boolean horizontal) {
+        if((horizontal && col + size > 10) || (!horizontal && row + size > 10)){
+            return false;
+        }
         for (int i = 0; i < size; i++) {
             int shipRow = horizontal ? row : row + i;
             int shipCol = horizontal ? col + i : col;
@@ -126,9 +108,6 @@ public class GameBoard {
                 System.out.print(" " + board[i][j]);
             }
             System.out.println();
-
         }
-
     }
-
 }
