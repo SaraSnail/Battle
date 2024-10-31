@@ -1,19 +1,23 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 
 public class LoginView extends Application{//Sara har skapat klassen och kodat in det i
 
     public Stage window;
-    private Button client;
-    private Button server;
+    private Button clientButton;
+    private Button serverButton;
     //private Label choosePlayer;
     private Scene loginView;
     private final Text choosePlayer2 = new Text("Choose player");
@@ -35,36 +39,74 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         //BorderPane borderPane = new BorderPane();
         //borderPane.setPadding(new Insets(20));
 
-        //int columnIndex = 19;
-
         //GridPane gridPane = new GridPane();
         //choosePlayer = new Label();
         //choosePlayer.setText("Choose player");
 
-        choosePlayer2.setFill(Color.BLACK);
-        //choosePlayer2.setStyle("-fx-font: 24 Courier New");
-        choosePlayer2.setFont(Font.font("Courier New", 24));
+        choosePlayer2.setFill(Color.WHITE);
+        choosePlayer2.setFont(Font.font("Courier New", 30));
         //GridPane.setConstraints(choosePlayer2, 15, 10);
 
 
         //GridPane.setConstraints(choosePlayer, 13,15);
 
 
-        client = new Button();
-        client.setText("Player 1");
-        client.setTextFill(Color.BLUE);
-        client.setFont(Font.font("Courier New", 14));
+        clientButton = new Button();
+        clientButton.setText("Player 1");
+        clientButton.setTextFill(Color.BLUE);
+        clientButton.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
+        clientButton.setFont(Font.font("Courier New", 14));
         //GridPane.setConstraints(player1,13,11);
-        server = new Button();
-        server.setText("Player 2");
-        server.setTextFill(Color.GREEN);
-        server.setFont(Font.font("Courier New",14));
+        serverButton = new Button();
+        serverButton.setText("Player 2");
+        serverButton.setTextFill(Color.GREEN);
+        serverButton.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
+        serverButton.setFont(Font.font("Courier New",14));
         //GridPane.setConstraints(player2, 20,11);
 
+/*
+        clientButton.setOnAction(e->{
+            System.out.println("Creating Socket");
+            try{
+                Socket socketClient = new Socket("localhost", 8886);
+
+                //Communication clientCom = new Communication(socketClient);
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        });
+
+        serverButton.setOnAction(e->{
+            System.out.println("Creating serverSocket");
+            try(ServerSocket serverSocket = new ServerSocket(8886)){
+                Socket socketServer = serverSocket.accept();
+                //Communication clientCom = new Communication(socketServer);
+
+            }catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+*/
 
         AnchorPane anchorPane = new AnchorPane();
-        anchorPane.getChildren().addAll(choosePlayer2, client, server);
-        anchorPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+        anchorPane.getChildren().addAll(choosePlayer2, clientButton, serverButton);
+        //anchorPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+        Image startScreen = new Image(getClass().getResourceAsStream("sprite_0.png"));
+
+
+        anchorPane.setBackground(
+                new Background(
+                        new BackgroundImage(
+                                startScreen,
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundPosition.DEFAULT,
+                                new BackgroundSize(500,500, false,false,false,false)
+                        )
+                )
+        );
 
         //gridBottom.getChildren().addAll(player1, player2);
         //gridCenter.getChildren().addAll(choosePlayer);
@@ -75,14 +117,14 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         //HBox HBottom = new HBox(20);
         //HBottom.getChildren().addAll(player1, player2);
         //borderPane.setBottom(HBottom);
-        choosePlayer2.setLayoutX(150);
-        choosePlayer2.setLayoutY(150);
+        choosePlayer2.setLayoutX(135);
+        choosePlayer2.setLayoutY(125);
 
-        client.setLayoutX(150);
-        client.setLayoutY(200);
+        clientButton.setLayoutX(150);
+        clientButton.setLayoutY(200);
 
-        server.setLayoutX(250);
-        server.setLayoutY(200);
+        serverButton.setLayoutX(250);
+        serverButton.setLayoutY(200);
 
 
         loginView = new Scene(anchorPane, 500,500);
