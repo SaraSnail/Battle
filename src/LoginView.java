@@ -18,6 +18,9 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
 
+    private final int windowSizeHeight = 700;
+    private final int windowSizeWidth = 1000;
+
     //@Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
@@ -56,10 +59,10 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.getChildren().addAll(choosePlayer, clientButton, serverButton, titel);
-        Image startScreen = new Image(getClass().getResourceAsStream("sprite_0.png"));
+        //Image startScreen = new Image(getClass().getResourceAsStream("sprite_0.png"));
         //Kan inte lägga till någon annan bild alls, då kraschar det....
         //Image startScreen = new Image(getClass().getResourceAsStream("sprite_1.png"));
-
+        Image startScreen = new Image(getClass().getResourceAsStream("ship.jpg"));
 
 
 
@@ -70,7 +73,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundPosition.DEFAULT,
-                                new BackgroundSize(500,500, false,false,false,false)
+                                new BackgroundSize(windowSizeWidth,windowSizeHeight, false,false,false,false)
                         )
                 )
         );
@@ -80,8 +83,8 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         titel.setLayoutX(180);
         titel.setLayoutY(100);
 
-        choosePlayer.setLayoutX(150);
-        choosePlayer.setLayoutY(140);
+        choosePlayer.setLayoutX(155);
+        choosePlayer.setLayoutY(150);
 
         clientButton.setLayoutX(160);
         clientButton.setLayoutY(200);
@@ -90,7 +93,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         serverButton.setLayoutY(200);
 
 
-        loginView = new Scene(anchorPane, 500,500);
+        loginView = new Scene(anchorPane, windowSizeWidth,windowSizeHeight);
         window.setScene(loginView);
         window.show();
 
