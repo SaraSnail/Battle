@@ -11,6 +11,7 @@ public class Game {
     när game-objekt skapas.
     */
 
+
     //GB-23-AA //GB-25-AA
     private CommunicationHandler player;
     private boolean isClient;
