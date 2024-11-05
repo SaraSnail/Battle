@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,19 +35,28 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
 
-    private final int windowSizeHeight = 700;
-    private final int windowSizeWidth = 1000;
+    private final int windowSizeHeight = 1080;
+    private final int windowSizeWidth = 1920;
+
+    private final int column = 25;
+
 
     public void start(Stage primaryStage) throws Exception {
         //Sätter primaryStage i window, gör att fönstrets storlek inte går att ändra och anger titel
         window = primaryStage;
+
         window.setResizable(false);
         window.setTitle("Login View");
 
+//----------------------------------------------------------------------------------------------------------------------
+
         //Lägger in en bild från resources
         Image startScreen = new Image(getClass().getResourceAsStream("ship.jpg"));
+        //Credit "Dorian Mongel" på unsplash
 
-        //Ändrar utseende på texten för titel och choose player
+//----------------------------------------------------------------------------------------------------------------------
+        //Ändrar utseende labels, buttons och textfeilds
+        //Start
         titel.setFill(Color.WHITE);
         titel.setFont(Font.font("Arial",30));
         choosePlayer.setFill(Color.WHITE);
@@ -66,21 +76,10 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         serverButton.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
         serverButton.setFont(Font.font("Courier New",14));
 
-        //Knappar tillbaka
-        back1 = new Button();
-        back1.setText("Back");
-        back1.setTextFill(Color.BLACK);
-        back1.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
-        back1.setFont(Font.font("Arial", 14));
-
-        back2 = new Button();
-        back2.setText("Back");
-        back2.setTextFill(Color.BLACK);
-        back2.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
-        back2.setFont(Font.font("Arial", 14));
-
+//----------------------------------------------------------------------------------------------------------------------
 
         //Skapat textField där användaren kan skriva in host och port
+        //Client sida
         host = new TextField();
         host.setPromptText("host");
         host.setPrefSize(100,20);
@@ -89,21 +88,36 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         port1.setPromptText("port");
         port1.setPrefSize(100,20);
 
-        port2 = new TextField();
-        port2.setPromptText("port");
-        port2.setPrefSize(100,20);
-
-        //submit för att ta emot text från användaren
         submit1 = new Button("Submit");
         submit1.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
         submit1.setFont(Font.font("Arial", 14));
+
+        back1 = new Button();
+        back1.setText("Back");
+        back1.setTextFill(Color.BLACK);
+        back1.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
+        back1.setFont(Font.font("Arial", 14));
+
+//----------------------------------------------------------------------------------------------------------------------
+
+        //Server sida
+        port2 = new TextField();
+        port2.setPromptText("port");
+        port2.setPrefSize(100,20);
 
         submit2 = new Button("Submit");
         submit2.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
         submit2.setFont(Font.font("Arial", 14));
 
+        back2 = new Button();
+        back2.setText("Back");
+        back2.setTextFill(Color.BLACK);
+        back2.setBackground(new Background(new BackgroundFill(Color.BEIGE, null, null)));
+        back2.setFont(Font.font("Arial", 14));
 
-        //Action för knapparna player1 och player2
+
+//----------------------------------------------------------------------------------------------------------------------
+        //Action för knapparna
         clientButton.setOnAction(e->{
             System.out.println("Player 1");
             //Lägg in att användaren får skriva in localhost och port
@@ -111,6 +125,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
             //New Scene
             whichPlayer(1);
             window.setScene(scene1);
+            window.setFullScreen(true);
         });
 
         serverButton.setOnAction(e->{
@@ -118,6 +133,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
             //Lägg in att användaren får skriva in port
             whichPlayer(2);
             window.setScene(scene2);
+            window.setFullScreen(true);
         });
 
         //Submit knapprar som kollar av i metoden isInt om port är ett nummer
@@ -136,25 +152,38 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
         submit2.setOnAction(e->{
             System.out.println("Sumbit");
-            isInt(port2, port2.getText());
+            if(isInt(port2, port2.getText())){
+                //launch(game);
+            } else if (!isInt(port2, port2.getText())) {
+                System.out.println("Can't play at that port");
+            }
         });
 
         //Tillbaka till start skärmen
         back1.setOnAction(e->{
             window.setScene(loginView);
+            window.setFullScreen(true);
         });
         back2.setOnAction(e->{
             window.setScene(loginView);
+            window.setFullScreen(true);
         });
 
 
         //Förhindrar att fönstret stängs utan möjlighet att gå tillbaka
+        Button close = new Button("Close");
+        close.setOnAction(e->{
+            e.consume();
+            closeProgram();
+        });
+
         window.setOnCloseRequest(e -> {
             e.consume();
             closeProgram();
         });
 
-
+//----------------------------------------------------------------------------------------------------------------------
+//Scener
         //Scene 1
         GridPane gridPane1 = new GridPane();
         gridPane1.setPadding(new Insets(10));
@@ -165,13 +194,14 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         player1Label.setText("Enter host and port");
         player1Label.setTextFill(Color.WHITE);
         player1Label.setFont(Font.font("Arial", 20));
+
         gridPane1.getChildren().addAll(player1Label,host, port1, submit1, back1);
 
-        GridPane.setConstraints(player1Label, 12, 9);
-        GridPane.setConstraints(host, 12, 11);
-        GridPane.setConstraints(port1, 12, 13);
-        GridPane.setConstraints(submit1, 12, 15);
-        GridPane.setConstraints(back1, 12,17);
+        GridPane.setConstraints(player1Label, column, 15);
+        GridPane.setConstraints(host, column, 17);
+        GridPane.setConstraints(port1, column, 19);
+        GridPane.setConstraints(submit1, column, 21);
+        GridPane.setConstraints(back1, column,23);
 
 
         gridPane1.setBackground(
@@ -198,12 +228,13 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         player2Label.setText("Enter port");
         player2Label.setTextFill(Color.WHITE);
         player2Label.setFont(Font.font("Arial", 20));
+
         gridPane2.getChildren().addAll(player2Label, port2, submit2, back2);
 
-        GridPane.setConstraints(player2Label, 12, 9);
-        GridPane.setConstraints(port2, 12, 11);
-        GridPane.setConstraints(submit2, 12, 13);
-        GridPane.setConstraints(back2, 12, 15);
+        GridPane.setConstraints(player2Label, column, 15);
+        GridPane.setConstraints(port2, column, 17);
+        GridPane.setConstraints(submit2, column, 19);
+        GridPane.setConstraints(back2, column, 21);
 
         gridPane2.setBackground(
                 new Background(
@@ -219,26 +250,21 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         scene2 = new Scene(gridPane2, windowSizeWidth, windowSizeHeight);
 
 
-        //Koordinater för placeringar av titel, choosePlayer, client-, serverButton
-        //width 1000, height 700
-        //x = width, y = height
-        titel.setLayoutX(windowSizeWidth/5.5);
-        titel.setLayoutY(windowSizeHeight/7.0);
+        //Start scene
+        GridPane start = new GridPane();
+        start.setPadding(new Insets(10));
+        start.setVgap(8);
+        start.setHgap(10);
 
-        choosePlayer.setLayoutX(windowSizeWidth/6.4);
-        choosePlayer.setLayoutY(windowSizeHeight/5.0);
+        start.getChildren().addAll(titel, choosePlayer, clientButton, serverButton, close);
 
-        clientButton.setLayoutX(windowSizeWidth/7.0);
-        clientButton.setLayoutY(windowSizeHeight/4.0);
+        GridPane.setConstraints(titel, column,13);
+        GridPane.setConstraints(choosePlayer, column,15);
+        GridPane.setConstraints(clientButton, column, 17);
+        GridPane.setConstraints(serverButton, column, 19);
+        GridPane.setConstraints(close, column, 21);
 
-        serverButton.setLayoutX(windowSizeWidth/3.7);
-        serverButton.setLayoutY(windowSizeHeight/4.0);
-
-        //Sätter bakgrund på start scenen
-        AnchorPane anchorPane = new AnchorPane();
-        anchorPane.getChildren().addAll(choosePlayer, clientButton, serverButton, titel);
-
-        anchorPane.setBackground(
+        start.setBackground(
                 new Background(
                         new BackgroundImage(
                                 startScreen,
@@ -249,15 +275,23 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
                         )
                 )
         );
+        loginView = new Scene(start, windowSizeWidth,windowSizeHeight);
+
+//----------------------------------------------------------------------------------------------------------------------
 
 
-        loginView = new Scene(anchorPane, windowSizeWidth,windowSizeHeight);
+        window.setFullScreen(true);
+        window.setFullScreenExitHint("Exit code is Ctrl+B");
+        window.setFullScreenExitKeyCombination(KeyCombination.valueOf("Ctrl+B"));
+
         window.setScene(loginView);
         window.show();
 
 
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+//Metoder
     private void closeProgram(){
         Boolean answer = ConfirmBox.display("Exit","Sure you want to exit?");
         if (answer) {
