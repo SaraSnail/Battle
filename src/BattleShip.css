@@ -1,0 +1,46 @@
+.root{
+    -fx-font-size: 14;
+    -fx-font-family: "Comic Sans MS";
+}
+.titel-big{
+    -fx-font-size: 80;
+    -fx-font-family: Broadway;
+    -fx-fill: linear-gradient(#407076,#2c2a4a);
+}
+.titel-small{
+    -fx-font-size: 19;
+    -fx-font-family: Broadway;
+    -fx-fill: #ffffff;
+}
+
+.button-green{
+    -fx-font-size: 14;
+    -fx-font-family: Broadway;
+    -fx-background-color: #1b998b;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 6;
+}
+.button-blue{
+    -fx-font-size: 14;
+    -fx-font-family: Broadway;
+    -fx-background-color: #2c2a4a;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 6;
+}
+.button-standard{
+    -fx-font-size: 14;
+    -fx-font-family: Broadway;
+    -fx-background-color: #bc6c25;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 6;
+}
+.button-red{
+    -fx-font-size: 14;
+    -fx-font-family: Broadway;
+    -fx-background-color: #bc4749;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 6;
+}
+.background-blue{
+    -fx-background-color: linear-gradient(to bottom, #0077b6, #03045e);
+}

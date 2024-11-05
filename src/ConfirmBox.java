@@ -19,13 +19,16 @@ public class ConfirmBox {
         window.setTitle(titel.toUpperCase());
         window.setMinWidth(400);
         window.setMinHeight(300);
+
         Label label = new Label();
         label.setText(message);
-        label.setTextFill(Color.BLACK);
+        label.getStyleClass().add("titel-small");
 
 
         Button yesButton = new Button("Yes");
+        yesButton.getStyleClass().add("button-green");
         Button noButton = new Button("No");
+        noButton.getStyleClass().add("button-red");
 
         yesButton.setOnAction(e->{
             answer = true;
@@ -40,8 +43,11 @@ public class ConfirmBox {
         VBox layout = new VBox(10);
         layout.getChildren().addAll(label,yesButton, noButton);
         layout.setAlignment(Pos.CENTER);
-        layout.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+
+        layout.getStyleClass().add("background-blue");
+
         Scene scene = new Scene(layout);
+        scene.getStylesheets().add("BattleShip.css");
         window.setScene(scene);
         window.showAndWait();
 
