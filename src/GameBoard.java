@@ -50,6 +50,9 @@ public class GameBoard {
             }
         }
     }
+
+                // logik för att lösa om inte alla skepp är inlagda.
+
    // GB-8-AWS
     private void placeAllShips(){
         Random random = new Random();
@@ -71,6 +74,15 @@ public class GameBoard {
                     System.out.println("Placed " + ship.getKind() + " at (" + row + ", " + col + ") " + (horizontal ? "horizontally" : "vertically"));      // använder för kontroll atm kommer försvinna
                     placed = true;
                 }
+            }
+            // om alla inte placeras så kör vi programmet igen.
+            if(!placed){
+                System.out.println("-----------------------------------------------------------");
+                System.out.println("Misslyckades med att placera alla skeppen, försöker igen.");
+                System.out.println("-----------------------------------------------------------");
+                initializeBoard();
+                placeAllShips();
+                return;
             }
         }
     }
