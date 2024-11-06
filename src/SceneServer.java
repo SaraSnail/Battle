@@ -1,7 +1,6 @@
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -17,10 +16,6 @@ public class SceneServer {
     private static Button submit2;
     private static Button back2;
 
-    private static final int windowSizeHeight = 1080;
-    private static final int windowSizeWidth = 1920;
-
-    private static final int COLUMN = 25;
 
     //Sara
     public static Scene getScene(Stage window) {
@@ -42,7 +37,9 @@ public class SceneServer {
         submit2.setOnAction(e->{
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
-                //launch(game);
+
+                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+
             } else if (!login.isInt(port2, port2.getText())) {
                 System.out.println("Can't play at that port");
             }
@@ -67,10 +64,10 @@ public class SceneServer {
 
         gridPane2.getChildren().addAll(player2Label, port2, submit2, back2);
 
-        GridPane.setConstraints(player2Label, COLUMN, 15);
-        GridPane.setConstraints(port2, COLUMN, 17);
-        GridPane.setConstraints(submit2, COLUMN, 19);
-        GridPane.setConstraints(back2, COLUMN, 21);
+        GridPane.setConstraints(player2Label, login.COLUMN, 15);
+        GridPane.setConstraints(port2, login.COLUMN, 17);
+        GridPane.setConstraints(submit2, login.COLUMN, 19);
+        GridPane.setConstraints(back2, login.COLUMN, 21);
 
         gridPane2.setBackground(
                 new Background(
@@ -79,11 +76,11 @@ public class SceneServer {
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundPosition.DEFAULT,
-                                new BackgroundSize(windowSizeWidth,windowSizeHeight, false,false,false,false)
+                                new BackgroundSize(login.windowSizeWidth,login.windowSizeHeight, false,false,false,false)
                         )
                 )
         );
-        scene = new Scene(gridPane2, windowSizeWidth, windowSizeHeight);
+        scene = new Scene(gridPane2, login.windowSizeWidth, login.windowSizeHeight);
         scene.getStylesheets().add("BattleShip.css");
 
         return scene;

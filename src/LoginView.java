@@ -23,10 +23,10 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
 
-    private final int windowSizeHeight = 1080;
-    private final int windowSizeWidth = 1920;
+    public final int windowSizeHeight = 1080;
+    public final int windowSizeWidth = 1920;
 
-    private final int column = 25;
+    public final int COLUMN = 25;
 
     @Override//Sara
     public void start(Stage primaryStage) throws Exception {
@@ -102,12 +102,12 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
         start.getChildren().addAll(titel, choosePlayer, clientButton, serverButton, close);
 
-        GridPane.setConstraints(titel, column,13);
-        GridPane.setConstraints(choosePlayer, column,15);
+        GridPane.setConstraints(titel, COLUMN,13);
+        GridPane.setConstraints(choosePlayer, COLUMN,15);
 
-        GridPane.setConstraints(clientButton, column, 17);
-        GridPane.setConstraints(serverButton, column, 19);
-        GridPane.setConstraints(close, column, 25);
+        GridPane.setConstraints(clientButton, COLUMN, 17);
+        GridPane.setConstraints(serverButton, COLUMN, 19);
+        GridPane.setConstraints(close, COLUMN, 25);
 
         start.setBackground(
                 new Background(
@@ -165,12 +165,13 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         }
     }
     //Sara
-    public void whichPlayer(int player){
+    public String whichPlayer(int player){
         if(player == 1){
-            String player1 = "Player 1";
+            return "Player 1";
         } else if (player == 2) {
-            String player2 = "Player 2";
+            return "Player 2";
         }
+        return null;
     }
 
    

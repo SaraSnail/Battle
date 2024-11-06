@@ -1,7 +1,6 @@
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -9,8 +8,6 @@ import javafx.stage.Stage;
 //Sara
 public class SceneClient {
     public static Scene scene;
-    private static final int windowSizeHeight = 1080;
-    private static final int windowSizeWidth = 1920;
 
     private static TextField host;
     private static TextField port1;
@@ -19,7 +16,6 @@ public class SceneClient {
 
     private static Text player1Label;
 
-    private static final int COLUMN = 25;
 
     //Sara
     public static Scene getScene(Stage primaryStage) {
@@ -46,13 +42,17 @@ public class SceneClient {
         submit1.setOnAction(e->{
             //Sätta detta i en loop?
             System.out.println("Submit");
-            host.getText();
+
             if(login.isInt(port1, port1.getText())){
                 //launch(game);
+                //Skriv in name, host och port
+                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()));
 
             }else if (!login.isInt(port1, port1.getText())){
                 System.out.println("Can't play at that port");
             }
+
+
 
         });
 
@@ -76,11 +76,11 @@ public class SceneClient {
 
         gridPane1.getChildren().addAll(player1Label,host, port1, submit1, back1);
 
-        GridPane.setConstraints(player1Label, COLUMN, 15);
-        GridPane.setConstraints(host, COLUMN, 17);
-        GridPane.setConstraints(port1, COLUMN, 19);
-        GridPane.setConstraints(submit1, COLUMN, 21);
-        GridPane.setConstraints(back1, COLUMN,23);
+        GridPane.setConstraints(player1Label, login.COLUMN, 15);
+        GridPane.setConstraints(host, login.COLUMN, 17);
+        GridPane.setConstraints(port1, login.COLUMN, 19);
+        GridPane.setConstraints(submit1, login.COLUMN, 21);
+        GridPane.setConstraints(back1, login.COLUMN,23);
 
 
         gridPane1.setBackground(
@@ -90,12 +90,12 @@ public class SceneClient {
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundPosition.DEFAULT,
-                                new BackgroundSize(windowSizeWidth,windowSizeHeight, false,false,false,false)
+                                new BackgroundSize(login.windowSizeWidth,login.windowSizeHeight, false,false,false,false)
                         )
                 )
         );
 
-        scene = new Scene(gridPane1, windowSizeWidth, windowSizeHeight);
+        scene = new Scene(gridPane1, login.windowSizeWidth, login.windowSizeHeight);
         scene.getStylesheets().add("BattleShip.css");
 
 
