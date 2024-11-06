@@ -14,54 +14,41 @@ public class Game {
 
     //GB-23-AA //GB-25-AA
     private CommunicationHandler player;
-    private boolean isClient;
+    private boolean isClientTurn;
     private GameBoard gameBoard;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient) {
         this.player = player;
-        this.isClient = isClient;
+        this.isClientTurn = isClient;
     }
 
     //GB-13-AA //GB-25-AA
     public void startGame() {
 
         this.gameBoard = new GameBoard();
-
-        try {
-            Thread.sleep(5000);  //Väntar 5 sek innan spelet drar igång
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (!isClient) {
-            System.out.println("Waiting for client to connect and make it's fist move");
-        }
-
+        waitForStart();
         new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
 
     }
-
+    //GB-25-AA
     private void gameLoop(){
         boolean gameOver = false;
-        boolean fistMove = true;
+        boolean firstMove = true;
         while (!gameOver) {
-            if (isClient) {
-                if (fistMove){
-                    System.out.println("Klientens första drag"); // tas bort senare
-
-                    fistMove = false;
+            if (isClientTurn) {
+                if (firstMove){
+                    makeMove(player);
+                    firstMove = false;
                 } else {
-                    System.out.println("Klientens tur"); //Tas bort senare
-                    // makeMove(client);                //Klient skickar sitt drag
-                    // receiveMove(server);             //Server tar emot drag
-                    isClient = false;
+                    makeMove(player);
+                    getShotOutcome();
+                    //updateMaps();
+                    isClientTurn = false;
                 }
             } else {
-                System.out.println("Servens tur: "); //Tas bort senare
-                //makeMove(server);                 //Server skickar sitt drag
-                //receiveMove(client);              //klient tar emot sitt drag
-                isClient = true;
+                receiveMove(player);
+                isClientTurn = true;
             }
             try {
                 Thread.sleep(3000);          //Väntar 3 sekunder mellan varje drag
@@ -74,24 +61,46 @@ public class Game {
         System.out.println("Game over!");
     }
 
+    private void waitForStart(){
+        try {
+            Thread.sleep(5000);  //Väntar 5 sek innan spelet drar igång
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
+            System.out.println("Waiting for client to connect and make it's fist move");
+        }
+    }
+
+   private void makeMove(CommunicationHandler player){
+        // Metod för att slumpa fram skott - retunera kordinater
+        // Metod för att skicka skottet(kordinaterna) till motståndare
+    }
 
 
-       /* private void makeMove(CommunicationHandler player){
-            // Metod för att slumpa fram skott - retunera kordinater
-            // Metod för att uppdatera egen karta med skott
-            // Metod för att skicka skottet till motståndare
-        }*/
+    private void receiveMove(CommunicationHandler player) {
+        // Metod för att ta emot skott/koordinater
+        // Metod för att titta på egen kartan om träff/träff & sänkt skepp/träff & game over/miss
+        setShotOutcome();
+        //updateMaps(coordinates);
+    }
 
-/*        private String reciveMove(CommunicationHandler player) {
-            // Metod för att ta emot skott/kordenater
-            // Metod för att titta på egen kartan om träff/träff & sänkt skepp/träff & game over/miss
-            // Metod för att uppdatera karta med skott
-            // String coordinates = Metod för att skicka tillbaka om träff/träff & sänkt skepp/träff & game over/miss
-        return; //coordinates;
-        }*/
+    private void setShotOutcome(){ //denna metod bör kanske i BoardGame
+
+    }
+
+    private void getShotOutcome(){ //denna metod bör kanske i BoardGame
+
+    }
+
+    private void updateMaps(String coordinates){
+        //Uppdatera GabeBoard-metod(coordinates)
+        updateGameView(coordinates);
+    }
 
     //GB-25-AA
-    private void updateGameView(String move){
+    private void updateGameView(String coordinates){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
             //Uppdatera GUI/GameView
         });
@@ -109,7 +118,7 @@ public class Game {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //"protokoll" för att se om spelet är slut
+        //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
         return gameOver;
     }
 }
