@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
+//Sara
 public class SceneClient {
     public static Scene scene;
     private static final int windowSizeHeight = 1080;
@@ -18,13 +18,11 @@ public class SceneClient {
 
     private static Label player1Label;
 
-    private static final int column = 25;
+    private static final int COLUMN = 25;
 
-
-
-    public static Scene getScene(Stage window, Scene startScene) {
+    //Sara
+    public static Scene getScene(Stage primaryStage) {
         LoginView login = new LoginView();
-
 
         //Skapat textField där användaren kan skriva in host och port
         //Client sida
@@ -58,7 +56,8 @@ public class SceneClient {
         });
 
         back1.setOnAction(e->{
-            window.setScene(startScene);//Den går inte tillbaka alls och fönstret blir fritt
+           goBack(login, primaryStage);
+            //primaryStage.setScene(startScene);//Den går inte tillbaka alls och fönstret blir fritt
 
         });
 
@@ -76,11 +75,11 @@ public class SceneClient {
 
         gridPane1.getChildren().addAll(player1Label,host, port1, submit1, back1);
 
-        GridPane.setConstraints(player1Label, column, 15);
-        GridPane.setConstraints(host, column, 17);
-        GridPane.setConstraints(port1, column, 19);
-        GridPane.setConstraints(submit1, column, 21);
-        GridPane.setConstraints(back1, column,23);
+        GridPane.setConstraints(player1Label, COLUMN, 15);
+        GridPane.setConstraints(host, COLUMN, 17);
+        GridPane.setConstraints(port1, COLUMN, 19);
+        GridPane.setConstraints(submit1, COLUMN, 21);
+        GridPane.setConstraints(back1, COLUMN,23);
 
 
         gridPane1.setBackground(
@@ -100,5 +99,16 @@ public class SceneClient {
 
 
         return scene;
+    }
+
+    //Sara
+    private static void goBack(LoginView login, Stage window) {
+        try{
+            login.start(window);
+            window.setFullScreen(true);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
     }
 }

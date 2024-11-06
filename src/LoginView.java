@@ -9,7 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
+//Sara
 public class LoginView extends Application{//Sara har skapat klassen och kodat in det i
 
     public Stage window;
@@ -18,6 +18,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
     public Scene loginView;
 
     public Image startBackground = new Image(getClass().getResourceAsStream("ship.jpg"));
+    //Credit "Dorian Mongel" på unsplash
 
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
@@ -27,7 +28,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
     private final int column = 25;
 
-    @Override
+    @Override//Sara
     public void start(Stage primaryStage) throws Exception {
         //Sätter primaryStage i window, gör att fönstrets storlek inte går att ändra och anger titel
         window = primaryStage;
@@ -35,16 +36,10 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         window.setResizable(false);
         window.setTitle("Login View");
 
-        //Klass för scene1, reunerrar scenenr
-        Scene sceneClient = SceneClient.getScene(window, loginView);
-        Scene sceneServer = SceneServer.getScene(window, loginView);
+        //Klasser för sceneClient och sceneServer
+        Scene sceneClient = SceneClient.getScene(window);
+        Scene sceneServer = SceneServer.getScene(window);
 
-
-//----------------------------------------------------------------------------------------------------------------------
-
-        //Lägger in en bild från resources
-        //Image startScreen = new Image(getClass().getResourceAsStream("ship.jpg"));
-        //Credit "Dorian Mongel" på unsplash
 
 //----------------------------------------------------------------------------------------------------------------------
         //Ändrar utseende labels, buttons och textfeilds
@@ -144,13 +139,14 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
 //----------------------------------------------------------------------------------------------------------------------
 //Metoder
+    //Sara
     private void closeProgram(){
         Boolean answer = ConfirmBox.display("Exit","Sure you want to exit?");
         if (answer) {
             window.close();
         }
     }
-
+    //Sara
     public boolean isInt(TextField input, String message){
         try{
             int port = Integer.parseInt(input.getText());
@@ -168,7 +164,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
         }
     }
-
+    //Sara
     public void whichPlayer(int player){
         if(player == 1){
             String player1 = "Player 1";

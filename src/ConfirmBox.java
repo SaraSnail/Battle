@@ -2,16 +2,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+//Sara
 public class ConfirmBox {
     public static boolean answer;
 
+    //Sara
     public static boolean display(String titel, String message){
         Stage window = new Stage();
 

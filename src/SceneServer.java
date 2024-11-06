@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
+//Sara
 public class SceneServer {
 
     public static Scene scene;
@@ -17,9 +17,10 @@ public class SceneServer {
     private static final int windowSizeHeight = 1080;
     private static final int windowSizeWidth = 1920;
 
-    private static final int column = 25;
+    private static final int COLUMN = 25;
 
-    public static Scene getScene(Stage window, Scene startScene) {
+    //Sara
+    public static Scene getScene(Stage window) {
         LoginView login = new LoginView();
 
         port2 = new TextField();
@@ -47,7 +48,8 @@ public class SceneServer {
         //Tillbaka till start skärmen
 
         back2.setOnAction(e->{
-            window.setScene(startScene);
+            goBack(login, window);
+            //window.setScene(startScene);
         });
 
         //Scene 2
@@ -62,10 +64,10 @@ public class SceneServer {
 
         gridPane2.getChildren().addAll(player2Label, port2, submit2, back2);
 
-        GridPane.setConstraints(player2Label, column, 15);
-        GridPane.setConstraints(port2, column, 17);
-        GridPane.setConstraints(submit2, column, 19);
-        GridPane.setConstraints(back2, column, 21);
+        GridPane.setConstraints(player2Label, COLUMN, 15);
+        GridPane.setConstraints(port2, COLUMN, 17);
+        GridPane.setConstraints(submit2, COLUMN, 19);
+        GridPane.setConstraints(back2, COLUMN, 21);
 
         gridPane2.setBackground(
                 new Background(
@@ -82,5 +84,16 @@ public class SceneServer {
         scene.getStylesheets().add("BattleShip.css");
 
         return scene;
+    }
+    //Sara
+    private static void goBack(LoginView login, Stage window) {
+
+        try{
+            login.start(window);
+            window.setFullScreen(true);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
     }
 }
