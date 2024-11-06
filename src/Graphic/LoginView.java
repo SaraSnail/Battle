@@ -1,3 +1,5 @@
+package Graphic;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -9,15 +11,15 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-//Sara
-public class LoginView extends Application{//Sara har skapat klassen och kodat in det i
+//GB-15-SA
+public class LoginView extends Application{
 
     public Stage window;
+    public Scene loginView;
     private Button clientButton;
     private Button serverButton;
-    public Scene loginView;
 
-    public Image startBackground = new Image(getClass().getResourceAsStream("ship.jpg"));
+    public Image startBackground = new Image("file:recourses/images/ship.jpg");
     //Credit "Dorian Mongel" på unsplash
 
     private final Text choosePlayer = new Text("Choose player");
@@ -28,11 +30,10 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
     public final int COLUMN = 25;
 
-    @Override//Sara
+    @Override//GB-15-SA
     public void start(Stage primaryStage) throws Exception {
         //Sätter primaryStage i window, gör att fönstrets storlek inte går att ändra och anger titel
         window = primaryStage;
-
         window.setResizable(false);
         window.setTitle("Login View");
 
@@ -42,7 +43,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
 
 //----------------------------------------------------------------------------------------------------------------------
-        //Ändrar utseende labels, buttons och textfeilds
+        //Ändrar utseende text, buttons
         //Start
         titel.getStyleClass().add("titel-big");
         choosePlayer.getStyleClass().add("titel-small");
@@ -94,14 +95,17 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         });
 
 
-        //Start scene
+        //Start-scene
+        //Skapar gridpane
         GridPane start = new GridPane();
         start.setPadding(new Insets(10));
         start.setVgap(8);
         start.setHgap(10);
 
+        //Lägger till all Nodes på gridpane "start"
         start.getChildren().addAll(titel, choosePlayer, clientButton, serverButton, close);
 
+        //Sätter platser för alla Nodes
         GridPane.setConstraints(titel, COLUMN,13);
         GridPane.setConstraints(choosePlayer, COLUMN,15);
 
@@ -109,6 +113,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         GridPane.setConstraints(serverButton, COLUMN, 19);
         GridPane.setConstraints(close, COLUMN, 25);
 
+        //Backgrund för gridpaneen
         start.setBackground(
                 new Background(
                         new BackgroundImage(
@@ -120,15 +125,16 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
                         )
                 )
         );
+
+        //Skapar scenen med gridpane och fönsterstorlek
         loginView = new Scene(start, windowSizeWidth,windowSizeHeight);
+        //Stil på scenen
+        loginView.getStylesheets().add("Graphic/BattleShip.css");
 
 //----------------------------------------------------------------------------------------------------------------------
-
-        loginView.getStylesheets().add("BattleShip.css");
-
+        //Ställer in så att fönstret är helskärm och inte går att ändra på
         window.setFullScreen(true);
         window.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-
 
 
         window.setScene(loginView);
@@ -139,19 +145,22 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
 //----------------------------------------------------------------------------------------------------------------------
 //Metoder
-    //Sara
+    //GB-15-SA
+    //Den skickar tillbaka om användaren verkligen vill stäga programmet eller inte, anger svar i ConfirmBox klassen
     private void closeProgram(){
         Boolean answer = ConfirmBox.display("Exit","Sure you want to exit?");
+
         if (answer) {
             window.close();
         }
     }
-    //Sara
+    //GB-15-SA
+    //Kollar om porten användaren skrivir in är en Int och om den är över 1024 vilket är portar som redan används
     public boolean isInt(TextField input, String message){
         try{
             int port = Integer.parseInt(input.getText());
             if(port<1024){
-                System.out.println("Port not avalible");
+                System.out.println("Port not available");
                 return false;
             } else {
                 System.out.println("Port is: " + message);
@@ -164,7 +173,8 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
 
         }
     }
-    //Sara
+    //GB-15-SA
+    //Skickar med vilken spelare det är
     public String whichPlayer(int player){
         if(player == 1){
             return "Player 1";

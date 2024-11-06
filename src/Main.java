@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import Graphic.LoginView;
 import javafx.application.Application;
 
 public class Main {
@@ -8,9 +8,9 @@ public class Main {
         gameBoard.displayBoard();
 
 
-        //Sara
+        //GB-15-SA
         try{
-            Application.launch(LoginView.class, args);
+            Application.launch(Graphic.LoginView.class, args);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
