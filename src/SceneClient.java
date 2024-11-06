@@ -4,6 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 //Sara
 public class SceneClient {
@@ -16,7 +17,7 @@ public class SceneClient {
     private static Button submit1;
     private static Button back1;
 
-    private static Label player1Label;
+    private static Text player1Label;
 
     private static final int COLUMN = 25;
 
@@ -69,7 +70,7 @@ public class SceneClient {
         gridPane1.setVgap(8);
         gridPane1.setHgap(10);
 
-        player1Label = new Label();
+        player1Label = new Text();
         player1Label.setText("Enter host and port");
         player1Label.getStyleClass().add("titel-small");
 

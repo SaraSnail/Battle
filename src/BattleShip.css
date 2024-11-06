@@ -5,7 +5,7 @@
 .titel-big{
     -fx-font-size: 80;
     -fx-font-family: Broadway;
-    -fx-fill: linear-gradient(#407076,#2c2a4a);
+    -fx-fill: #2c2a4a;
 }
 .titel-small{
     -fx-font-size: 19;
@@ -30,14 +30,14 @@
 .button-standard{
     -fx-font-size: 14;
     -fx-font-family: Broadway;
-    -fx-background-color: #bc6c25;
+    -fx-background-color: #BB7E5D;
     -fx-text-fill: #ffffff;
     -fx-border-radius: 6;
 }
-.button-red{
+.button-brown{
     -fx-font-size: 14;
     -fx-font-family: Broadway;
-    -fx-background-color: #bc4749;
+    -fx-background-color: #BB7E5D;
     -fx-text-fill: #ffffff;
     -fx-border-radius: 6;
 }

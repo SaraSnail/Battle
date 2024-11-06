@@ -58,7 +58,7 @@ public class LoginView extends Application{//Sara har skapat klassen och kodat i
         serverButton.getStyleClass().add("button-green");
 
         Button close = new Button("Close");
-        close.getStyleClass().add("button-red");
+        close.getStyleClass().add("button-brown");
 
 
 //----------------------------------------------------------------------------------------------------------------------

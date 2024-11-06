@@ -4,11 +4,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 //Sara
 public class SceneServer {
 
     public static Scene scene;
+
+    private static Text player2Label;
 
     private static TextField port2;
     private static Button submit2;
@@ -58,7 +61,7 @@ public class SceneServer {
         gridPane2.setVgap(8);
         gridPane2.setHgap(10);
 
-        Label player2Label = new Label();
+        player2Label = new Text();
         player2Label.setText("Enter port");
         player2Label.getStyleClass().add("titel-small");
 

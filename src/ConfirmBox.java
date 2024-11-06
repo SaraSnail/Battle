@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -19,15 +20,15 @@ public class ConfirmBox {
         window.setMinWidth(400);
         window.setMinHeight(300);
 
-        Label label = new Label();
-        label.setText(message);
-        label.getStyleClass().add("titel-small");
+        Text enter = new Text();
+        enter.setText(message);
+        enter.getStyleClass().add("titel-small");
 
 
         Button yesButton = new Button("Yes");
-        yesButton.getStyleClass().add("button-green");
+        yesButton.getStyleClass().add("button-brown");
         Button noButton = new Button("No");
-        noButton.getStyleClass().add("button-red");
+        noButton.getStyleClass().add("button-brown");
 
         yesButton.setOnAction(e->{
             answer = true;
@@ -40,7 +41,7 @@ public class ConfirmBox {
         });
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(label,yesButton, noButton);
+        layout.getChildren().addAll(enter,yesButton, noButton);
         layout.setAlignment(Pos.CENTER);
 
         layout.getStyleClass().add("background-blue");
