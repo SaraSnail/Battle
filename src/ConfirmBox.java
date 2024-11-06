@@ -25,9 +25,9 @@ public class ConfirmBox {
 
 
         Button yesButton = new Button("Yes");
-        yesButton.getStyleClass().add("button-brown");
+        yesButton.getStyleClass().add("button-standard");
         Button noButton = new Button("No");
-        noButton.getStyleClass().add("button-brown");
+        noButton.getStyleClass().add("button-standard");
 
         yesButton.setOnAction(e->{
             answer = true;

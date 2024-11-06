@@ -34,13 +34,6 @@
     -fx-text-fill: #ffffff;
     -fx-border-radius: 6;
 }
-.button-brown{
-    -fx-font-size: 14;
-    -fx-font-family: Broadway;
-    -fx-background-color: #BB7E5D;
-    -fx-text-fill: #ffffff;
-    -fx-border-radius: 6;
-}
 .background-blue{
     -fx-background-color: linear-gradient(to bottom, #0077b6, #03045e);
 }
