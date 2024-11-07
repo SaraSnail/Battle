@@ -7,12 +7,14 @@ public class GameBoard {
     private char[][] board;
    private List<Ship> ships;
     // GB-8-AWS
-    public GameBoard(){
+    public GameBoard(boolean myBoard){
         board = new char[10][10];
         ships = new ArrayList<>();
         initializeBoard();
-        initializeFleet();
-        placeAllShips();
+        if (myBoard) {
+            initializeFleet();
+            placeAllShips();
+        }
     }
            // GB-8-AWS
     private void initializeBoard(){

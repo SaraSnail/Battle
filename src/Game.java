@@ -12,10 +12,11 @@ public class Game {
     */
 
 
-    //GB-23-AA //GB-25-AA
+    //GB-23-AA //GB-25-AA //GB-25-AA
     private CommunicationHandler player;
     private boolean isClientTurn;
-    private GameBoard gameBoard;
+    private GameBoard myGameBoard;
+    private GameBoard enemyGameBoard;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient) {
@@ -23,10 +24,12 @@ public class Game {
         this.isClientTurn = isClient;
     }
 
-    //GB-13-AA //GB-25-AA
+    //GB-13-AA //GB-25-AA //GB-30-AA
     public void startGame() {
 
-        this.gameBoard = new GameBoard();
+        myGameBoard = new GameBoard(true);
+        enemyGameBoard = new GameBoard(false);
+
         waitForStart();
         new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
 
@@ -47,7 +50,7 @@ public class Game {
                     isClientTurn = false;
                 }
             } else {
-                receiveMove(player);
+                //receiveMove(player);
                 isClientTurn = true;
             }
             try {
@@ -120,5 +123,37 @@ public class Game {
         }
         //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
         return gameOver;
+    }
+
+    public CommunicationHandler getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(CommunicationHandler player) {
+        this.player = player;
+    }
+
+    public boolean isClientTurn() {
+        return isClientTurn;
+    }
+
+    public void setClientTurn(boolean clientTurn) {
+        isClientTurn = clientTurn;
+    }
+
+    public GameBoard getMyGameBoard() {
+        return myGameBoard;
+    }
+
+    public void setMyGameBoard(GameBoard myGameBoard) {
+        this.myGameBoard = myGameBoard;
+    }
+
+    public GameBoard getEnemyGameBoard() {
+        return enemyGameBoard;
+    }
+
+    public void setEnemyGameBoard(GameBoard enemyGameBoard) {
+        this.enemyGameBoard = enemyGameBoard;
     }
 }
