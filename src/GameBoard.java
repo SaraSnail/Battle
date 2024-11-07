@@ -51,7 +51,7 @@ public class GameBoard {
         }
     }
 
-                // logik för att lösa om inte alla skepp är inlagda.
+
 
    // GB-8-AWS
     private void placeAllShips(){
@@ -71,7 +71,9 @@ public class GameBoard {
 
                 if(isAreaAvailable(row,col,ship.getSize(),horizontal)){
                     placeShip(ship, row, col, horizontal);
+
                     System.out.println("Placed " + ship.getKind() + " at (" + row + ", " + col + ") " + (horizontal ? "horizontally" : "vertically"));      // använder för kontroll atm kommer försvinna
+                    System.out.println("attempts: " + attempts);                                                                                            // använder för kontroll atm kommer försvinna
                     placed = true;
                 }
             }
@@ -121,5 +123,9 @@ public class GameBoard {
             }
             System.out.println();
         }
+    }
+    // AWS
+    public char[][] getBoard() {
+        return board;
     }
 }
