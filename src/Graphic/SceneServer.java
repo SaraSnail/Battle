@@ -41,8 +41,6 @@ public class SceneServer {
         submit2.setOnAction(e->{
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
-                System.out.println("k");
-
                 /*
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 Game game = new Game(communicationHandler, false);
