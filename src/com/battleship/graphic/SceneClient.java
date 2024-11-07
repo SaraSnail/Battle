@@ -1,5 +1,7 @@
-package Graphic;
+package com.battleship.graphic;
 
+import com.battleship.CommunicationHandler;
+import com.battleship.Game;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -46,10 +48,10 @@ public class SceneClient {
 
             if(login.isInt(port1, port1.getText())){
                 //Denna CommunicationHandler ska ha vilken spelare det är, host och port
-                /*
+
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()));
                 Game game = new Game(communicationHandler, true);
-                game.startGame();*/
+                game.startGame();
 
             }else if (!login.isInt(port1, port1.getText())){
                 System.out.println("Can't play at that port");
@@ -103,7 +105,7 @@ public class SceneClient {
 
         //Skapar scenen och ger den Stylesheet
         scene = new Scene(gridPane1, login.windowSizeWidth, login.windowSizeHeight);
-        scene.getStylesheets().add("Graphic/BattleShip.css");
+        scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
 
         return scene;

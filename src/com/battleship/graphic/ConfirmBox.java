@@ -1,4 +1,4 @@
-package Graphic;
+package com.battleship.graphic;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -59,7 +59,7 @@ public class ConfirmBox {
         //Skapar scenen
         Scene scene = new Scene(layout);
         //Style på scenen
-        scene.getStylesheets().add("Graphic/BattleShip.css");
+        scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
         //Sätter denna scenen på Stage window
         window.setScene(scene);

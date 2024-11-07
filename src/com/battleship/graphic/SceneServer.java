@@ -1,5 +1,7 @@
-package Graphic;
+package com.battleship.graphic;
 
+import com.battleship.CommunicationHandler;
+import com.battleship.Game;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -41,10 +43,11 @@ public class SceneServer {
         submit2.setOnAction(e->{
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
-                /*
+
+
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 Game game = new Game(communicationHandler, false);
-                game.startGame();*/
+                game.startGame();
 
 
             } else if (!login.isInt(port2, port2.getText())) {
@@ -92,7 +95,7 @@ public class SceneServer {
         );
         //Skapar scenen och ger den Stylesheet
         scene = new Scene(gridPane2, login.windowSizeWidth, login.windowSizeHeight);
-        scene.getStylesheets().add("Graphic/BattleShip.css");
+        scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
         return scene;
     }

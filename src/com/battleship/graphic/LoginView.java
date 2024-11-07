@@ -1,4 +1,4 @@
-package Graphic;
+package com.battleship.graphic;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -129,7 +129,7 @@ public class LoginView extends Application{
         //Skapar scenen med gridpane och fönsterstorlek
         loginView = new Scene(start, windowSizeWidth,windowSizeHeight);
         //Stil på scenen
-        loginView.getStylesheets().add("Graphic/BattleShip.css");
+        loginView.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
 //----------------------------------------------------------------------------------------------------------------------
         //Ställer in så att fönstret är helskärm och inte går att ändra på

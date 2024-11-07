@@ -1,4 +1,4 @@
-// BG-9 CF
+package com.battleship;// BG-9 CF
 
 public class Ship {
 

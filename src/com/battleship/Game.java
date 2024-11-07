@@ -1,3 +1,5 @@
+package com.battleship;
+
 import javafx.application.Platform;
 
 import java.io.IOException;
