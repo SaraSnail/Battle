@@ -14,6 +14,12 @@ public class CommunicationHandler {
     private BufferedReader reader;
     private PrintWriter writer;
 
+    //GB-26-SA
+    //Tom constructor för testning
+    public CommunicationHandler(){
+
+    }
+
 
     //BG-10-AA
     public CommunicationHandler(String name, String host, int port) {

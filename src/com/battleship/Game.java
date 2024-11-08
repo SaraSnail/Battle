@@ -4,6 +4,8 @@ import javafx.application.Platform;
 
 import java.io.IOException;
 
+import static com.battleship.Coordinates.getValueAtCoordinates;
+
 public class Game {
 
     /*
@@ -20,6 +22,11 @@ public class Game {
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
 
+    //GB-26-SA
+    private char valueAtCoordinates;
+    private int row;
+    private int col;
+
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient) {
         this.player = player;
@@ -28,6 +35,7 @@ public class Game {
 
     //GB-13-AA //GB-25-AA //GB-30-AA
     public void startGame() {
+
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
@@ -52,12 +60,15 @@ public class Game {
                 } else {
                     gameOver = checkIfGameOver();
                     makeMove(player);
+                    getShotOutcome();
+                    //updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
                     isClientTurn = false;
                 }
             } else {
                 gameOver = checkIfGameOver();
                 makeMove(player);
                 isClientTurn = true;
+                //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
             }
             waitThreeSec();
         }
@@ -88,10 +99,55 @@ public class Game {
 
     }
 
-    private void updateMaps(String coordinates){
+    //GB-26-SA, ändrar för test till public
+    public void updateMaps(String message, GameBoard gameBoard){
+
+        //Får in typ "i shot 4b" i message
+
+        //[0.0][0.1]
+        //[1.0][1.1]
+
+        // i = x-led = row = letter
+        // j = y-led = column = number
+
+        try{
+            //Skickar in tex "4b" och spelplanen
+            //Har en klass som i dens metod som tar koordinaterna från meddelandet och får fram till row och column som går att få ut vart man är eller värdet på koordinaten
+            Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
+            //Coordinates constructor ska innehålla row och col, delar message och får tillbaka row och column
+
+            //Sätter in row och column från klassen i variablerna row och column
+            row = coords.getRow();
+            col = coords.getCol();
+
+            //Samlar värdet på koordinaten på spelplanen
+            valueAtCoordinates = gameBoard.getBoard()[row][col];
+            //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
+
+        } catch (Exception e) {
+            System.out.println("Error: "+e.getMessage());
+        }
+
+        //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
+        //Kan ta bort sout senare, finns där för att se att allting fungerar
+        if(valueAtCoordinates == 'S'){
+            System.out.println("A ship");
+            gameBoard.getBoard()[col][row] = '0';
+
+        } else if (valueAtCoordinates == ' ') {
+            System.out.println("No ship");
+            gameBoard.getBoard()[col][row] = 'X';
+
+        }
+        gameBoard.displayBoard();
+
+
+        //GB-25-AA
         //Uppdatera GabeBoard-metod(coordinates)
-        updateGameView(coordinates);
+        //updateGameView(coordinates);
+
     }
+
 
     //GB-25-AA
     private void updateGameView(String coordinates){ // denna metod kanske bör ligga i GameBoard
