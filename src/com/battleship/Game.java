@@ -1,7 +1,6 @@
 package com.battleship;
 
 import javafx.application.Platform;
-import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,11 +41,16 @@ public class Game {
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
-        waitForStart();
-        new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+        waitThreeSec();
 
+        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
+            System.out.println("Waiting for client to connect and make it's fist move");
+        }
+
+        new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
     }
-    //GB-25-AA
+
+    //GB-25-AA //GB-31-AA
     private void gameLoop(){
         boolean gameOver = false;
         boolean firstMove = true;
@@ -56,51 +60,38 @@ public class Game {
                     makeMove(player);
                     firstMove = false;
                 } else {
+                    gameOver = checkIfGameOver();
                     makeMove(player);
                     getShotOutcome();
                     updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
                     isClientTurn = false;
                 }
             } else {
-                //receiveMove(player);
+                gameOver = checkIfGameOver();
+                makeMove(player);
                 isClientTurn = true;
                 updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
             }
-            try {
-                Thread.sleep(3000);          //Väntar 3 sekunder mellan varje drag
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            gameOver = checkIfGameOver();
+            waitThreeSec();
         }
         System.out.println("Game over!");
     }
 
-    private void waitForStart(){
+    //GB-31-AA
+    private void waitThreeSec(){
         try {
-            Thread.sleep(5000);  //Väntar 5 sek innan spelet drar igång
+            Thread.sleep(3000);  //Väntar 3 sek
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
-            System.out.println("Waiting for client to connect and make it's fist move");
-        }
     }
 
+    //GB-19-AA
    private void makeMove(CommunicationHandler player){
         // Metod för att slumpa fram skott - retunera kordinater
         // Metod för att skicka skottet(kordinaterna) till motståndare
     }
 
-
-    private void receiveMove(CommunicationHandler player) {
-        // Metod för att ta emot skott/koordinater
-        // Metod för att titta på egen kartan om träff/träff & sänkt skepp/träff & game over/miss
-        setShotOutcome();
-        //updateMaps(coordinates);
-    }
 
     private void setShotOutcome(){ //denna metod bör kanske i BoardGame
 
