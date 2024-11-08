@@ -126,7 +126,9 @@ public class Game {
             //Har en klass som i dens metod gör om koordinaterna till row och column och skickar tillbaka den separat
             Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
             //Coordinates constructor ska innehålla row och col, delar coordinates och får tillbaka row och column
-            row = coords.getRow();//Sätter in row och column från klassen i variablerna row och column
+
+            //Sätter in row och column från klassen i variablerna row och column
+            row = coords.getRow();
             col = coords.getCol();
 
             //Samlar värdet på koordinaten på spelplanen
