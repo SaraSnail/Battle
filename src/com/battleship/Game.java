@@ -47,12 +47,10 @@ public class Game {
                     firstMove = false;
                 } else {
                     makeMove(player);
-                    getShotOutcome();
-                    //updateMaps();
                     isClientTurn = false;
                 }
             } else {
-                //receiveMove(player);
+                makeMove(player);
                 isClientTurn = true;
             }
             try {
