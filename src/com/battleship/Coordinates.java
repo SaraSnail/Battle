@@ -3,31 +3,18 @@ package com.battleship;
 import java.util.ArrayList;
 import java.util.List;
 
+//GB-26-SA
 public class Coordinates {
     private int row;
     private int col;
 
+    //GB-26-SA
     public Coordinates(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-
+    //GB-26-SA
     public static Coordinates getValueAtCoordinates(String message, char[][] gameBoard) {
         List<Character> letters = new ArrayList<Character>();
         //Kanske ska ha lower case?
@@ -47,12 +34,10 @@ public class Coordinates {
 
         //Tar sen storleken på arrayen -1, för arrayen är storlek 3 men sista array elementet är på plats 2
         String coordinates = splitMessage[splitMessage.length - 1];
-        //System.out.println("Koordinater: " + coordinates);
-
 
         int boardSize = 10;// Spelplanen är 10x10, börjar på 0 och A och går till 9 och J
 
-        //Tar char på plats 0 och sätter det som row. I ex 4b är 4:ran row
+        //Tar char på plats 0 och sätter det som row. I ex 4b är 4:ran row, gör om det från char till ett siffer tal
         int row  = Character.getNumericValue(coordinates.charAt(0));
 
         //Tar char på plats 1 som ska bli column. I ex 4b är b column. Gör om till LowerCase så det stämmer med listan
@@ -70,4 +55,25 @@ public class Coordinates {
         //Skickar tillbaka det som finns på koordinaterna
         return new Coordinates(row, col);
     }
+
+    //GB-26-SA
+    public int getRow() {
+        return row;
+    }
+
+    //GB-26-SA
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    //GB-26-SA
+    public int getCol() {
+        return col;
+    }
+
+    //GB-26-SA
+    public void setCol(int col) {
+        this.col = col;
+    }
+
 }

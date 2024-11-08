@@ -112,9 +112,9 @@ public class Game {
 
         try{
             //Skickar in tex "4b" och spelplanen
-            //Har en klass som i dens metod gör om koordinaterna till row och column och skickar tillbaka den separat
+            //Har en klass som i dens metod som tar koordinaterna från meddelandet och får fram till row och column som går att få ut vart man är eller värdet på koordinaten
             Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
-            //Coordinates constructor ska innehålla row och col, delar coordinates och får tillbaka row och column
+            //Coordinates constructor ska innehålla row och col, delar message och får tillbaka row och column
 
             //Sätter in row och column från klassen i variablerna row och column
             row = coords.getRow();
@@ -146,10 +146,7 @@ public class Game {
         //Uppdatera GabeBoard-metod(coordinates)
         //updateGameView(coordinates);
 
-
     }
-
-
 
 
     //GB-25-AA
