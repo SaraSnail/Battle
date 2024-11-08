@@ -1,10 +1,13 @@
 package com.battleship;
 
 import javafx.application.Platform;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.battleship.Coordinates.getValueAtCoordinates;
 
 public class Game {
 
@@ -21,6 +24,11 @@ public class Game {
     private boolean isClientTurn;
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
+
+    //GB-26-SA
+    private char valueAtCoordinates;
+    private int row;
+    private int col;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient) {
@@ -102,76 +110,56 @@ public class Game {
 
     }
 
-    //GB-26-SA
-    private String updateMaps(String coordinates, GameBoard gameBoard){
-        //Får string på typ 4b
-        List<Character>letters = new ArrayList<Character>();
-        letters.add('A');//0
-        letters.add('B');//1
-        letters.add('C');//2
-        letters.add('D');//3
-        letters.add('E');//4
-        letters.add('F');//5
-        letters.add('G');//6
-        letters.add('H');//7
-        letters.add('I');//8
-        letters.add('J');//9
+    //GB-26-SA, ändrar för test till public
+    public void updateMaps(String message, GameBoard gameBoard){
 
-        int boardSize = 10;
-
-        char number = coordinates.charAt(0);
-        char[] numberArray = new char[]{number};
-
-        //Bokstav till char Array
-        char letter = coordinates.toUpperCase().charAt(1);
-        //Gör om bokstaven till en siffra mellan 0-9, bokstav A till J
-        int letterToInt = 0;
-        for (int i = 0; i < letters.size(); i++) {
-            if(letter == letters.get(i)){
-                letterToInt = i;
-            }
-        }
-        char[] letterToChar = new char [] {(char)letterToInt};
-
-
-        //Vet inte om detta fungerar
-        //Lägger in talen i en 2d array
-        char shot [][] = {numberArray, letterToChar};
+        //Får in typ "i shot 4b" i message
 
         //[0.0][0.1]
         //[1.0][1.1]
 
-        // i = x-led
-        // j = y-led
+        // i = x-led = row = letter
+        // j = y-led = column = number
 
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                if (gameBoard.getBoard()[i] == shot[i]) {
-                    if (gameBoard.getBoard()[j] == shot[j]) {
+        try{
+            //Skickar in tex "4b" och spelplanen
+            //Har en klass som i dens metod gör om koordinaterna till row och column och skickar tillbaka den separat
+            Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
+            //Coordinates constructor ska innehålla row och col, delar coordinates och får tillbaka row och column
+            row = coords.getRow();//Sätter in row och column från klassen i variablerna row och column
+            col = coords.getCol();
 
-                        if (gameBoard.getBoard()[i][j] == 'S') {
-                            System.out.println("hit");
-                            return "h";
-                        } else if (gameBoard.getBoard()[i][j] == ' ') {
-                            System.out.println("miss");
-                            return "m";
-                        }
-                    }
-                }
-                System.out.println("out of bounds");
-            }
+            //Samlar värdet på koordinaten på spelplanen
+            valueAtCoordinates = gameBoard.getBoard()[row][col];
+            //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
+
+        } catch (Exception e) {
+            System.out.println("Error: "+e.getMessage());
         }
 
+        //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
+        //Kan ta bort sout senare, finns där för att se att allting fungerar
+        if(valueAtCoordinates == 'S'){
+            System.out.println("A ship");
+            gameBoard.getBoard()[col][row] = '0';
 
+        } else if (valueAtCoordinates == ' ') {
+            System.out.println("No ship");
+            gameBoard.getBoard()[col][row] = 'X';
+
+        }
+        gameBoard.displayBoard();
 
 
         //GB-25-AA
         //Uppdatera GabeBoard-metod(coordinates)
-        updateGameView(coordinates);
+        //updateGameView(coordinates);
 
-        //GB-26-SA
-        return null;
+
     }
+
+
+
 
     //GB-25-AA
     private void updateGameView(String coordinates){ // denna metod kanske bör ligga i GameBoard
