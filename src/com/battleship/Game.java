@@ -33,6 +33,7 @@ public class Game {
         enemyGameBoard = new GameBoard(false);
 
         waitForStart();
+
         new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
 
     }
@@ -43,16 +44,14 @@ public class Game {
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
-                    makeMove(player);
+                    makeMove(player, true);
                     firstMove = false;
                 } else {
-                    makeMove(player);
-                    getShotOutcome();
-                    //updateMaps();
+                    makeMove(player, false);
                     isClientTurn = false;
                 }
             } else {
-                //receiveMove(player);
+                makeMove(player, false);
                 isClientTurn = true;
             }
             try {
@@ -78,18 +77,45 @@ public class Game {
         }
     }
 
-   private void makeMove(CommunicationHandler player){
-        // Metod för att slumpa fram skott - retunera kordinater
-        // Metod för att skicka skottet(kordinaterna) till motståndare
+    //GB-19-AA
+
+   private void makeMove(CommunicationHandler player, boolean firstMove){
+        String myMove = "shot ";
+        String myShotCoordinates = "";
+        String enemyMove = "";
+        if (firstMove){
+            myShotCoordinates =//metod som genererarSkot och retunerar kordinater.
+            myMove = "i " + myMove + myShotCoordinates;
+            System.out.println("Sträng till motståndaren: " + myMove);
+            player.getWriter().println(myMove);
+        } else {
+            try {
+                enemyMove = player.getReader().readLine();
+            } catch (IOException e) {
+                System.out.println("Could not receive move from other player");
+                throw new RuntimeException(e);
+            }
+            //Här bör kollas om det är game over!
+            //enemyGameBoard.setShotOutcome(enemyMove.charAt(0)); //ShotOutcome finns ej ännu
+            //update map
+            String enemyShotCoordinates = enemyMove.substring(enemyMove.length() -2);
+            char hitOrMiss = 'X';  //yGameboard.evaluateShotFromEnemy() - eller vad metoden nu kan tänkas få för namn
+            myShotCoordinates = ""; //metod som genererarSkot och retunerar kordinater.
+            myMove = hitOrMiss + " " + myMove + myShotCoordinates;
+            updateMaps(enemyShotCoordinates, hitOrMiss, myShotCoordinates); //Updatera GUI alt båda kartorna? Hur tänker vi?
+            System.out.println("Sträng till motståndaren: " + myMove);
+            player.getWriter().println(myMove);
+        }
     }
 
 
-    private void receiveMove(CommunicationHandler player) {
+    //Recive move ska inte användas då endast en sträng ska skickas. Eventuellt kan man använda den inom MakeMove();
+/*    private void receiveMove(CommunicationHandler player) {
         // Metod för att ta emot skott/koordinater
         // Metod för att titta på egen kartan om träff/träff & sänkt skepp/träff & game over/miss
         setShotOutcome();
         //updateMaps(coordinates);
-    }
+    }*/
 
     private void setShotOutcome(){ //denna metod bör kanske i BoardGame
 
@@ -99,17 +125,17 @@ public class Game {
 
     }
 
-    private void updateMaps(String coordinates){
+/*    private void updateMaps(String coordinates){
         //Uppdatera GabeBoard-metod(coordinates)
         updateGameView(coordinates);
-    }
+    }*/
 
-    //GB-25-AA
+/*    //GB-25-AA
     private void updateGameView(String coordinates){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
             //Uppdatera GUI/GameView
         });
-    }
+    }*/
 
     //GB-25-AA
     private boolean checkIfGameOver(){
