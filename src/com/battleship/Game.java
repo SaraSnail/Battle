@@ -3,8 +3,6 @@ package com.battleship;
 import javafx.application.Platform;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
@@ -63,14 +61,14 @@ public class Game {
                     gameOver = checkIfGameOver();
                     makeMove(player);
                     getShotOutcome();
-                    updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
+                    //updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
                     isClientTurn = false;
                 }
             } else {
                 gameOver = checkIfGameOver();
                 makeMove(player);
                 isClientTurn = true;
-                updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
+                //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
             }
             waitThreeSec();
         }
