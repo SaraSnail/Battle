@@ -107,7 +107,7 @@ public class SceneServer {
         try{
             //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
             login.start(window);
-            window.setFullScreen(true);
+            //window.setFullScreen(true);
 
         }catch (Exception exception){
             exception.printStackTrace();
