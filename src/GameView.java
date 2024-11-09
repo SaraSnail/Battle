@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -9,41 +10,48 @@ import java.awt.*;
 
 //aws
 public class GameView extends Application {
-    private GameBoard gameBoard;
+    private GameBoard myGameBoard;
+    private GameBoard enemyGameBoard;
 
     //aws
     @Override
     public void start(Stage primaryStage) throws Exception {
-        gameBoard = new GameBoard();
+        myGameBoard = new GameBoard();
+        enemyGameBoard= new GameBoard();
 
-        AnchorPane board = new AnchorPane();        // Spelplanen
+        AnchorPane myGame = new AnchorPane();        // Min Spelplan
+        battleGroundFX(myGame, myGameBoard, false);
+        myGame.setLayoutX(50);
+        myGame.setLayoutY(50);
 
+        Label myLabel = new Label("Min Spelplan");
+        myLabel.setLayoutX(50);
+        myLabel.setLayoutY(25);
 
+        AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
+        battleGroundFX(enemyGame, enemyGameBoard, true);
+        enemyGame.setLayoutX(600);
+        enemyGame.setLayoutY(50);
 
+        Label enemyLabel = new Label("Motståndarens Spelplan");
+        enemyLabel.setLayoutX(600);
+        enemyLabel.setLayoutY(25);
 
+        AnchorPane stack = new AnchorPane();
+        stack.getChildren().addAll(myLabel,enemyLabel,myGame,enemyGame);
 
-        battleGroundFX(board);
-        board.setLayoutX(50);
-        board.setLayoutY(50);
-
-        Rectangle test = new Rectangle(50,50);
-        test.setFill(Color.HOTPINK);
-        test.setStroke(Color.BLACK);
-        test.setLayoutX(-50);
-        test.setLayoutY(-50);
-        board.getChildren().add(test);
-
-        Scene scene = new Scene(board, 600, 600);
+        Scene scene = new Scene(stack, 1600, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
 
         primaryStage.show();
-        gameBoard.displayBoard();
+        myGameBoard.displayBoard();
+        enemyGameBoard.displayBoard();
     }
 
     //aws
-    public void battleGroundFX(AnchorPane board) {
-        char[][] gameBoardFX = gameBoard.getBoard();
+    public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
+        char[][] gameBoardFX = board.getBoard();
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -51,17 +59,18 @@ public class GameView extends Application {
                 cell.setX(c * 50);
                 cell.setY(r * 50);
 
-                if(gameBoardFX[r][c] == 'S') {
-                    cell.setFill(Color.DARKGRAY);
-                }else{
+                if(isEnemy){
                     cell.setFill(Color.BLUE);
+                }else{
+                    if(gameBoardFX[r][c] == 'S') {
+                        cell.setFill(Color.DARKGRAY);
+                    }else{
+                        cell.setFill(Color.BLUE);
+                    }
                 }
                 cell.setStroke(Color.BLACK);
-                board.getChildren().add(cell);
+                boardPane.getChildren().add(cell);
             }
-
         }
     }
-
-
 }
