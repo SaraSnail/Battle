@@ -1,7 +1,11 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,32 +25,40 @@ public class GameView extends Application {
         AnchorPane myGame = new AnchorPane();        // Min Spelplan
         AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
 
-        Label myLabel = new Label("Min Spelplan");
+        Label myLabel = new Label("My gameboard");
+        myLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: BLACK;");
         myLabel.setLayoutX(50);
-        myLabel.setLayoutY(25);
+        myLabel.setLayoutY(5);
 
-        Label enemyLabel = new Label("Motståndarens Spelplan");
+
+        Label enemyLabel = new Label("Enemy gameboard");
+        enemyLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: BLACK;");
         enemyLabel.setLayoutX(600);
-        enemyLabel.setLayoutY(25);
+        enemyLabel.setLayoutY(5);
 
-        Label coordinateLabel = new Label();
-        coordinateLabel.setStyle("/*-fx-background-color: transparant;*/ -fx-border-color: black;");
-        coordinateLabel.setVisible(false);
-
-
-
-        battleGroundFX(myGame, myGameBoard, false, coordinateLabel);
-        battleGroundFX(enemyGame, enemyGameBoard, true,coordinateLabel );
+        battleGroundFX(myGame, myGameBoard, false);
+        battleGroundFX(enemyGame, enemyGameBoard, true );
 
         myGame.setLayoutX(50);
         myGame.setLayoutY(50);
         enemyGame.setLayoutX(600);
         enemyGame.setLayoutY(50);
 
-        AnchorPane stack = new AnchorPane();
-        stack.getChildren().addAll(myLabel,enemyLabel,myGame,enemyGame,coordinateLabel);
+        Image backgroundOcean = new Image("file:src/ocean.jpg");        //Akira Hojo
+        BackgroundImage background = new BackgroundImage(
+                backgroundOcean,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(100, 100, true, true, true, true));
 
-        Scene scene = new Scene(stack, 1600, 600);
+
+
+        AnchorPane stack = new AnchorPane();
+        stack.getChildren().addAll(myLabel,enemyLabel,myGame,enemyGame);
+        stack.setBackground(new Background(background));
+
+        Scene scene = new Scene(stack, 1150, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
 
@@ -56,10 +68,8 @@ public class GameView extends Application {
     }
 
     //aws
-    public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy, Label cooerdinateLabel) {
+    public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
-
-        /*Tooltip tooltip = new Tooltip();*/
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -68,38 +78,16 @@ public class GameView extends Application {
                 cell.setY(r * 50);
 
                 if(isEnemy){
-                    cell.setFill(Color.BLUE);
+                    cell.setFill(Color.TRANSPARENT);
                 }else{
                     if(gameBoardFX[r][c] == 'S') {
                         cell.setFill(Color.DARKGRAY);
                     }else{
-                        cell.setFill(Color.BLUE);
+                        cell.setFill(Color.TRANSPARENT);
                     }
                 }
                 cell.setStroke(Color.BLACK);
-
-                String coordinate = String.valueOf((char) ('A' + r)) +(c + 1);
-                cell.setOnMouseEntered(e -> {
-                    double centerX = cell.getX() + cell.getWidth() / 2;
-                    double centerY = cell.getY() + cell.getHeight() / 2;
-
-                    cooerdinateLabel.setText(coordinate);
-                    cooerdinateLabel.setVisible(true);
-
-                    /*double width = cooerdinateLabel.getWidth();
-                    double height = cooerdinateLabel.getHeight();*/
-
-                    cooerdinateLabel.setTranslateX(centerX - cooerdinateLabel.getWidth() / 2);
-                    cooerdinateLabel.setTranslateY(centerY - cooerdinateLabel.getHeight() / 2);
-
-
-                });
-
-                cell.setOnMouseExited(e -> {cooerdinateLabel.setVisible(false);});
-
-
-
-
+                cell.setStrokeWidth(5);
 
                 boardPane.getChildren().add(cell);
             }
