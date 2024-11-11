@@ -34,7 +34,7 @@ public class LoginView extends Application{
     public void start(Stage primaryStage) throws Exception {
         //Sätter primaryStage i window, gör att fönstrets storlek inte går att ändra och anger titel
         window = primaryStage;
-        window.setResizable(false);
+        //window.setResizable(false);
         window.setTitle("Login View");
 
         //Klasser för sceneClient och sceneServer
@@ -71,7 +71,7 @@ public class LoginView extends Application{
             //New Scene
             whichPlayer(1);
             window.setScene(sceneClient);
-            window.setFullScreen(true);
+            //window.setFullScreen(true);
         });
 
         serverButton.setOnAction(e->{
@@ -79,7 +79,7 @@ public class LoginView extends Application{
             //Lägg in att användaren får skriva in port
             whichPlayer(2);
             window.setScene(sceneServer);
-            window.setFullScreen(true);
+            //window.setFullScreen(true);
         });
 
 
@@ -133,8 +133,8 @@ public class LoginView extends Application{
 
 //----------------------------------------------------------------------------------------------------------------------
         //Ställer in så att fönstret är helskärm och inte går att ändra på
-        window.setFullScreen(true);
-        window.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        //window.setFullScreen(true);
+        //window.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
 
         window.setScene(loginView);
