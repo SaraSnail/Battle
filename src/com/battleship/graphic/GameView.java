@@ -75,10 +75,10 @@ public class GameView extends Application {
     public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
 
-        Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");
-        Image battleShipImage = new Image("file:recourses/images/Slagskepp.png");
-        Image cruiserImage = new Image("file:recourses/images/Kryssare.png");
-        Image subImage = new Image("file:recourses/images/Ubåt.png");
+        Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");       //PNGEGG
+        Image battleShipImage = new Image("file:recourses/images/Slagskepp.png");       //PNGEGG
+        Image cruiserImage = new Image("file:recourses/images/Kryssare.png");           //PNGEGG
+        Image subImage = new Image("file:recourses/images/Ubåt.png");                   //PNGEGG
 
 
 
@@ -89,12 +89,16 @@ public class GameView extends Application {
                 cell.setY(r * 50);
 
                 if(isEnemy){
-                    cell.setFill(Color.TRANSPARENT);
+                    cell.setFill(Color.TRANSPARENT);            // Enemy Havet
                 }else{
-                    if(gameBoardFX[r][c] == 'S') {
+                    if(gameBoardFX[r][c] == 'S') {              //Skepp
                         cell.setFill(Color.DARKGRAY);
-                    }else{
-                        cell.setFill(Color.TRANSPARENT);
+                    } else if (gameBoardFX[r][c] == 'X') {      //Miss
+                        cell.setFill(Color.BLUE);
+                    } else if (gameBoardFX[r][c] == '0') {      //Träff
+                        cell.setFill(Color.RED);
+                    } else{
+                        cell.setFill(Color.TRANSPARENT);        //Havet
                     }
                 }
                 cell.setStroke(Color.BLACK);
