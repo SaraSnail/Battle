@@ -1,3 +1,5 @@
+package com.battleship;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -129,4 +131,5 @@ public class GameBoard {
     public char[][] getBoard() {
         return board;
     }
+
 }

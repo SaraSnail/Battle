@@ -1,3 +1,7 @@
+package com.battleship.graphic;
+
+import com.battleship.GameBoard;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -19,8 +23,8 @@ public class GameView extends Application {
     //aws
     @Override
     public void start(Stage primaryStage) throws Exception {
-        myGameBoard = new GameBoard();
-        enemyGameBoard= new GameBoard();
+        myGameBoard = new GameBoard(true);
+        enemyGameBoard = new GameBoard(false);
 
         AnchorPane myGame = new AnchorPane();        // Min Spelplan
         AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
@@ -44,7 +48,7 @@ public class GameView extends Application {
         enemyGame.setLayoutX(600);
         enemyGame.setLayoutY(50);
 
-        Image backgroundOcean = new Image("file:src/ocean.jpg");        //Akira Hojo
+        Image backgroundOcean = new Image("file:recourses/images/ocean.jpg");        //Akira Hojo
         BackgroundImage background = new BackgroundImage(
                 backgroundOcean,
                 BackgroundRepeat.NO_REPEAT,
@@ -70,6 +74,13 @@ public class GameView extends Application {
     //aws
     public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
+
+        Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");
+        Image battleShipImage = new Image("file:recourses/images/Slagskepp.png");
+        Image cruiserImage = new Image("file:recourses/images/Kryssare.png");
+        Image subImage = new Image("file:recourses/images/Ubåt.png");
+
+
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
