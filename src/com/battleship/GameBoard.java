@@ -131,4 +131,5 @@ public class GameBoard {
     public char[][] getBoard() {
         return board;
     }
+
 }
