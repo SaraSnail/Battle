@@ -78,7 +78,6 @@ public class Game {
     }
 
     //GB-19-AA
-
    private void makeMove(CommunicationHandler player, boolean firstMove){
         String myMove = "shot ";
         String myShotCoordinates = "";
@@ -95,11 +94,10 @@ public class Game {
                 System.out.println("Could not receive move from other player");
                 throw new RuntimeException(e);
             }
-            //Här bör kollas om det är game over!
             //enemyGameBoard.setShotOutcome(enemyMove.charAt(0)); //ShotOutcome finns ej ännu
             //update map
             String enemyShotCoordinates = enemyMove.substring(enemyMove.length() -2);
-            char hitOrMiss = 'X';  //yGameboard.evaluateShotFromEnemy() - eller vad metoden nu kan tänkas få för namn
+            char hitOrMiss = ;//Gameboard.evaluateShotFromEnemy() - eller vad metoden nu kan tänkas få för namn
             myShotCoordinates = ""; //metod som genererarSkot och retunerar kordinater.
             myMove = hitOrMiss + " " + myMove + myShotCoordinates;
             updateMaps(enemyShotCoordinates, hitOrMiss, myShotCoordinates); //Updatera GUI alt båda kartorna? Hur tänker vi?
