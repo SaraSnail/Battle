@@ -83,7 +83,7 @@ public class Game {
         String myShotCoordinates = "";
         String enemyMove = "";
         if (firstMove){
-            myShotCoordinates =//metod som genererarSkot och retunerar kordinater.
+            myShotCoordinates = //randomShot - statisk metod? //metod som genererarSkot och retunerar kordinater.
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
             player.getWriter().println(myMove);
