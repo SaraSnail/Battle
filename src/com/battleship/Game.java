@@ -97,10 +97,10 @@ public class Game {
             //enemyGameBoard.setShotOutcome(enemyMove.charAt(0)); //ShotOutcome finns ej ännu
             //update map
             String enemyShotCoordinates = enemyMove.substring(enemyMove.length() -2);
-            char hitOrMiss = ;//Gameboard.evaluateShotFromEnemy() - eller vad metoden nu kan tänkas få för namn
-            myShotCoordinates = ""; //metod som genererarSkot och retunerar kordinater.
-            myMove = hitOrMiss + " " + myMove + myShotCoordinates;
-            updateMaps(enemyShotCoordinates, hitOrMiss, myShotCoordinates); //Updatera GUI alt båda kartorna? Hur tänker vi?
+            //char hitOrMiss = ;//Gameboard.evaluateShotFromEnemy() - eller vad metoden nu kan tänkas få för namn
+            myShotCoordinates = ""; //metod som genererarSkot och retunerar kordinater från coordinates.
+            // myMove = hitOrMiss + " " + myMove + myShotCoordinates;
+            //updateMaps(enemyShotCoordinates, hitOrMiss, myShotCoordinates); //Updatera GUI alt båda kartorna? Hur tänker vi?
             System.out.println("Sträng till motståndaren: " + myMove);
             player.getWriter().println(myMove);
         }
