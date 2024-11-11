@@ -156,23 +156,68 @@ public class LoginView extends Application{
     }
     //GB-15-SA
     //Kollar om porten användaren skrivir in är en Int och om den är över 1024 vilket är portar som redan används
-    public boolean isInt(TextField input, String message){
-        try{
-            int port = Integer.parseInt(input.getText());
-            if(port<1024){
-                System.out.println("Port not available");
-                return false;
+
+                /*    public boolean isInt(TextField input, String message){
+                        try{
+                            int port = Integer.parseInt(input.getText());
+                            if(port<1024){
+                                System.out.println("Port not available");
+                                return false;
+                            } else {
+                                System.out.println("Port is: " + message);
+                                return true;
+                            }
+
+                        }catch (NumberFormatException e){
+                            System.out.println(message + " is not a number");
+                            return false;
+
+                        }
+                    }*/
+    //GB-34-AA
+    // uppdaterar metoden så att det blir en Loop och alert-box för kontoll av att det är 4 siffror som skrivs in och att
+    // talet är mellan 1025-9999
+    public boolean isInt(TextField input, String message) {
+
+
+        String textInput = input.getText();
+        boolean isValidPort = false;
+        // boolean validPort = false; //Boblean att skicka tillbaka
+
+        while (!isValidPort) {
+            if (textInput.length() == 4 && textInput.matches("\\d+") ) { //kontrollerar om strängen består av 4 siffror
+                int port = Integer.parseInt(input.getText());
+
+                    if (port >= 1025 && port <= 9999) {
+                        System.out.println("Port is: " + message);
+                        //validPort = true;
+                        isValidPort = true;
+                    } else {
+                        input.clear();
+                        displayAlertBoxInvalidPort(message);
+                        break;
+                    }
+
             } else {
-                System.out.println("Port is: " + message);
-                return true;
+                input.clear();
+                displayAlertBoxInvalidPort(message);
+                break;
             }
 
-        }catch (NumberFormatException e){
-            System.out.println(message + " is not a number");
-            return false;
-
+            textInput = input.getText();
         }
+        return true;
     }
+
+    private void displayAlertBoxInvalidPort(String message){
+        System.out.println("invalid port. " + message);
+        AlertBox.display("Varning", "Ogiltlig port!\n " +
+                "En giltlig port består av 4 siffror mellan 1025-9999\n" +
+                "Försök igen!");
+
+    }
+
+
     //GB-15-SA
     //Skickar med vilken spelare det är
     public String whichPlayer(int player){
