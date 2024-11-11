@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 public class LoginView extends Application{
 
     public Stage window;
+
     public Scene loginView;
     private Button clientButton;
     private Button serverButton;

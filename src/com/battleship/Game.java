@@ -1,8 +1,12 @@
 package com.battleship;
 
+import com.battleship.graphic.GameView;
+import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
 
+
 import java.io.IOException;
+
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
@@ -144,14 +148,18 @@ public class Game {
 
         //GB-25-AA
         //Uppdatera GabeBoard-metod(coordinates)
-        //updateGameView(coordinates);
+        updateGameView(col, row);
 
     }
 
 
     //GB-25-AA
-    private void updateGameView(String coordinates){ // denna metod kanske bör ligga i GameBoard
+    //GB-18-SA, uppdaterar inparametrar till int col och row
+    private void updateGameView(int col, int row){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
+            //GB-18-SA
+            LoginView loginView = new LoginView();
+            loginView.window.setScene(GameView.gameView(loginView.window));
             //Uppdatera GUI/GameView
         });
     }
