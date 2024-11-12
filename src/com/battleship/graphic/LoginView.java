@@ -178,8 +178,6 @@ public class LoginView extends Application{
     // uppdaterar metoden så att det blir en Loop och alert-box för kontoll av att det är 4 siffror som skrivs in och att
     // talet är mellan 1025-9999
     public boolean isInt(TextField input, String message) {
-
-
         String textInput = input.getText();
         boolean isValidPort = false;
         // boolean validPort = false; //Boblean att skicka tillbaka
@@ -211,9 +209,12 @@ public class LoginView extends Application{
 
     private void displayAlertBoxInvalidPort(String message){
         System.out.println("invalid port. " + message);
-        AlertBox.display("Varning", "Ogiltlig port!\n " +
+        AlertBox.display("Varning", "Ogiltlig port!\n" +
+                "\n" +
                 "En giltlig port består av 4 siffror mellan 1025-9999\n" +
-                "Försök igen!");
+                "\n" +
+                "Försök igen!\n" +
+                "\n");
 
     }
 
