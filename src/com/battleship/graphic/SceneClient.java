@@ -9,6 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import java.net.ConnectException;
+import java.net.Socket;
+
 //GB-15-SA
 public class SceneClient {
     public static Scene scene;
@@ -45,23 +48,46 @@ public class SceneClient {
         submit1.setOnAction(e->{
 
             System.out.println("Submit");
-
-            if(login.isInt(port1, port1.getText())){
-                //Denna CommunicationHandler ska ha vilken spelare det är, host och port
-
-                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()));
-                host.clear();
-                port1.clear();
-                Game game = new Game(communicationHandler, true);
-                game.startGame();
-
-            }else if (!login.isInt(port1, port1.getText())){
-                System.out.println("Can't play at that port");
+            //GB-34-AA (if satsen)
+            String portText = port1.getText().trim();
+            if (portText.isEmpty()){
+                System.out.println("Empty port box");
+                return;
             }
 
 
+            if(login.isInt(port1, port1.getText())){
+                //Denna CommunicationHandler ska ha vilken spelare det är, host och port
+                //GB-34-AA (try-catch - AA skrev catch connection refused)
+                try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
 
+                    host.clear();
+                    port1.clear();
+                    Game game = new Game(communicationHandler, true);
+                    game.startGame();
+
+                } catch (ConnectException ex) {
+                    // Om ConnectionRefusedException uppstår, visa en alertbox
+                    System.out.println("Connection refused!");
+                    AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                    host.clear();
+                    port1.clear();
+                } catch (Exception exep) {
+                    System.out.println("An error occurred: " + exep.getMessage());
+                    exep.printStackTrace();
+                }
+
+
+            }else if (!login.isInt(port1, port1.getText())){
+                System.out.println("Can't play at that port");
+                //GB-34-AA (AlertBox - meddelandet)
+                AlertBox.display("Warning", "Invalid port! \nPlease try again!");
+                port1.clear();
+                host.clear();
+            }
         });
+
+        //SA
         //Går tillbaka till start
         back1.setOnAction(e->{
            goBack(login, primaryStage);

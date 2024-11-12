@@ -3,8 +3,10 @@ package com.battleship;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.ConnectException;
 
-public class CommunicationHandler {
+public class CommunicationHandler implements AutoCloseable{
+    //GB-34-AA  implements Auto.... För att kunna använda tryCatch i SceneClient om det inte finns någon server
 
     private String name; // kan skrivas ut på skärmen över kartan
     private String host;
@@ -21,8 +23,8 @@ public class CommunicationHandler {
     }
 
 
-    //BG-10-AA
-    public CommunicationHandler(String name, String host, int port) {
+    //BG-10-AA (konstruktorn) //GB-34-AA (throws...)
+    public CommunicationHandler(String name, String host, int port) throws ConnectException {
         this.name = name;
         this.host = host;
         this.port = port;
@@ -37,15 +39,18 @@ public class CommunicationHandler {
     }
 
     //BG-10-AA
-    private void connectToServer(){
+    private void connectToServer() throws ConnectException {
         //Try-with-resources om vi lägger in communication här i blocket. Socket stängs då i slutet av blocket.
         // Annars använd closeSocket()- metod.
-        try  {
-            clientSocket = new Socket(this.host,this.port);
+        try {
+            clientSocket = new Socket(this.host, this.port);
             System.out.println("Connected to server");
-            this.writer = new PrintWriter (new OutputStreamWriter(clientSocket.getOutputStream()),true);
+            this.writer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+            //GB-34-AA (connectionExpectation)
+        } catch (java.net.ConnectException e) {
+            throw new ConnectException("Connection refused: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Could not connect to server at " + this.host + ":" + this.port);
             e.printStackTrace();
@@ -92,30 +97,6 @@ public class CommunicationHandler {
             //Uppdatera egen spelplan (vet ej om metoden ska ligga här eller på annan plats)
         }
     }
-
-    //GB-10-AA
-    public void closeSocket() {
-        try {
-            if (reader != null) {
-                reader.close();
-            }
-            if (writer != null){
-                writer.close();
-            }
-            if (clientSocket != null && !clientSocket.isClosed()){
-                clientSocket.close();
-            }
-            if (serverSocket != null && !clientSocket.isClosed()){
-                serverSocket.close();
-            }
-        } catch (IOException e){
-            System.out.println("Error closing resources");
-            e.printStackTrace();
-        }
-
-    }
-
-
 
     public String getName() {
         return name;
@@ -184,5 +165,27 @@ public class CommunicationHandler {
                 ", reader=" + reader +
                 ", writer=" + writer +
                 '}';
+    }
+
+    @Override
+    //GB-10-AA
+    public void close() throws Exception {
+        try {
+            if (reader != null) {
+                reader.close();
+            }
+            if (writer != null){
+                writer.close();
+            }
+            if (clientSocket != null && !clientSocket.isClosed()){
+                clientSocket.close();
+            }
+            if (serverSocket != null && !clientSocket.isClosed()){
+                serverSocket.close();
+            }
+        } catch (IOException e){
+            System.out.println("Error closing resources");
+            e.printStackTrace();
+        }
     }
 }

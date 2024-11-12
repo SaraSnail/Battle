@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,13 +20,12 @@ public class AlertBox {
         window.setTitle(title); //titel på fönstret
 
         //samma som ConfirmBox
-        window.setWidth(370);
-        window.setHeight(200);
+        window.setMinWidth(300);
+        window.setMinHeight(200);
 
-        Label label = new Label(messange); //textfält med meddelandet som skickades in.
-        label.setAlignment(Pos.CENTER);
-        label.setTextAlignment(TextAlignment.CENTER); //Centrerar texten i varje rad.
-        label.getStyleClass().add("titel-small");
+        Text text = new Text(messange); //textfält med meddelandet som skickades in.
+        text.setTextAlignment(TextAlignment.CENTER); //Centrerar texten i varje rad.
+        text.getStyleClass().add("titel-small");
 
         //Knapp för att stänga fönstret
         Button closeButton = new Button("OK!");
@@ -34,12 +34,13 @@ public class AlertBox {
 
         VBox layout = new VBox(10);
 
-        layout.getChildren().addAll(label, closeButton);
+        layout.getChildren().addAll(text, closeButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("background-blue");
 
 
         Scene scene = new Scene(layout);
+        scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
         window.setScene(scene);
         window.showAndWait(); // för att koden efter alertboxen ska pausas tills den klickas ner innan den kan fortsätta
 

@@ -156,8 +156,7 @@ public class LoginView extends Application{
     }
     //GB-15-SA
     //Kollar om porten användaren skrivir in är en Int och om den är över 1024 vilket är portar som redan används
-
-                /*    public boolean isInt(TextField input, String message){
+/*                    public boolean isInt(TextField input, String message){
                         try{
                             int port = Integer.parseInt(input.getText());
                             if(port<1024){
@@ -178,46 +177,23 @@ public class LoginView extends Application{
     // uppdaterar metoden så att det blir en Loop och alert-box för kontoll av att det är 4 siffror som skrivs in och att
     // talet är mellan 1025-9999
     public boolean isInt(TextField input, String message) {
-        String textInput = input.getText();
-        boolean isValidPort = false;
-        // boolean validPort = false; //Boblean att skicka tillbaka
+        String textInput = input.getText().trim();
 
-        while (!isValidPort) {
             if (textInput.length() == 4 && textInput.matches("\\d+") ) { //kontrollerar om strängen består av 4 siffror
                 int port = Integer.parseInt(input.getText());
 
                     if (port >= 1025 && port <= 9999) {
                         System.out.println("Port is: " + message);
-                        //validPort = true;
-                        isValidPort = true;
+                        return true;
                     } else {
-                        input.clear();
-                        displayAlertBoxInvalidPort(message);
-                        break;
+                        return false;
                     }
 
             } else {
-                input.clear();
-                displayAlertBoxInvalidPort(message);
-                break;
+                return false;
             }
 
-            textInput = input.getText();
-        }
-        return true;
     }
-
-    private void displayAlertBoxInvalidPort(String message){
-        System.out.println("invalid port. " + message);
-        AlertBox.display("Varning", "Invalid port!\n" +
-                "\n" +
-                "A valid port must be 4 digits and a number between 1025-9999\n" +
-                "\n" +
-                "Please try again!\n" +
-                "\n");
-
-    }
-
 
     //GB-15-SA
     //Skickar med vilken spelare det är
