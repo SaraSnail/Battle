@@ -44,6 +44,15 @@ public class SceneServer {
 
         //Action för submit och back knapparna
         submit2.setOnAction(e->{
+
+            //GB-34-AA (if satsen)
+            String portText = port2.getText().trim();
+            if (portText.isEmpty()){
+                System.out.println("Empty port box");
+                return;
+            }
+
+            //SA
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
 
@@ -67,9 +76,13 @@ public class SceneServer {
 
             } else if (!login.isInt(port2, port2.getText())) {
                 System.out.println("Can't play at that port");
+                //GB-35-AA (AlertBox - meddelandet)
+                AlertBox.display("Warning", "Invalid port! \nA valid port must be 4 digits and a number between 1025-9999.\nPlease try again!");
+                port2.clear();
             }
         });
 
+        //SA
         //Går tillbaka till start
         back2.setOnAction(e->{
             goTo(login, window);
@@ -128,4 +141,6 @@ public class SceneServer {
             exception.printStackTrace();
         }
     }
+
+
 }
