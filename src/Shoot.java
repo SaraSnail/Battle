@@ -9,7 +9,6 @@ public class Shoot {
 
 
 
-
     int lastShotX;
     int lastShotY;
 
