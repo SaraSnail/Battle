@@ -209,11 +209,11 @@ public class LoginView extends Application{
 
     private void displayAlertBoxInvalidPort(String message){
         System.out.println("invalid port. " + message);
-        AlertBox.display("Varning", "Ogiltlig port!\n" +
+        AlertBox.display("Varning", "Invalid port!\n" +
                 "\n" +
-                "En giltlig port består av 4 siffror mellan 1025-9999\n" +
+                "A valid port must be 4 digits and a number between 1025-9999\n" +
                 "\n" +
-                "Försök igen!\n" +
+                "Please try again!\n" +
                 "\n");
 
     }
