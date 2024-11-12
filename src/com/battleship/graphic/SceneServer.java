@@ -9,6 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Scanner;
+
 //GB-15-SA
 public class SceneServer {
 
@@ -56,8 +59,19 @@ public class SceneServer {
 
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
-                Game game = new Game(communicationHandler, false);
+                Game game = new Game(communicationHandler, false, login);
                 game.startGame();
+
+                //GB-18-SA
+
+                try{
+                    Scene view = GameView.gameView(window);
+                    window.setScene(view);
+
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+
 
 
             } else if (!login.isInt(port2, port2.getText())) {
@@ -71,7 +85,7 @@ public class SceneServer {
         //SA
         //Går tillbaka till start
         back2.setOnAction(e->{
-            goBack(login, window);
+            goTo(login, window);
         });
 
         //Scene-Server
@@ -115,7 +129,8 @@ public class SceneServer {
     }
     //GB-15-SA
     //Om man vill gå tillbaka
-    private static void goBack(LoginView login, Stage window) {
+    //GB-18-SA, bytte från goBack till goTo
+    private static void goTo(LoginView login, Stage window) {
 
         try{
             //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
