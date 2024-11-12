@@ -65,8 +65,17 @@ public class SceneClient {
 
                     host.clear();
                     port1.clear();
-                    Game game = new Game(communicationHandler, true);
+                    Game game = new Game(communicationHandler, true, login);
                     game.startGame();
+
+                    //GB-18-SA
+                    try{
+                        Scene view = GameView.gameView(window);
+                        window.setScene(view);
+
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
 
                 } catch (ConnectException ex) {
                     // Om ConnectionRefusedException uppstår, visa en alertbox
@@ -78,17 +87,6 @@ public class SceneClient {
                     System.out.println("An error occurred: " + exep.getMessage());
                     exep.printStackTrace();
                 }
-
-                //GB-18-SA
-                try{
-                    Scene view = GameView.gameView(window);
-                    window.setScene(view);
-
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
-
-
             }else if (!login.isInt(port1, port1.getText())){
                 System.out.println("Can't play at that port");
                 //GB-34-AA (AlertBox - meddelandet)
