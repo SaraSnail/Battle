@@ -174,25 +174,22 @@ public class LoginView extends Application{
                         }
                     }*/
     //GB-34-AA
-    // uppdaterar metoden så att det blir en Loop och alert-box för kontoll av att det är 4 siffror som skrivs in och att
-    // talet är mellan 1025-9999
+    //Uppdaterar metoden så att den kontrollerar antal tecken och att det är siffror mellan 1025-9999.
     public boolean isInt(TextField input, String message) {
         String textInput = input.getText().trim();
+        if (textInput.length() == 4 && textInput.matches("\\d+") ) { //kontrollerar om strängen består av 4 siffror
+            int port = Integer.parseInt(input.getText());
 
-            if (textInput.length() == 4 && textInput.matches("\\d+") ) { //kontrollerar om strängen består av 4 siffror
-                int port = Integer.parseInt(input.getText());
+                if (port >= 1025 && port <= 9999) {
+                    System.out.println("Port is: " + message);
+                    return true;
+                } else {
+                    return false;
+                }
 
-                    if (port >= 1025 && port <= 9999) {
-                        System.out.println("Port is: " + message);
-                        return true;
-                    } else {
-                        return false;
-                    }
-
-            } else {
-                return false;
-            }
-
+        } else {
+            return false;
+        }
     }
 
     //GB-15-SA

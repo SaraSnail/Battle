@@ -41,7 +41,7 @@ public class CommunicationHandler implements AutoCloseable{
     //BG-10-AA
     private void connectToServer() throws ConnectException {
         //Try-with-resources om vi lägger in communication här i blocket. Socket stängs då i slutet av blocket.
-        // Annars använd closeSocket()- metod.
+        // Annars använd close()- metod.
         try {
             clientSocket = new Socket(this.host, this.port);
             System.out.println("Connected to server");
