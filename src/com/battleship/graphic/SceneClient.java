@@ -56,7 +56,7 @@ public class SceneClient {
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()));
                 host.clear();
                 port1.clear();
-                Game game = new Game(communicationHandler, true);
+                Game game = new Game(communicationHandler, true, login);
                 game.startGame();
 
 

@@ -77,7 +77,8 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         scene = new Scene(stack, 1150, 600);
 
 
-        /*  //GB-18-SA, kommenterade ut detta
+        //GB-18-SA, kommenterade ut detta
+        /*
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
 

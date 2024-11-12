@@ -26,15 +26,21 @@ public class Game {
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
 
+    //GB-18-SA, så man kan nå samma Stage i updateGameView
+    private LoginView loginView;
+
     //GB-26-SA
     private char valueAtCoordinates;
     private int row;
     private int col;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
-    public Game(CommunicationHandler player, boolean isClient) {
+    public Game(CommunicationHandler player, boolean isClient, LoginView loginView) {
         this.player = player;
         this.isClientTurn = isClient;
+
+        //GB-18-SA
+        this.loginView = loginView;
     }
 
     //GB-13-AA //GB-25-AA //GB-30-AA
@@ -148,17 +154,18 @@ public class Game {
 
         //GB-25-AA
         //Uppdatera GabeBoard-metod(coordinates)
-        updateGameView(col, row);
+        //GB-18-SA
+        updateGameView();//GB-18-SA, behöver inte skicka med row och col
 
     }
 
 
     //GB-25-AA
-    //GB-18-SA, uppdaterar inparametrar till int col och row
-    private void updateGameView(int col, int row){ // denna metod kanske bör ligga i GameBoard
+    private void updateGameView(){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
+
             //GB-18-SA
-            LoginView loginView = new LoginView();
+            //Medskickad loginView så man kan nå samma fönster de andra scenerna har
             loginView.window.setScene(GameView.gameView(loginView.window));
             //Uppdatera GUI/GameView
         });
