@@ -19,7 +19,7 @@ public class AlertBox {
         window.setTitle(title); //titel på fönstret
 
         //samma som ConfirmBox
-        window.setWidth(300);
+        window.setWidth(370);
         window.setHeight(200);
 
         Label label = new Label(messange); //textfält med meddelandet som skickades in.
