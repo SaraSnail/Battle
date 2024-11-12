@@ -1,5 +1,7 @@
 package com.battleship.graphic;
 
+import com.battleship.CommunicationHandler;
+import com.battleship.Game;
 import com.battleship.GameBoard;
 
 import javafx.application.Application;
@@ -14,17 +16,26 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.awt.*;
+import java.util.Scanner;
 
 //aws
-public class GameView extends Application {
-    private GameBoard myGameBoard;
-    private GameBoard enemyGameBoard;
+public class GameView {//GB-18-SA, tog bort "extends applications"
+    //GB-18-SA, gjorde dem static
+    //aws
+    private static GameBoard myGameBoard;
+    private static GameBoard enemyGameBoard;
+    //GB-18-SA, la till scene
+    public static Scene scene;
 
     //aws
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    //@Override
+    //aws hade skrivit detta som en start metod, GB-18-SA, behövde göra om den till en scene istället
+    public static Scene gameView (Stage window){
+        //aws
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
+
+
 
         AnchorPane myGame = new AnchorPane();        // Min Spelplan
         AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
@@ -62,17 +73,27 @@ public class GameView extends Application {
         stack.getChildren().addAll(myLabel,enemyLabel,myGame,enemyGame);
         stack.setBackground(new Background(background));
 
-        Scene scene = new Scene(stack, 1150, 600);
+        //GB-18-SA, gjorde att den "skapas" utanför metoden
+        scene = new Scene(stack, 1150, 600);
+
+
+        //GB-18-SA, kommenterade ut detta
+        /*
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
 
-        primaryStage.show();
+        primaryStage.show();*/
+
         myGameBoard.displayBoard();
         enemyGameBoard.displayBoard();
+
+        //GB-18-SA
+        return scene;
+
     }
 
     //aws
-    public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
+    public static void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
 
         Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");       //PNGEGG
@@ -108,4 +129,5 @@ public class GameView extends Application {
             }
         }
     }
+
 }

@@ -2,6 +2,7 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Scanner;
+
 //GB-15-SA
 public class SceneClient {
     public static Scene scene;
@@ -21,7 +25,7 @@ public class SceneClient {
 
 
     //GB-15-SA
-    public static Scene getScene(Stage primaryStage) {
+    public static Scene getScene(Stage window) {
         LoginView login = new LoginView();
 
         //Skapat textField där användaren kan skriva in host och port
@@ -52,8 +56,19 @@ public class SceneClient {
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()));
                 host.clear();
                 port1.clear();
-                Game game = new Game(communicationHandler, true);
+                Game game = new Game(communicationHandler, true, login);
                 game.startGame();
+
+
+                //GB-18-SA
+                try{
+                    Scene view = GameView.gameView(window);
+                    window.setScene(view);
+
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+
 
             }else if (!login.isInt(port1, port1.getText())){
                 System.out.println("Can't play at that port");
@@ -64,7 +79,7 @@ public class SceneClient {
         });
         //Går tillbaka till start
         back1.setOnAction(e->{
-           goBack(login, primaryStage);
+           goBack(login, window);
 
         });
 
