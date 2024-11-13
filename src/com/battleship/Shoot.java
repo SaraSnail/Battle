@@ -1,4 +1,8 @@
-//GB-17-cf
+package com.battleship;//GB-17-cf
+
+
+
+
 
 
 
@@ -8,21 +12,20 @@ import java.util.Random;
 public class Shoot {
 
 
-
-    int lastShotX;
-    int lastShotY;
+    static int lastShotX;
+    static int lastShotY;
 
 
     /*char[][] enemyBoard= {
             {'e','e','e','e','e','e','e','e','e','e'},
             {'e','e','e','e','e','e','e','e','e','e'}};*/
 
-    char[] yAxis= {'a','b','c','d','e','f','g','h','i','j'};
+    static char[] yAxis= {'a','b','c','d','e','f','g','h','i','j'};
 
-    Random random = new Random();
+    static Random random = new Random();
 
 
-    private  String randomShot() {
+    public static String randomShot(char[][] enemyGameBoard) {
 
 
 
@@ -57,7 +60,7 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    private  String hitShot(){
+    public static  String hitShot(char[][] enemyGmeBoard){
 
         boolean randomShotTaken= false;
 
@@ -92,9 +95,9 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    private void uppdateLastShot(){
-        lastShotX=;
-        lastShotY=;
+    public static String uppdateLastShot(){
+        lastShotX=0;
+        lastShotY=0;
     }
 
     public Shoot(int lastShotX, int lastShotY) {
