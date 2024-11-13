@@ -1,7 +1,5 @@
 package com.battleship;
 
-import com.battleship.graphic.WaitToConnect;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -65,7 +63,6 @@ public class CommunicationHandler implements AutoCloseable{
         // Annars använd closeSocket()- metod.
         try {
             serverSocket = new ServerSocket(this.port);
-            //WaitToConnect.display();
             System.out.println("Waiting for client to connect");
             clientSocket = serverSocket.accept();
             System.out.println("Client connected");
