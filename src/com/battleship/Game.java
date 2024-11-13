@@ -23,7 +23,7 @@ public class Game {
     private boolean isClientTurn;
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
-    private boolean iWin = false;
+    private boolean iLose = false;
     private String lastShot;
 
     //GB-18-SA, så man kan nå samma Stage i updateGameView
@@ -102,7 +102,7 @@ public class Game {
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
-            updateMaps(myShotCoordinates,myGameBoard); //Uppdaterar min spelplan med vart jag skjutit. Rätt?
+            updateMaps(myShotCoordinates,enemyGameBoard);
             player.getWriter().println(myMove);
         } else {
             try {
@@ -111,7 +111,7 @@ public class Game {
                 System.out.println("Could not receive move from other player");
                 throw new RuntimeException(e);
             }
-
+            updateMaps(enemyMove, myGameBoard);
             char myShotHitOrMiss = setShotOutcome(enemyMove);
 
             if (myShotHitOrMiss == 'h'){
@@ -124,18 +124,18 @@ public class Game {
 
             enemyHitOrMiss = setShotOutcome(enemyMove, myGameBoard);
 
-            updateMaps(enemyMove, enemyGameBoard);
-            updateMaps(myShotCoordinates, myGameBoard);
-
             if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
-                iWin = true;
+                iLose = true;    //Ändra till iLoose
                 System.out.println("Sträng till motståndaren: " + myMove);
                 player.getWriter().println(enemyHitOrMiss.toLowerCase());
             } else {
                 myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                 System.out.println("Sträng till motståndaren: " + myMove);
                 player.getWriter().println(myMove);
+                updateMaps(myShotCoordinates, enemyGameBoard);
             }
+
+
         }
     }
 
