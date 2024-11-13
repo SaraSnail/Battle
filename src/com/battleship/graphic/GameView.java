@@ -110,7 +110,18 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                 cell.setY(r * 50);
 
                 if(isEnemy){
-                    cell.setFill(Color.TRANSPARENT);            // Enemy Havet
+                    //GB-38-SA
+                    if (gameBoardFX[r][c] == 'X') { //Blå ruta om miss
+                        cell.setFill(Color.BLUE);
+                    } else if (gameBoardFX[r][c] == 'O') { //Röd om hit
+                        cell.setFill(Color.RED);
+                    } else {
+                        cell.setFill(Color.TRANSPARENT); //Annars transparent
+                    }
+
+                    //aws
+                    //cell.setFill(Color.TRANSPARENT);            // Enemy Havet
+
                 }else{
                     if(gameBoardFX[r][c] == 'S') {              //Skepp
                         cell.setFill(Color.DARKGRAY);
