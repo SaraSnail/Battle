@@ -185,9 +185,16 @@ public class Game {
             throw new RuntimeException(e);
         }
         //GB-35-AA
-        Platform.runLater(()->{
+        if (gameOver) {
+            Platform.runLater(()->{
+                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!");
+            });
+        } else if (iWin){
+            Platform.runLater(() ->{
+                AlertBox.display("Game Over", "GAME OVER\nYOU WIN!");
+            });
+        }
 
-        });
         //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
         return gameOver;
     }
