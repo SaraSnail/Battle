@@ -120,42 +120,53 @@ public class Game {
         // i = x-led = row = letter
         // j = y-led = column = number
 
-        try{
-            //Skickar in tex "4b" och spelplanen
-            //Har en klass som i dens metod som tar koordinaterna från meddelandet och får fram till row och column som går att få ut vart man är eller värdet på koordinaten
-            Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
-            //Coordinates constructor ska innehålla row och col, delar message och får tillbaka row och column
+        String[] isGameOver = message.split(" ");
 
-            //Sätter in row och column från klassen i variablerna row och column
-            row = coords.getRow();
-            col = coords.getCol();
+        if(isGameOver[isGameOver.length -1].equals("game over")){
+            //shoot.updateLastShot;
+            //Visa det sista skottets koordinater
 
-            //Samlar värdet på koordinaten på spelplanen
-            valueAtCoordinates = gameBoard.getBoard()[row][col];
-            //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
 
-        } catch (Exception e) {
-            System.out.println("Error: "+e.getMessage());
+        }else {
+            try{
+                //Skickar in tex "4b" och spelplanen
+                //Har en klass som i dens metod som tar koordinaterna från meddelandet och får fram till row och column som går att få ut vart man är eller värdet på koordinaten
+                Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
+                //Coordinates constructor ska innehålla row och col, delar message och får tillbaka row och column
+
+                //Sätter in row och column från klassen i variablerna row och column
+                row = coords.getRow();
+                col = coords.getCol();
+
+                //Samlar värdet på koordinaten på spelplanen
+                valueAtCoordinates = gameBoard.getBoard()[row][col];
+                //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
+
+            } catch (Exception e) {
+                System.out.println("Error: "+e.getMessage());
+            }
+
+            //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
+            //Kan ta bort sout senare, finns där för att se att allting fungerar
+            if(valueAtCoordinates == 'S'){
+                System.out.println("A ship");
+                gameBoard.getBoard()[col][row] = '0';
+
+            } else if (valueAtCoordinates == ' ') {
+                System.out.println("No ship");
+                gameBoard.getBoard()[col][row] = 'X';
+
+            }
+            gameBoard.displayBoard();
+
+
+            //GB-25-AA
+            //Uppdatera GabeBoard-metod(coordinates)
+            //GB-18-SA
+            updateGameView();//GB-18-SA, behöver inte skicka med row och col
         }
 
-        //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
-        //Kan ta bort sout senare, finns där för att se att allting fungerar
-        if(valueAtCoordinates == 'S'){
-            System.out.println("A ship");
-            gameBoard.getBoard()[col][row] = '0';
 
-        } else if (valueAtCoordinates == ' ') {
-            System.out.println("No ship");
-            gameBoard.getBoard()[col][row] = 'X';
-
-        }
-        gameBoard.displayBoard();
-
-
-        //GB-25-AA
-        //Uppdatera GabeBoard-metod(coordinates)
-        //GB-18-SA
-        updateGameView();//GB-18-SA, behöver inte skicka med row och col
 
     }
 
