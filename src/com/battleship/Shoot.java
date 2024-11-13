@@ -1,4 +1,4 @@
-//GB-17-cf
+package com.battleship;//GB-17-cf
 import java.util.Random;
 
 public class Shoot {

@@ -23,6 +23,8 @@ public class Game {
     private boolean isClientTurn;
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
+    private boolean iWin = false;
+    private String lastShot;
 
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
@@ -47,7 +49,7 @@ public class Game {
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
-        waitThreeSec();
+        waitOneSec();
 
         new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
     }
@@ -74,15 +76,16 @@ public class Game {
                 isClientTurn = true;
                 //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
             }
-            waitThreeSec();
+            gameOver = checkIfGameOver(); //GB-19-AA ifall inevarande spelare skickar game over. Spelare vinner.
+            waitOneSec();
         }
         System.out.println("Game over!");
     }
 
     //GB-31-AA
-    private void waitThreeSec(){
+    private void waitOneSec(){
         try {
-            Thread.sleep(5000);  //Väntar 5 sek innan spelet drar igång
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -90,30 +93,49 @@ public class Game {
 
     //GB-19-AA
    private void makeMove(CommunicationHandler player, boolean firstMove){
-        String myMove = "shot ";
-        String myShotCoordinates = "";
-        String enemyMove = "";
+        String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
+        String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
+        String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
+        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
+
         if (firstMove){
-            myShotCoordinates = //randomShot - statisk metod? //metod som genererarSkot och retunerar kordinater.
+            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
+            updateMaps(myShotCoordinates,myGameBoard); //Uppdaterar min spelplan med vart jag skjutit. Rätt?
             player.getWriter().println(myMove);
         } else {
             try {
-                enemyMove = player.getReader().readLine();
+                enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
             } catch (IOException e) {
                 System.out.println("Could not receive move from other player");
                 throw new RuntimeException(e);
             }
-            //enemyGameBoard.setShotOutcome(enemyMove.charAt(0)); //ShotOutcome finns ej ännu
-            //update map
-            String enemyShotCoordinates = enemyMove.substring(enemyMove.length() -2);
-            //char hitOrMiss = ;//Gameboard.evaluateShotFromEnemy() - eller vad metoden nu kan tänkas få för namn
-            myShotCoordinates = ""; //metod som genererarSkot och retunerar kordinater från coordinates.
-            // myMove = hitOrMiss + " " + myMove + myShotCoordinates;
-            //updateMaps(enemyShotCoordinates, hitOrMiss, myShotCoordinates); //Updatera GUI alt båda kartorna? Hur tänker vi?
-            System.out.println("Sträng till motståndaren: " + myMove);
-            player.getWriter().println(myMove);
+
+            char myShotHitOrMiss = setShotOutcome(enemyMove);
+
+            if (myShotHitOrMiss == 'h'){
+                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+                Shoot.setLastHit(myShotCoordinates); //sträng med tex "5b"
+            } else {
+                myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+            }
+            lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+
+            enemyHitOrMiss = setShotOutcome(enemyMove, myGameBoard);
+
+            updateMaps(enemyMove, enemyGameBoard);
+            updateMaps(myShotCoordinates, myGameBoard);
+
+            if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
+                iWin = true;
+                System.out.println("Sträng till motståndaren: " + myMove);
+                player.getWriter().println(enemyHitOrMiss.toLowerCase());
+            } else {
+                myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
+                System.out.println("Sträng till motståndaren: " + myMove);
+                player.getWriter().println(myMove);
+            }
         }
     }
 
