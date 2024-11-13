@@ -25,6 +25,8 @@ public class Game {
     private GameBoard enemyGameBoard;
     private boolean iLose = false;
     private String lastShot;
+    private String lastHitShot;
+    private boolean sunk;
 
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
@@ -114,12 +116,22 @@ public class Game {
             updateMaps(enemyMove, myGameBoard);
             char myShotHitOrMiss = setShotOutcome(enemyMove);
 
-            if (myShotHitOrMiss == 'h'){
+            if (myShotHitOrMiss == 'h') {
                 myShotCoordinates = Shoot.hitShot(enemyGameBoard);
-                Shoot.setLastHit(myShotCoordinates); //sträng med tex "5b"
+                Shoot.setLastHit(lastShot); //sträng med tex "5b"
+                lastHitShot = myShotCoordinates;
+                sunk = false;
+
+            }else if (myShotHitOrMiss == 'm' && !sunk){
+                   myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+
+            } else if (myShotHitOrMiss == 's'){
+                sunk = true;
+                myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             } else {
                 myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             }
+
             lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
 
             enemyHitOrMiss = setShotOutcome(enemyMove, myGameBoard);
