@@ -1,5 +1,6 @@
 package com.battleship;
 
+import com.battleship.graphic.AlertBox;
 import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
@@ -183,6 +184,10 @@ public class Game {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        //GB-35-AA
+        Platform.runLater(()->{
+
+        });
         //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
         return gameOver;
     }
