@@ -206,7 +206,7 @@ public class Game {
         //GB-33-SA
         if (message.equalsIgnoreCase("game over")) {
             gameOver = true;
-            //updateMaps(lastShot, enemyGameBoard);
+            //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
             // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
             //lastShot fixa
         } else {
