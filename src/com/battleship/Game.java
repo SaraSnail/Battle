@@ -184,14 +184,37 @@ public class Game {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //GB-35-AA
         if (gameOver) {
             Platform.runLater(()->{
-                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!");
-            });
-        } else if (iWin){
-            Platform.runLater(() ->{
                 AlertBox.display("Game Over", "GAME OVER\nYOU WIN!");
+                //Stäng ner spelet vid tryck OK!
+            });
+        } else if (iLose){
+            Platform.runLater(() ->{
+                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!");
+                //stäng ner spelet vid tryck OK!
             });
         }
 
