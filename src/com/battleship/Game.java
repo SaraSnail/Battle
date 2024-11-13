@@ -1,6 +1,8 @@
 package com.battleship;
 
 import javafx.application.Platform;
+import com.battleship.graphic.GameView;
+import com.battleship.graphic.LoginView;
 
 import java.io.IOException;
 
@@ -45,11 +47,11 @@ public class Game {
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
-        waitForStart();
+        waitThreeSec();
 
         new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
-
     }
+
     //GB-25-AA
     private void gameLoop(){
         boolean gameOver = false;
@@ -57,18 +59,18 @@ public class Game {
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
-                    makeMove(player);
+                    makeMove(player,true);
                     firstMove = false;
                 } else {
                     gameOver = checkIfGameOver();
-                    makeMove(player);
+                    makeMove(player, false);
                     getShotOutcome();
                     //updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
                     isClientTurn = false;
                 }
             } else {
                 gameOver = checkIfGameOver();
-                makeMove(player);
+                makeMove(player, false);
                 isClientTurn = true;
                 //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
             }
