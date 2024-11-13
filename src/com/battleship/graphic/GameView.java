@@ -1,6 +1,7 @@
 package com.battleship.graphic;
 
 import com.battleship.GameBoard;
+import com.battleship.Ship;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -8,19 +9,18 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import java.awt.*;
 
-//aws
+import java.util.List;
+
+//GB-14-aws
 public class GameView extends Application {
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
 
-    //aws
+    //GB-14-aws
     @Override
     public void start(Stage primaryStage) throws Exception {
         myGameBoard = new GameBoard(true);
@@ -29,26 +29,31 @@ public class GameView extends Application {
         AnchorPane myGame = new AnchorPane();        // Min Spelplan
         AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
 
-        Label myLabel = new Label("My gameboard");
-        myLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: BLACK;");
-        myLabel.setLayoutX(50);
+        Label myLabel = new Label("--------MyGameBoard-------");
+        myLabel.getStyleClass().add("text-stroke");
+        myLabel.setLayoutX(100);
         myLabel.setLayoutY(5);
 
-
-        Label enemyLabel = new Label("Enemy gameboard");
-        enemyLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: BLACK;");
-        enemyLabel.setLayoutX(600);
+        Label enemyLabel = new Label("------EnemyGameBoard------");
+        enemyLabel.getStyleClass().add("text-stroke");
+        enemyLabel.setLayoutX(850);
         enemyLabel.setLayoutY(5);
+
+        topNumberLabel(myGame);
+        topNumberLabel(enemyGame);
+        sideCharLabel(myGame);
+        sideCharLabel(enemyGame);
 
         battleGroundFX(myGame, myGameBoard, false);
         battleGroundFX(enemyGame, enemyGameBoard, true );
+        gameBoardGrid(myGame, myGameBoard,false);
 
-        myGame.setLayoutX(50);
-        myGame.setLayoutY(50);
-        enemyGame.setLayoutX(600);
-        enemyGame.setLayoutY(50);
+        myGame.setLayoutX(100);
+        myGame.setLayoutY(100);
+        enemyGame.setLayoutX(850);
+        enemyGame.setLayoutY(100);
 
-        Image backgroundOcean = new Image("file:recourses/images/ocean.jpg");        //Akira Hojo
+        Image backgroundOcean = new Image("file:recourses/images/oceanblue.png");        //PNGEGG
         BackgroundImage background = new BackgroundImage(
                 backgroundOcean,
                 BackgroundRepeat.NO_REPEAT,
@@ -56,31 +61,51 @@ public class GameView extends Application {
                 BackgroundPosition.CENTER,
                 new BackgroundSize(100, 100, true, true, true, true));
 
-
-
         AnchorPane stack = new AnchorPane();
         stack.getChildren().addAll(myLabel,enemyLabel,myGame,enemyGame);
         stack.setBackground(new Background(background));
 
-        Scene scene = new Scene(stack, 1150, 600);
+        Scene scene = new Scene(stack, 1450, 700);
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
+        stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
         primaryStage.show();
         myGameBoard.displayBoard();
-        enemyGameBoard.displayBoard();
+        /*enemyGameBoard.displayBoard();*/
     }
 
-    //aws
+    //GB-14-aws
     public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
 
         Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");       //PNGEGG
         Image battleShipImage = new Image("file:recourses/images/Slagskepp.png");       //PNGEGG
-        Image cruiserImage = new Image("file:recourses/images/Kryssare.png");           //PNGEGG
+        Image cruiserImage = new Image("file:recourses/images/Kryssarenr2.png");           //PNGEGG
         Image subImage = new Image("file:recourses/images/Ubåt.png");                   //PNGEGG
 
+        for (Ship ship : board.getShips()){
+            List<int[]> coordinatesList = ship.getCoordinates();
+            int[][] coordinates = coordinatesList.toArray(new int[0][0]);
+            int r = coordinates[0][0];
+            int c = coordinates[0][1];
+            int shipSize = ship.getSize();
+            boolean isHorizontal = coordinates.length > 1 && coordinates[0][1] != coordinates[1][1];
 
+            ImageView shipImage = getShipImage(shipSize,isHorizontal,carrierImage,battleShipImage,cruiserImage,subImage);
+            if(shipImage != null){
+                if(isHorizontal) {
+                    shipImage.setX(c * 50);
+                    shipImage.setY(r * 50 - 25);
+                    boardPane.getChildren().add(shipImage);
+                }else{
+                    shipImage.setX(c * 50);
+                    shipImage.setY(r * 50);
+                    boardPane.getChildren().add(shipImage);
+                }
+            }
+
+        }
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -90,22 +115,127 @@ public class GameView extends Application {
 
                 if(isEnemy){
                     cell.setFill(Color.TRANSPARENT);            // Enemy Havet
-                }else{
+                /*}else{
                     if(gameBoardFX[r][c] == 'S') {              //Skepp
-                        cell.setFill(Color.DARKGRAY);
-                    } else if (gameBoardFX[r][c] == 'X') {      //Miss
+                        ImageView shipImage = null;
+                        int shipSize = getShipSize(board,r,c);
+
+                        if(shipSize == 5){
+                            shipImage = new ImageView(carrierImage);
+                        } else if (shipSize == 4) {
+                            shipImage = new ImageView(battleShipImage);
+                        } else if (shipSize == 3) {
+                            shipImage = new ImageView(cruiserImage);
+                        } else if (shipSize == 2) {
+                            shipImage = new ImageView(subImage);
+                        }
+                        if(shipImage != null){
+                            if(isHorizontal){
+                                shipImage.setFitWidth(shipSize * 50);
+                                shipImage.setFitHeight(75);
+                            }else{
+                                shipImage.setFitWidth(50);
+                                shipImage.setFitHeight(shipSize * 50);
+                                shipImage.setRotate(90);
+                            }
+                            shipImage.setX(c * 50);
+                            shipImage.setY(r * 50-20);
+                            boardPane.getChildren().add(shipImage);
+                        }
+                        continue;
+                        cell.setFill(Color.DARKGRAY);*/
+                    } else{
+                        if (gameBoardFX[r][c] == 'X') {      //Miss
                         cell.setFill(Color.BLUE);
+
                     } else if (gameBoardFX[r][c] == '0') {      //Träff
                         cell.setFill(Color.RED);
+
                     } else{
                         cell.setFill(Color.TRANSPARENT);        //Havet
+
                     }
                 }
                 cell.setStroke(Color.BLACK);
                 cell.setStrokeWidth(5);
-
                 boardPane.getChildren().add(cell);
             }
+        }
+
+    }
+    //GB-36-AWS
+    private void gameBoardGrid(AnchorPane boardPane, GameBoard board,boolean isEnemy){
+        char[][] gameBoardGrid = board.getBoard();
+
+        for (int r = 0; r < 10; r++) {
+            for (int c = 0; c < 10; c++) {
+                Rectangle grid = new Rectangle(50, 50);
+                grid.setX(c * 50);
+                grid.setY(r * 50);
+                grid.setFill(Color.TRANSPARENT);
+                grid.setStroke(Color.BLACK);
+                grid.setStrokeWidth(5);
+                boardPane.getChildren().add(grid);
+            }
+        }
+
+    }
+
+
+    //GB-36-AWS
+    private int getShipSize(GameBoard board, int row, int col) {
+        for (Ship ship : board.getShips()){
+            for(int[] coordinate : ship.getCoordinates()){
+                if(coordinate[0] == row && coordinate[1] == col){
+                    return ship.getSize();
+                }
+            }
+        }
+        return 0;
+    }
+
+    private ImageView getShipImage(int shipSize, boolean isHorizontal, Image carrierImage, Image battleShipImage, Image cruiserImage, Image subImage){
+        ImageView shipImage = null;
+        if(shipSize == 5){
+            shipImage = new ImageView(carrierImage);
+        } else if (shipSize == 4) {
+            shipImage = new ImageView(battleShipImage);
+        } else if (shipSize == 3) {
+            shipImage = new ImageView(cruiserImage);
+        } else if (shipSize == 2) {
+            shipImage = new ImageView(subImage);
+        }
+        if(shipImage != null){
+            if(isHorizontal){
+                shipImage.setFitWidth(shipSize * 50);
+                shipImage.setFitHeight(75);
+            } else{
+                shipImage.setFitWidth(shipSize * 50);
+                shipImage.setFitHeight(75);
+                shipImage.setRotate(90);
+            }
+        }
+        return shipImage;
+    }
+
+    //GB-36-AWS
+    private void topNumberLabel(AnchorPane boardPane){
+        for (int c = 0; c < 10; c++) {
+            Label numberLabel = new Label(String.valueOf(c));
+            numberLabel.getStyleClass().add("text-stroke");
+            numberLabel.setLayoutX(c * 50+15);
+            numberLabel.setLayoutY(-50);
+            boardPane.getChildren().add(numberLabel);
+        }
+    }
+    //GB-36-AWS
+    private void sideCharLabel(AnchorPane boardPane){
+        for (int r = 0; r < 10; r++) {
+            Label letterLabel = new Label(String.valueOf((char)('A' + r)));
+            letterLabel.getStyleClass().add("text-stroke");
+            letterLabel.setLayoutX(-35);
+            letterLabel.setLayoutY(r * 50);
+            boardPane.getChildren().add(letterLabel);
         }
     }
 }

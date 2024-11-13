@@ -1,17 +1,22 @@
 package com.battleship;// BG-9 CF
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ship {
 
         private String kind;
         private int size;
         private boolean sunk;
         private int numberOfHits;
+        private List<int[]> coordinates;        //GB-36-AWS
 
         public Ship(String kind, int size, boolean sunk, int numberOfHits) {
             this.kind = kind;
             this.size = size;
             this.sunk = sunk;
             this.numberOfHits = numberOfHits;
+            this.coordinates = new ArrayList<>();       //GB-36-AWS
         }
 
         public String getKind() {
@@ -45,4 +50,12 @@ public class Ship {
         public void setNumberOfHits(int numberOfHits) {
             this.numberOfHits = numberOfHits;
         }
-    }
+        //GB-36-AWS
+        public List<int[]> getCoordinates() {
+            return coordinates;
+        }
+        //GB-36-AWS
+        public void addCoordinates(int row, int col) {
+            coordinates.add(new int[]{row, col});
+        }
+}

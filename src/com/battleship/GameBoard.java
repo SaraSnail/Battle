@@ -47,10 +47,12 @@ public class GameBoard {
         if(horizontal){
             for (int i = 0; i < size; i++) {
                 board[row][col + i] = 'S';
+                ship.addCoordinates(row, col + i);
             }
         }else{
             for (int i = 0; i < size; i++) {
                 board[row + i][col] = 'S';
+                ship.addCoordinates(row + i, col);
             }
         }
     }
@@ -127,9 +129,24 @@ public class GameBoard {
         }
     }
 
+   /* public boolean getPosition(int row, int col){
+        for (Ship ship : ships){
+            for(int[] coordinate : ship.getCoordinates()){
+                if(coordinate[0] == row && coordinate[1] == col){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }*/
+
     //GB-26-SA
     public char[][] getBoard() {
         return board;
     }
 
+    //GB-36-AWS
+    public List<Ship> getShips() {
+        return ships;
+    }
 }
