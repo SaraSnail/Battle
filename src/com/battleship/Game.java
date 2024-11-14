@@ -10,14 +10,6 @@ import static com.battleship.Coordinates.getValueAtCoordinates;
 
 public class Game {
 
-    /*
-    // GB-25-AA
-    På inloggningssidan när spelaren loggar in som server eller klient. Lägg då till en boolean med true/false beroende
-    på om det är en klient eller en server som skapats. Skicka med boolean tillsammans med CommunicationHandler-objektet
-    när game-objekt skapas.
-    */
-
-
     //GB-23-AA //GB-25-AA //GB-25-AA
     private CommunicationHandler player;
     private boolean isClientTurn;
@@ -88,7 +80,7 @@ public class Game {
                     break;
                 }
             }
-            gameOver = checkIfGameOver(); //GB-19-AA ifall inevarande spelare skickar game over. Spelare vinner.
+            gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
         }
         System.out.println("Game over!");
@@ -144,7 +136,7 @@ public class Game {
 
             lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
 
-            enemyHitOrMiss = setShotOutcome(enemyMove, myGameBoard);
+            enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
 
             if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
                 iLose = true;    //Ändra till iLoose
@@ -156,18 +148,16 @@ public class Game {
                 player.getWriter().println(myMove);
                 updateMaps(myShotCoordinates, enemyGameBoard);
             }
-
-
         }
     }
 
 
-    private void setShotOutcome(){ //denna metod bör kanske i BoardGame
-
+    private char setShotOutcome(String enemyMove){ //denna metod bör kanske i BoardGame
+        return 'x'; //Tillfällig char till metoden är klar.
     }
 
-    private void getShotOutcome(){ //denna metod bör kanske i BoardGame
-
+    private String getShotOutcome(String enemyMove, GameBoard myGameBoard){ //denna metod bör kanske i BoardGame
+        return "Tillfällig sträng"; //Tillfällig sträng tills metoden är klar.
     }
 
     //GB-26-SA, ändrar för test till public
@@ -214,7 +204,7 @@ public class Game {
 
 
         //GB-25-AA
-        //Uppdatera GabeBoard-metod(coordinates)
+        //Uppdatera GameBoard-metod(coordinates)
         //GB-18-SA
         updateGameView();//GB-18-SA, behöver inte skicka med row och col
 
@@ -234,13 +224,13 @@ public class Game {
 
     //GB-25-AA
     private boolean checkIfGameOver(){
-        /*//GB-33-SA
-        *//*
+        //GB-33-SA
+        /*
         String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
         //Samlar om de två sista arrays i isGameOver
         String isGameOver = isGameOverArray[isGameOverArray.length-2] + " " + isGameOverArray[isGameOverArray.length-1];
         //Kan använda String message rakt av om jag bara får tillbaka "game over"
-        *//*
+        */
 
         //GB-33-SA
         String message = " ";
@@ -252,7 +242,7 @@ public class Game {
         //GB-35-AA (Alertbox och .exit)
         if (iLose){ // iLose kommer fungera när makeMove är mergeat!
             Platform.runLater(() ->{
-                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\nWhen you klick OK you will exit the application.");
+                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\n When you klick OK you will exit the application ");
                 Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
             });
             return true;
@@ -260,13 +250,13 @@ public class Game {
             //GB-33-SA
             if (message.equalsIgnoreCase("game over")) {
 
-                //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
+                updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
                 // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
                 //lastShot fixa
 
                 //GB-35-AA (Alertbox och .exit())
                 Platform.runLater(() -> {
-                    AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\nWhen you klick OK you vill exit the application.");
+                    AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
                     Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
                 });
 
@@ -276,9 +266,7 @@ public class Game {
 
                 return false;
             }
-            }*/
-        return false; //Ta bort när avmarkering av blockkommentar i makeMove.
-
+        }
     }
 
     public CommunicationHandler getPlayer() {
