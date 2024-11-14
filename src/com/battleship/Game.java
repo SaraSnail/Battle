@@ -1,5 +1,6 @@
 package com.battleship;
 
+import com.battleship.graphic.AlertBox;
 import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
@@ -22,6 +23,8 @@ public class Game {
     private boolean isClientTurn;
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
+
+    //private boolean iLose; - använt för testning
 
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
@@ -99,6 +102,8 @@ public class Game {
 
     //GB-19-AA
    private void makeMove(CommunicationHandler player){
+        //player.getWriter().println("game over"); - använt för testning
+        //iLose = true; - använt för testning
         // Metod för att slumpa fram skott - retunera kordinater
         // Metod för att skicka skottet(kordinaterna) till motståndare
     }
@@ -176,7 +181,14 @@ public class Game {
 
     //GB-25-AA
     private boolean checkIfGameOver(){
-        boolean gameOver;
+        /*//GB-33-SA
+        *//*
+        String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
+        //Samlar om de två sista arrays i isGameOver
+        String isGameOver = isGameOverArray[isGameOverArray.length-2] + " " + isGameOverArray[isGameOverArray.length-1];
+        //Kan använda String message rakt av om jag bara får tillbaka "game over"
+        *//*
+
         //GB-33-SA
         String message = " ";
         try {
@@ -184,42 +196,36 @@ public class Game {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        /*
-        String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
-        //Samlar om de två sista arrays i isGameOver
-        String isGameOver = isGameOverArray[isGameOverArray.length-2] + " " + isGameOverArray[isGameOverArray.length-1];
-        //Kan använda String message rakt av om jag bara får tillbaka "game over"
-*/
-
-        //GB-25-AA
-        /*try {
-            if (player.getReader().readLine().equals("game over")) {
-                gameOver = true;
-            } else {
-                gameOver = false;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
-        return gameOver;*/
-
-
-        //GB-33-SA
-        if (message.equalsIgnoreCase("game over")) {
-            gameOver = true;
-
-            //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
-            // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
-            //lastShot fixa
+        //GB-35-AA (Alertbox och .exit)
+        if (iLose){ // iLose kommer fungera när makeMove är mergeat!
+            Platform.runLater(() ->{
+                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\nWhen you klick OK you will exit the application.");
+                Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+            });
+            return true;
         } else {
-            gameOver = false;
-        }
+            //GB-33-SA
+            if (message.equalsIgnoreCase("game over")) {
 
-        //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
-        //AlertBox for winner/loser
-        return gameOver;
+                //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
+                // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
+                //lastShot fixa
+
+                //GB-35-AA (Alertbox och .exit())
+                Platform.runLater(() -> {
+                    AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\nWhen you klick OK you vill exit the application.");
+                    Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+                });
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+            }*/
+        return false; //Ta bort när avmarkering av blockkommentar i makeMove.
+
     }
 
     public CommunicationHandler getPlayer() {
