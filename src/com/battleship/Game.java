@@ -3,10 +3,7 @@ package com.battleship;
 import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
-
-
 import java.io.IOException;
-
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
@@ -62,6 +59,7 @@ public class Game {
     private void gameLoop(){
         boolean gameOver = false;
         boolean firstMove = true;
+
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
@@ -83,6 +81,7 @@ public class Game {
                     break;
                 }
             }
+
             gameOver = checkIfGameOver();
             waitOneSec();
         }
