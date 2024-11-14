@@ -62,38 +62,40 @@ public class SceneServer {
             if(login.isInt(port2, port2.getText())){
 
                 //GB-39-SA
-
+                //I Platform.runLater visar jag först WaitToConnect fönstret
                 Platform.runLater(()->{
                     WaitToConnect.display();
 
-                    PauseTransition pause = new PauseTransition(Duration.seconds(5));
+                    //Skapar en "PauseTransition" med försening på 2 sekunder
+                    PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                    //I pause skapas view Scenen
                     pause.setOnFinished(event -> {
 
+                        //Scene för spelplanen som ska vara i samma Stage som LoginView
                         Scene view = GameView.gameView(window);
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
+                            //Platform.runLater i pause för att uppdatera till spelplanen efter den visat WaitToConnect
 
 
-                            try {
-                                Thread.sleep(2000);
+                            //Skapar först CommunicationHandler som väntar på kontakt med Client
+                            //GB-18-SA
+                            CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                            port2.clear();
+                            Game game = new Game(communicationHandler, false, login);
+                            game.startGame();
 
-                                //GB-18-SA
-                                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                                port2.clear();
-                                Game game = new Game(communicationHandler, false, login);
-                                game.startGame();
 
-                            } catch (InterruptedException ex) {
-                                throw new RuntimeException(ex);
-                            }
-
+                            //Byter scene till spelplanen
                             window.setScene(view);
                             //GB-39-SA
+                            //Stänger WaitToConnect
                             WaitToConnect.close();
 
                         });
 
                     });
+                    //Startar förseningen mellan WaitToConnect.display och CommunicationHandler
                     pause.play();
                 });
 
