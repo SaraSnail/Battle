@@ -181,13 +181,13 @@ public class Game {
 
     //GB-25-AA
     private boolean checkIfGameOver(){
-        //GB-33-SA
-        /*
+        /*//GB-33-SA
+        *//*
         String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
         //Samlar om de två sista arrays i isGameOver
         String isGameOver = isGameOverArray[isGameOverArray.length-2] + " " + isGameOverArray[isGameOverArray.length-1];
         //Kan använda String message rakt av om jag bara får tillbaka "game over"
-        */
+        *//*
 
         //GB-33-SA
         String message = " ";
@@ -223,7 +223,9 @@ public class Game {
 
                 return false;
             }
-        }
+            }*/
+        return false; //Ta bort när avmarkering av blockkommentar i makeMove.
+
     }
 
     public CommunicationHandler getPlayer() {
