@@ -151,9 +151,16 @@ public class Game {
         }
     }
 
-
+    //GB-21-DE
     private char setShotOutcome(String enemyMove){ //denna metod bör kanske i BoardGame
-        return 'x'; //Tillfällig char till metoden är klar.
+        //return 'x'; //Tillfällig char till metoden är klar.
+        char resultCode = enemyMove.charAt(0);
+        if (resultCode != 'i' && resultCode != 'h' && resultCode != 'm' && resultCode != 's') {
+            throw new IllegalArgumentException(" Ogiltig input" + resultCode);
+        }
+
+
+        return resultCode;
     }
 
     private String getShotOutcome(String enemyMove, GameBoard myGameBoard){ //denna metod bör kanske i BoardGame
