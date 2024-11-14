@@ -82,7 +82,7 @@ public class Shoot {
         return "No valid shot";
     }
     private void uppdateLastShot(){
-        lastShotX=;
-        lastShotY=;
+        lastShotX=0;
+        lastShotY=0;
     }
 }

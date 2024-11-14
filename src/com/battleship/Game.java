@@ -27,6 +27,8 @@ public class Game {
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
 
+    //private boolean iLose; - använt för testning
+
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
 
@@ -81,6 +83,7 @@ public class Game {
                 isClientTurn = true;
                 //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
             }
+
             waitThreeSec();
         }
         System.out.println("Game over!");
@@ -97,6 +100,8 @@ public class Game {
 
     //GB-19-AA
    private void makeMove(CommunicationHandler player){
+        //player.getWriter().println("game over"); - använt för testning
+        //iLose = true; - använt för testning
         // Metod för att slumpa fram skott - retunera kordinater
         // Metod för att skicka skottet(kordinaterna) till motståndare
     }
@@ -174,52 +179,54 @@ public class Game {
 
     //GB-25-AA
     private boolean checkIfGameOver(){
-        boolean gameOver;
-        try {
-            if (player.getReader().readLine().equals("game over")) {
-                gameOver = true;
-            } else {
-                gameOver = false;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //GB-35-AA
-        if (gameOver) {
-            Platform.runLater(()->{
-                AlertBox.display("Game Over", "GAME OVER\nYOU WIN!");
-                //Stäng ner spelet vid tryck OK!
-            });
-        } else if (iLose){
+        //boolean gameOver;
+        //GB-35-AA (Alertbox och .exit)
+        if (iLose){
             Platform.runLater(() ->{
-                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!");
-                //stäng ner spelet vid tryck OK!
+                AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\nWhen you klick OK you will exit the application.");
+                Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
             });
+            return true;
+        } else {
+            try {
+                if (player.getReader().readLine().equals("game over")) {
+                    Platform.runLater(() -> {
+                        AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\nWhen you klick OK you vill exit the application.");
+                        Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+                    });
+                    return true;
+
+                } else {
+                    return false;
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
-        return gameOver;
+        //return gameOver;
     }
 
     public CommunicationHandler getPlayer() {
