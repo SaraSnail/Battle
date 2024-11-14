@@ -1,7 +1,6 @@
 package com.battleship;
 
 import com.battleship.graphic.AlertBox;
-import com.battleship.graphic.AlertBox;
 import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
