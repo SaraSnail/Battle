@@ -174,7 +174,23 @@ public class Game {
     //GB-25-AA
     private boolean checkIfGameOver(){
         boolean gameOver;
+        //GB-33-SA
+        String message = " ";
         try {
+            message = String.valueOf(player.getReader().readLine());//Samlar texten från players reader
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        /*
+        String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
+        //Samlar om de två sista arrays i isGameOver
+        String isGameOver = isGameOverArray[isGameOverArray.length-2] + " " + isGameOverArray[isGameOverArray.length-1];
+        //Kan använda String message rakt av om jag bara får tillbaka "game over"
+*/
+
+        //GB-25-AA
+        /*try {
             if (player.getReader().readLine().equals("game over")) {
                 gameOver = true;
             } else {
@@ -184,6 +200,22 @@ public class Game {
             throw new RuntimeException(e);
         }
         //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
+        return gameOver;*/
+
+
+        //GB-33-SA
+        if (message.equalsIgnoreCase("game over")) {
+            gameOver = true;
+
+            //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
+            // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
+            //lastShot fixa
+        } else {
+            gameOver = false;
+        }
+
+        //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
+        //AlertBox for winner/loser
         return gameOver;
     }
 
