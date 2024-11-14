@@ -126,4 +126,10 @@ public class GameBoard {
             System.out.println();
         }
     }
+
+    //GB-26-SA
+    public char[][] getBoard() {
+        return board;
+    }
+
 }

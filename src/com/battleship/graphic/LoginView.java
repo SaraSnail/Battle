@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 public class LoginView extends Application{
 
     public Stage window;
+
     public Scene loginView;
     private Button clientButton;
     private Button serverButton;
@@ -34,7 +35,7 @@ public class LoginView extends Application{
     public void start(Stage primaryStage) throws Exception {
         //Sätter primaryStage i window, gör att fönstrets storlek inte går att ändra och anger titel
         window = primaryStage;
-        window.setResizable(false);
+        //window.setResizable(false);
         window.setTitle("Login View");
 
         //Klasser för sceneClient och sceneServer
@@ -71,7 +72,7 @@ public class LoginView extends Application{
             //New Scene
             whichPlayer(1);
             window.setScene(sceneClient);
-            window.setFullScreen(true);
+            //window.setFullScreen(true);
         });
 
         serverButton.setOnAction(e->{
@@ -79,7 +80,7 @@ public class LoginView extends Application{
             //Lägg in att användaren får skriva in port
             whichPlayer(2);
             window.setScene(sceneServer);
-            window.setFullScreen(true);
+            //window.setFullScreen(true);
         });
 
 
@@ -133,8 +134,8 @@ public class LoginView extends Application{
 
 //----------------------------------------------------------------------------------------------------------------------
         //Ställer in så att fönstret är helskärm och inte går att ändra på
-        window.setFullScreen(true);
-        window.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        //window.setFullScreen(true);
+        //window.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
 
         window.setScene(loginView);
@@ -156,23 +157,42 @@ public class LoginView extends Application{
     }
     //GB-15-SA
     //Kollar om porten användaren skrivir in är en Int och om den är över 1024 vilket är portar som redan används
-    public boolean isInt(TextField input, String message){
-        try{
+/*                    public boolean isInt(TextField input, String message){
+                        try{
+                            int port = Integer.parseInt(input.getText());
+                            if(port<1024){
+                                System.out.println("Port not available");
+                                return false;
+                            } else {
+                                System.out.println("Port is: " + message);
+                                return true;
+                            }
+
+                        }catch (NumberFormatException e){
+                            System.out.println(message + " is not a number");
+                            return false;
+
+                        }
+                    }*/
+    //GB-34-AA
+    //Uppdaterar metoden så att den kontrollerar antal tecken och att det är siffror mellan 1025-9999.
+    public boolean isInt(TextField input, String message) {
+        String textInput = input.getText().trim();
+        if (textInput.length() == 4 && textInput.matches("\\d+") ) { //kontrollerar om strängen består av 4 siffror
             int port = Integer.parseInt(input.getText());
-            if(port<1024){
-                System.out.println("Port not available");
-                return false;
-            } else {
-                System.out.println("Port is: " + message);
-                return true;
-            }
 
-        }catch (NumberFormatException e){
-            System.out.println(message + " is not a number");
+                if (port >= 1025 && port <= 9999) {
+                    System.out.println("Port is: " + message);
+                    return true;
+                } else {
+                    return false;
+                }
+
+        } else {
             return false;
-
         }
     }
+
     //GB-15-SA
     //Skickar med vilken spelare det är
     public String whichPlayer(int player){
