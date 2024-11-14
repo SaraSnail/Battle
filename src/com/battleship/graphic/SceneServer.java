@@ -2,6 +2,7 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Scanner;
+
 //GB-15-SA
 public class SceneServer {
 
@@ -41,24 +45,52 @@ public class SceneServer {
 
         //Action för submit och back knapparna
         submit2.setOnAction(e->{
+
+            //GB-34-AA (if satsen)
+            String portText = port2.getText().trim();
+            if (portText.isEmpty()){
+                System.out.println("Empty port box");
+                return;
+            }
+
+            //SA
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
 
 
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
-                Game game = new Game(communicationHandler, false);
+                Game game = new Game(communicationHandler, false, login);
                 game.startGame();
+
+                //GB-18-SA
+
+                try{
+                    Scene view = GameView.gameView(window);
+                    //GB-37-SA, la till Platform.runLater
+                    Platform.runLater(()->{
+                        window.setScene(view);
+                    });
+
+
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+
 
 
             } else if (!login.isInt(port2, port2.getText())) {
                 System.out.println("Can't play at that port");
+                //GB-35-AA (AlertBox - meddelandet)
+                AlertBox.display("Warning", "Invalid port! \nA valid port must be 4 digits and a number between 1025-9999.\nPlease try again!");
+                port2.clear();
             }
         });
 
+        //SA
         //Går tillbaka till start
         back2.setOnAction(e->{
-            goBack(login, window);
+            goTo(login, window);
         });
 
         //Scene-Server
@@ -102,15 +134,21 @@ public class SceneServer {
     }
     //GB-15-SA
     //Om man vill gå tillbaka
-    private static void goBack(LoginView login, Stage window) {
+    //GB-18-SA, bytte från goBack till goTo
+    private static void goTo(LoginView login, Stage window) {
+        //GB-37-SA, la till Platform.runLater
+        Platform.runLater(()->{
+            try{
+                //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
+                login.start(window);
+                //window.setFullScreen(true);
 
-        try{
-            //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
-            login.start(window);
-            //window.setFullScreen(true);
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        });
 
-        }catch (Exception exception){
-            exception.printStackTrace();
-        }
     }
+
+
 }

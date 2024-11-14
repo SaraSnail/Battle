@@ -1,5 +1,7 @@
 package com.battleship.graphic;
 
+import com.battleship.CommunicationHandler;
+import com.battleship.Game;
 import com.battleship.GameBoard;
 import com.battleship.Ship;
 
@@ -16,15 +18,26 @@ import javafx.scene.shape.Rectangle;
 import java.util.List;
 
 //GB-14-aws
-public class GameView extends Application {
-    private GameBoard myGameBoard;
-    private GameBoard enemyGameBoard;
+public class GameView {//GB-18-SA, tog bort "extends applications"
+    //GB-18-SA, gjorde dem static
+    //aws
+    private static GameBoard myGameBoard;
+    private static GameBoard enemyGameBoard;
+    //GB-18-SA, la till scene
+    public static Scene scene;
 
     //GB-14-aws
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+   /* @Override
+    public void start(Stage primaryStage) throws Exception {*/
+    //aws
+    //aws hade skrivit detta som en start metod, GB-18-SA, behövde göra om den till en scene istället
+
+    public static Scene gameView (Stage window){
+        //aws
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
+
+
 
         AnchorPane myGame = new AnchorPane();        // Min Spelplan
         AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
@@ -66,17 +79,27 @@ public class GameView extends Application {
         stack.getChildren().addAll(myLabel,enemyLabel,myGame,enemyGame);
         stack.setBackground(new Background(background));
 
-        Scene scene = new Scene(stack, 1450, 700);
+        //GB-18-SA, gjorde att den "skapas" utanför metoden
+        scene = new Scene(stack, 1450, 700);
+
+
+        //GB-18-SA, kommenterade ut detta
+        /*
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
         stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
-        primaryStage.show();
+        primaryStage.show();*/
+
         myGameBoard.displayBoard();
+
+        //GB-18-SA
+        return scene;
+
     }
 
     //GB-14-aws
-    public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
+    public static void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
         //GB-36-AWS
         Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");       //PNGEGG
@@ -148,7 +171,7 @@ public class GameView extends Application {
 
     }
     //GB-36-AWS
-    private void gameBoardGrid(AnchorPane boardPane, GameBoard board,boolean isEnemy){
+    private static void gameBoardGrid(AnchorPane boardPane, GameBoard board,boolean isEnemy){
         char[][] gameBoardGrid = board.getBoard();
 
         for (int r = 0; r < 10; r++) {
@@ -165,7 +188,7 @@ public class GameView extends Application {
     }
 
     //GB-36-AWS
-    private ImageView getShipImage(int shipSize, boolean isHorizontal,
+    private static ImageView getShipImage(int shipSize, boolean isHorizontal,
                                    Image carrierImage, Image carrierImageVertikal,
                                    Image battleShipImage, Image battleShipImageVertikal,
                                    Image cruiserImage, Image cruiserImageVertikal,
@@ -193,7 +216,7 @@ public class GameView extends Application {
     }
 
     //GB-36-AWS
-    private void topNumberLabel(AnchorPane boardPane){
+    private static void topNumberLabel(AnchorPane boardPane){
         for (int c = 0; c < 10; c++) {
             Label numberLabel = new Label(String.valueOf(c));
             numberLabel.getStyleClass().add("text-stroke");
@@ -203,7 +226,7 @@ public class GameView extends Application {
         }
     }
     //GB-36-AWS
-    private void sideCharLabel(AnchorPane boardPane){
+    private static void sideCharLabel(AnchorPane boardPane){
         for (int r = 0; r < 10; r++) {
             Label letterLabel = new Label(String.valueOf((char)('A' + r)));
             letterLabel.getStyleClass().add("text-stroke");
@@ -212,4 +235,5 @@ public class GameView extends Application {
             boardPane.getChildren().add(letterLabel);
         }
     }
+
 }
