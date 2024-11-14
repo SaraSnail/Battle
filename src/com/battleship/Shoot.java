@@ -1,23 +1,32 @@
 package com.battleship;//GB-17-cf
+
+
+
+
+
+
+
+
 import java.util.Random;
 
 public class Shoot {
 
-    int lastShotX;
-    int lastShotY;
 
 
-    char[][] enemyBoard= {
-            {'e','e','e','e','e','e','e','e','e','e'},
-            {'e','e','e','e','e','e','e','e','e','e'}};
 
-    char[] yAxis= {'a','b','c','d','e','f','g','h','i','j'};
-
-    Random random = new Random();
+    static int lastShotX;
+    static int lastShotY;
+    static String lastHit;
 
 
-    private  String randomShot() {
+    static char[] yAxis= {'a','b','c','d','e','f','g','h','i','j'};
 
+    static Random random = new Random();
+
+
+    public static String randomShot(GameBoard enemyGameBoard ) {
+
+        char[][] enemyBoard = enemyGameBoard.getBoard();
 
 
         boolean randomShotTaken = false;
@@ -25,24 +34,22 @@ public class Shoot {
         while (!randomShotTaken) {
 
 
+
             int randomX = random.nextInt(10);
             int randomY = random.nextInt(10);
             char randomCoordinate = enemyBoard[randomX][randomY];
 
-            lastShotX = randomX;
-            lastShotY = randomY;
 
 
 
 
-            if(randomCoordinate=='e') {
+            if(randomCoordinate==' ') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
                 String result = numberCoordinate+letterCoordinate;
 
                 randomShotTaken = true;
-                enemyBoard[randomX][randomY] = 'x';
 
                 return result;
 
@@ -50,30 +57,41 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    private  String hitShot(){
+    public static  String hitShot(GameBoard enemyGameBoard){
 
-        boolean randomShotTaken= true;
+        char[][] enemyBoard = enemyGameBoard.getBoard();
 
-        while(randomShotTaken == true) {
+        boolean randomShotTaken= false;
+
+        while(!randomShotTaken) {
 
             int randomSpace = random.nextInt(4);
 
             int[] fireFieldX = {-1, 1, 0, 0};
             int[] fireFieldY = {0, 0, -1, 1};
 
+            String xString = lastHit.substring(0, lastHit.length() - 1);
+            String yString = lastHit.substring(lastHit.length() - 1);
+
+            lastShotX = Integer.parseInt(xString);
+            lastShotY = yString.charAt(0)-'a';
+
             int randomX = lastShotX + fireFieldX[randomSpace];
             int randomY = lastShotY + fireFieldY[randomSpace];
 
+            if (randomX < 0 || randomX >= 10 || randomY < 0 || randomY >= 10) {
+                continue;
+            }
+
             char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
-            if (randomSecondShotCoordinate == 'e') {
+            if (randomSecondShotCoordinate == ' ') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
                 String result = numberCoordinate + letterCoordinate;
 
-                randomShotTaken = false;
-                enemyBoard[randomX][randomY] = 'x';
+                randomShotTaken = true;
 
                 return result;
 
@@ -81,8 +99,15 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    private void uppdateLastShot(){
-        lastShotX=;
-        lastShotY=;
+
+    public Shoot() {
+    }
+
+    public static String getLastHit() {
+        return lastHit;
+    }
+
+    public static void setLastHit(String lastHit) {
+        Shoot.lastHit = lastHit;
     }
 }

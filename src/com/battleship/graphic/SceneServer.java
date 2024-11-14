@@ -2,6 +2,7 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -66,7 +67,11 @@ public class SceneServer {
 
                 try{
                     Scene view = GameView.gameView(window);
-                    window.setScene(view);
+                    //GB-37-SA, la till Platform.runLater
+                    Platform.runLater(()->{
+                        window.setScene(view);
+                    });
+
 
                 }catch(Exception ex){
                     ex.printStackTrace();
@@ -131,15 +136,18 @@ public class SceneServer {
     //Om man vill gå tillbaka
     //GB-18-SA, bytte från goBack till goTo
     private static void goTo(LoginView login, Stage window) {
+        //GB-37-SA, la till Platform.runLater
+        Platform.runLater(()->{
+            try{
+                //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
+                login.start(window);
+                //window.setFullScreen(true);
 
-        try{
-            //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
-            login.start(window);
-            //window.setFullScreen(true);
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        });
 
-        }catch (Exception exception){
-            exception.printStackTrace();
-        }
     }
 
 
