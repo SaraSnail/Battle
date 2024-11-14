@@ -98,7 +98,7 @@ public class Game {
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
         String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
-        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s", "i" eller "game over"
+        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
         if (firstMove){
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
