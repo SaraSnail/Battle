@@ -50,6 +50,7 @@ public class Shoot {
                 String result = numberCoordinate+letterCoordinate;
 
                 randomShotTaken = true;
+                enemyBoard[randomX][randomY] = 'x';
 
                 return result;
 
