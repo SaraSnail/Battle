@@ -3,10 +3,7 @@ package com.battleship;
 import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
-
-
 import java.io.IOException;
-
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
@@ -49,7 +46,7 @@ public class Game {
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
-        waitThreeSec();
+        waitOneSec();
 
         if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
@@ -62,6 +59,7 @@ public class Game {
     private void gameLoop(){
         boolean gameOver = false;
         boolean firstMove = true;
+
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
@@ -70,25 +68,30 @@ public class Game {
                 } else {
                     gameOver = checkIfGameOver();
                     makeMove(player);
-                    getShotOutcome();
-                    //updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
                     isClientTurn = false;
+                    if (gameOver){
+                        break;
+                    }
                 }
             } else {
                 gameOver = checkIfGameOver();
                 makeMove(player);
                 isClientTurn = true;
-                //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
+                if (gameOver){
+                    break;
+                }
             }
-            waitThreeSec();
+
+            gameOver = checkIfGameOver();
+            waitOneSec();
         }
         System.out.println("Game over!");
     }
 
     //GB-31-AA
-    private void waitThreeSec(){
+    private void waitOneSec(){
         try {
-            Thread.sleep(3000);  //Väntar 3 sek
+            Thread.sleep(1000);  //Vänta 1 sek.
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
