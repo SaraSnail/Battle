@@ -41,8 +41,6 @@ public class WaitToConnect {
 
         window.setScene(scene);
         window.show();
-        //window.showAndWait();//Måste stänga fönstret innan den går vidare
-        //Platform.runLater(() -> {window.show();});
     }
     //GB-39-SA
     public static void close() {

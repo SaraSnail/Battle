@@ -72,9 +72,7 @@ public class SceneServer {
                         Scene view = GameView.gameView(window);
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
-                            window.setScene(view);
-                            //GB-39-SA
-                            WaitToConnect.close();
+
 
                             try {
                                 Thread.sleep(2000);
@@ -88,6 +86,10 @@ public class SceneServer {
                             } catch (InterruptedException ex) {
                                 throw new RuntimeException(ex);
                             }
+
+                            window.setScene(view);
+                            //GB-39-SA
+                            WaitToConnect.close();
 
                         });
 
