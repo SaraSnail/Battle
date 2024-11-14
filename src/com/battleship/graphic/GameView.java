@@ -47,6 +47,7 @@ public class GameView extends Application {
         battleGroundFX(myGame, myGameBoard, false);
         battleGroundFX(enemyGame, enemyGameBoard, true );
         gameBoardGrid(myGame, myGameBoard,false);
+        gameBoardGrid(enemyGame, enemyGameBoard, true);
 
         myGame.setLayoutX(100);
         myGame.setLayoutY(100);
@@ -72,17 +73,21 @@ public class GameView extends Application {
 
         primaryStage.show();
         myGameBoard.displayBoard();
-        /*enemyGameBoard.displayBoard();*/
     }
 
     //GB-14-aws
     public void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
-
+        //GB-36-AWS
         Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");       //PNGEGG
         Image battleShipImage = new Image("file:recourses/images/Slagskepp.png");       //PNGEGG
         Image cruiserImage = new Image("file:recourses/images/Kryssarenr2.png");           //PNGEGG
         Image subImage = new Image("file:recourses/images/Ubåt.png");                   //PNGEGG
+        //GB-36-AWS
+        Image carrierImageVertikal = new Image("file:recourses/images/Hangarfartygvertikal.png"); //PNGEGG
+        Image battleShipImageVertikal = new Image("file:recourses/images/Slagskeppvertikal.png");       //PNGEGG
+        Image cruiserImageVertikal = new Image("file:recourses/images/Kryssarenr2vertikal.png");           //PNGEGG
+        Image subImageVertikal = new Image("file:recourses/images/Ubåtvertikal.png");                   //PNGEGG
 
         for (Ship ship : board.getShips()){
             List<int[]> coordinatesList = ship.getCoordinates();
@@ -91,18 +96,22 @@ public class GameView extends Application {
             int c = coordinates[0][1];
             int shipSize = ship.getSize();
             boolean isHorizontal = coordinates.length > 1 && coordinates[0][1] != coordinates[1][1];
-
-            ImageView shipImage = getShipImage(shipSize,isHorizontal,carrierImage,battleShipImage,cruiserImage,subImage);
+            //GB-36-AWS
+            ImageView shipImage = getShipImage(shipSize,isHorizontal,
+                                                carrierImage, carrierImageVertikal,
+                                                battleShipImage, battleShipImageVertikal,
+                                                cruiserImage, cruiserImageVertikal,
+                                                subImage, subImageVertikal);
             if(shipImage != null){
                 if(isHorizontal) {
                     shipImage.setX(c * 50);
                     shipImage.setY(r * 50 - 25);
-                    boardPane.getChildren().add(shipImage);
+
                 }else{
                     shipImage.setX(c * 50);
                     shipImage.setY(r * 50);
-                    boardPane.getChildren().add(shipImage);
                 }
+                boardPane.getChildren().add(shipImage);
             }
 
         }
@@ -114,47 +123,22 @@ public class GameView extends Application {
                 cell.setY(r * 50);
 
                 if(isEnemy){
-                    cell.setFill(Color.TRANSPARENT);            // Enemy Havet
-                /*}else{
-                    if(gameBoardFX[r][c] == 'S') {              //Skepp
-                        ImageView shipImage = null;
-                        int shipSize = getShipSize(board,r,c);
-
-                        if(shipSize == 5){
-                            shipImage = new ImageView(carrierImage);
-                        } else if (shipSize == 4) {
-                            shipImage = new ImageView(battleShipImage);
-                        } else if (shipSize == 3) {
-                            shipImage = new ImageView(cruiserImage);
-                        } else if (shipSize == 2) {
-                            shipImage = new ImageView(subImage);
-                        }
-                        if(shipImage != null){
-                            if(isHorizontal){
-                                shipImage.setFitWidth(shipSize * 50);
-                                shipImage.setFitHeight(75);
-                            }else{
-                                shipImage.setFitWidth(50);
-                                shipImage.setFitHeight(shipSize * 50);
-                                shipImage.setRotate(90);
-                            }
-                            shipImage.setX(c * 50);
-                            shipImage.setY(r * 50-20);
-                            boardPane.getChildren().add(shipImage);
-                        }
-                        continue;
-                        cell.setFill(Color.DARKGRAY);*/
-                    } else{
-                        if (gameBoardFX[r][c] == 'X') {      //Miss
+                    if (gameBoardFX[r][c] == 'X') {      //Miss
                         cell.setFill(Color.BLUE);
-
                     } else if (gameBoardFX[r][c] == '0') {      //Träff
                         cell.setFill(Color.RED);
-
                     } else{
-                        cell.setFill(Color.TRANSPARENT);        //Havet
-
+                        continue;
                     }
+
+                } else{
+                    if (gameBoardFX[r][c] == 'X') {      //Miss
+                    cell.setFill(Color.BLUE);
+                } else if (gameBoardFX[r][c] == '0') {      //Träff
+                    cell.setFill(Color.RED);
+                } else{
+                    continue;
+                }
                 }
                 cell.setStroke(Color.BLACK);
                 cell.setStrokeWidth(5);
@@ -178,41 +162,31 @@ public class GameView extends Application {
                 boardPane.getChildren().add(grid);
             }
         }
-
     }
-
 
     //GB-36-AWS
-    private int getShipSize(GameBoard board, int row, int col) {
-        for (Ship ship : board.getShips()){
-            for(int[] coordinate : ship.getCoordinates()){
-                if(coordinate[0] == row && coordinate[1] == col){
-                    return ship.getSize();
-                }
-            }
-        }
-        return 0;
-    }
-
-    private ImageView getShipImage(int shipSize, boolean isHorizontal, Image carrierImage, Image battleShipImage, Image cruiserImage, Image subImage){
+    private ImageView getShipImage(int shipSize, boolean isHorizontal,
+                                   Image carrierImage, Image carrierImageVertikal,
+                                   Image battleShipImage, Image battleShipImageVertikal,
+                                   Image cruiserImage, Image cruiserImageVertikal,
+                                   Image subImage, Image subImageVertikal) {
         ImageView shipImage = null;
         if(shipSize == 5){
-            shipImage = new ImageView(carrierImage);
+            shipImage = new ImageView(isHorizontal ? carrierImage : carrierImageVertikal);
         } else if (shipSize == 4) {
-            shipImage = new ImageView(battleShipImage);
+            shipImage = new ImageView(isHorizontal ? battleShipImage : battleShipImageVertikal);
         } else if (shipSize == 3) {
-            shipImage = new ImageView(cruiserImage);
+            shipImage = new ImageView(isHorizontal ? cruiserImage : cruiserImageVertikal);
         } else if (shipSize == 2) {
-            shipImage = new ImageView(subImage);
+            shipImage = new ImageView(isHorizontal ? subImage : subImageVertikal);
         }
         if(shipImage != null){
             if(isHorizontal){
                 shipImage.setFitWidth(shipSize * 50);
                 shipImage.setFitHeight(75);
             } else{
-                shipImage.setFitWidth(shipSize * 50);
-                shipImage.setFitHeight(75);
-                shipImage.setRotate(90);
+                shipImage.setFitWidth(75);
+                shipImage.setFitHeight(shipSize * 50);
             }
         }
         return shipImage;

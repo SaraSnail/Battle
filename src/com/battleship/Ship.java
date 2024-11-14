@@ -9,7 +9,7 @@ public class Ship {
         private int size;
         private boolean sunk;
         private int numberOfHits;
-        private List<int[]> coordinates;        //GB-36-AWS
+        private List<int[]> coordinates;  //GB-36-AWS
 
         public Ship(String kind, int size, boolean sunk, int numberOfHits) {
             this.kind = kind;
@@ -17,6 +17,10 @@ public class Ship {
             this.sunk = sunk;
             this.numberOfHits = numberOfHits;
             this.coordinates = new ArrayList<>();       //GB-36-AWS
+        }
+        //GB-36-AWS
+        public void clearCoordinates() {
+            coordinates.clear();
         }
 
         public String getKind() {

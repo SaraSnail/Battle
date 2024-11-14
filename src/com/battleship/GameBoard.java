@@ -57,41 +57,48 @@ public class GameBoard {
         }
     }
 
-                // logik för att lösa om inte alla skepp är inlagda.
-
    // GB-8-AWS
-    private void placeAllShips(){
+    private void placeAllShips() {
         Random random = new Random();
         ships.sort((s1, s2) -> Integer.compare(s2.getSize(), s1.getSize()));
 
-        for (Ship ship: ships){
-            boolean placed = false;
-            int attempts = 0;
+        boolean placementSuccess = false;
+        int trys = 0;
+        while (!placementSuccess && trys < 100) {       //GB-36-AWS
+            trys++;
+            initializeBoard();
+            for (Ship ship : ships) {
+                ship.clearCoordinates();
+                boolean placed = false;
+                int attempts = 0;
 
-            while(!placed && attempts < 100){
-                attempts ++;
+                while (!placed && attempts < 100) {
+                    attempts++;
 
-                int row = random.nextInt(10);
-                int col = random.nextInt(10);
-                boolean horizontal = random.nextBoolean();
+                    int row = random.nextInt(10);
+                    int col = random.nextInt(10);
+                    boolean horizontal = random.nextBoolean();
 
-                if(isAreaAvailable(row,col,ship.getSize(),horizontal)){
-                    placeShip(ship, row, col, horizontal);
-                    System.out.println("Placed " + ship.getKind() + " at (" + row + ", " + col + ") " + (horizontal ? "horizontally" : "vertically"));      // använder för kontroll atm kommer försvinna
-                    placed = true;
+                    if (isAreaAvailable(row, col, ship.getSize(), horizontal)) {
+                        placeShip(ship, row, col, horizontal);
+                        System.out.println("Placed " + ship.getKind() + " at (" + row + ", " + col + ") " + (horizontal ? "horizontally" : "vertically"));      // använder för kontroll atm kommer försvinna
+                        placed = true;
+
+                    }
+                }
+                // om alla inte placeras så kör vi programmet igen.
+                if (!placed) {
+                    System.out.println();
+                    System.out.println("Misslyckades med att placera alla skeppen, försöker igen.");
+                    System.out.println();
+                    break;
                 }
             }
-            // om alla inte placeras så kör vi programmet igen.
-            if(!placed){
-                System.out.println("-----------------------------------------------------------");
-                System.out.println("Misslyckades med att placera alla skeppen, försöker igen.");
-                System.out.println("-----------------------------------------------------------");
-                initializeBoard();
-                placeAllShips();
-                return;
-            }
+            //GB-36-AWS
+            placementSuccess = ships.stream().allMatch(ship -> ship.getCoordinates().size() == ship.getSize());
         }
     }
+
 
     //GB-8-AWS
     private boolean isAreaAvailable(int row, int col, int size, boolean horizontal) {
@@ -128,17 +135,6 @@ public class GameBoard {
             System.out.println();
         }
     }
-
-   /* public boolean getPosition(int row, int col){
-        for (Ship ship : ships){
-            for(int[] coordinate : ship.getCoordinates()){
-                if(coordinate[0] == row && coordinate[1] == col){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }*/
 
     //GB-26-SA
     public char[][] getBoard() {
