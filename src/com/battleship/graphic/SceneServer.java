@@ -2,6 +2,9 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.Scanner;
 
@@ -57,31 +61,48 @@ public class SceneServer {
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
 
+                //GB-39-SA
 
-                WaitToConnect.display();
+                Platform.runLater(()->{
+                    WaitToConnect.display();
 
+                    PauseTransition pause = new PauseTransition(Duration.seconds(5));
+                    pause.setOnFinished(event -> {
 
-                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                port2.clear();
-                Game game = new Game(communicationHandler, false, login);
-                game.startGame();
+                        Scene view = GameView.gameView(window);
+                        //GB-37-SA, la till Platform.runLater
+                        Platform.runLater(()->{
+                            window.setScene(view);
+                            //GB-39-SA
+                            WaitToConnect.close();
 
+                            try {
+                                Thread.sleep(2000);
 
-                //GB-18-SA
+                                //GB-18-SA
+                                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                                port2.clear();
+                                Game game = new Game(communicationHandler, false, login);
+                                game.startGame();
 
-                try{
-                    Scene view = GameView.gameView(window);
-                    //GB-37-SA, la till Platform.runLater
-                    Platform.runLater(()->{
-                        window.setScene(view);
-                        WaitToConnect.close();
+                            } catch (InterruptedException ex) {
+                                throw new RuntimeException(ex);
+                            }
+
+                        });
 
                     });
+                    pause.play();
+                });
+
+                //WaitToConnect.display();
+
+                //Pausa scene switch tills vi fått kontakt med klienten?
+                //Vill ladda krigsscenen och starta allt
+                //Skriv kod att ladda krigsscenen
+                //Innan connection ha fördörjning
 
 
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
 
 
 

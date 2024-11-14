@@ -8,9 +8,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+//GB-39-SA
 public class WaitToConnect {
     private static Stage window;
 
+    //GB-39-SA
     public static void display() {
         window = new Stage();
 
@@ -42,7 +44,7 @@ public class WaitToConnect {
         //window.showAndWait();//Måste stänga fönstret innan den går vidare
         //Platform.runLater(() -> {window.show();});
     }
-
+    //GB-39-SA
     public static void close() {
         if(window != null) {
             window.close();
