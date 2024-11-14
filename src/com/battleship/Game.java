@@ -31,7 +31,7 @@ public class Game {
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
-        waitThreeSec();
+        waitOneSec();
 
         if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
@@ -53,21 +53,28 @@ public class Game {
                     gameOver = checkIfGameOver();
                     makeMove(player);
                     isClientTurn = false;
+                    if (gameOver){
+                        break;
+                    }
                 }
             } else {
                 gameOver = checkIfGameOver();
                 makeMove(player);
                 isClientTurn = true;
+                if (gameOver){
+                    break;
+                }
             }
-            waitThreeSec();
+            gameOver = checkIfGameOver();
+            waitOneSec();
         }
         System.out.println("Game over!");
     }
 
     //GB-31-AA
-    private void waitThreeSec(){
+    private void waitOneSec(){
         try {
-            Thread.sleep(3000);  //Väntar 3 sek
+            Thread.sleep(1000);  //Vänta 1 sek.
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
