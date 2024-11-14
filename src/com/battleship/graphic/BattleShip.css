@@ -38,3 +38,21 @@
 .background-blue{
     -fx-background-color: linear-gradient(to bottom, #0077b6, #03045e);
 }
+/*GB-36-AWS*/
+.text-bold-large{
+    -fx-font-weight: bold;
+    -fx-font-size: 32;
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: rgb(255, 255, 255);
+}
+/*GB-36-AWS*/
+.text-stroke{
+    -fx-font-weight: bold;
+    -fx-font-size: 32;
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(one-pass-box, black, 25, 10, -1, 0),
+    dropshadow(one-pass-box, black, 25, 10, 1, 0),
+    dropshadow(one-pass-box, black, 25, 10, 0, -1),
+    dropshadow(one-pass-box, black, 25, 10, 0, 1);
+}
