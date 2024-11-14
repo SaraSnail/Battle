@@ -206,18 +206,19 @@ public class Game {
         //GB-25-AA
         //Uppdatera GameBoard-metod(coordinates)
         //GB-18-SA
-        updateGameView();//GB-18-SA, behöver inte skicka med row och col
+        updateGameView(gameBoard);//GB-18-SA, behöver inte skicka med row och col
 
     }
 
 
     //GB-25-AA
-    private void updateGameView(){ // denna metod kanske bör ligga i GameBoard
+    private void updateGameView(GameBoard gameBoard){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
 
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
-            loginView.window.setScene(GameView.gameView(loginView.window));
+            //loginView.window.setScene(GameView.gameView(loginView.window));
+            GameView.updateMapFX(col, row, gameBoard);
             //Uppdatera GUI/GameView
         });
     }

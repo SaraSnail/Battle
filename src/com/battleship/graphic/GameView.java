@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -25,6 +26,9 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     private static GameBoard enemyGameBoard;
     //GB-18-SA, la till scene
     public static Scene scene;
+
+    //GB-18-SA, skapa rektageln här så jag kan nå den i updateMapFX()
+    private static Rectangle cell = new Rectangle(50, 50);
 
     //GB-14-aws
    /* @Override
@@ -141,7 +145,8 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
-                Rectangle cell = new Rectangle(50, 50);
+                cell = new Rectangle(50, 50);//GB-18-SA, gjorde till en klass variabel
+                //Rectangle cell = new Rectangle(50, 50);
                 cell.setX(c * 50);
                 cell.setY(r * 50);
 
@@ -233,6 +238,21 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
             letterLabel.setLayoutX(-35);
             letterLabel.setLayoutY(r * 50);
             boardPane.getChildren().add(letterLabel);
+        }
+    }
+
+    public static void updateMapFX(int col, int row, GameBoard gameBoard){
+        char[][] boardFX = gameBoard.getBoard();
+        Image fire = new Image("file:recourses/images/fire.png");
+
+
+        if(boardFX[col][row] == 'X'){//A miss
+            cell.setFill(new ImagePattern(fire));//Kanske fungerar?
+            //cell.setFill(Color.BLUE);
+        } else if (boardFX[col][row] == '0') {//A hit
+            cell.setFill(Color.RED);
+        }else {
+            System.out.println("gameBoardFX not working");
         }
     }
 
