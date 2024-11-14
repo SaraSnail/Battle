@@ -57,7 +57,10 @@ public class SceneServer {
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
 
+
                 WaitToConnect.display();
+
+
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
                 Game game = new Game(communicationHandler, false, login);

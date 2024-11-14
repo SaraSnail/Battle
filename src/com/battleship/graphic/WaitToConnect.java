@@ -31,13 +31,15 @@ public class WaitToConnect {
         Scene scene = new Scene(vbox);
         scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
-        /*
+
         window.setOnCloseRequest(e->{
             e.consume();
-        });*/
+        });
+
 
         window.setScene(scene);
-        window.showAndWait();//Måste stänga fönstret innan den går vidare
+        window.show();
+        //window.showAndWait();//Måste stänga fönstret innan den går vidare
         //Platform.runLater(() -> {window.show();});
     }
 
