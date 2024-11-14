@@ -244,6 +244,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     public static void updateMapFX(int col, int row, GameBoard gameBoard){
         char[][] boardFX = gameBoard.getBoard();
         Image fire = new Image("file:recourses/images/fire.png");
+        //Designed by Freepik
 
 
         if(boardFX[col][row] == 'X'){//A miss
