@@ -197,9 +197,8 @@ public class Game {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         //GB-35-AA (Alertbox och .exit)
-        if (iLose){
+        if (iLose){ // iLose kommer fungera när makeMove är mergeat!
             Platform.runLater(() ->{
                 AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\nWhen you klick OK you will exit the application.");
                 Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
@@ -208,6 +207,7 @@ public class Game {
         } else {
             //GB-33-SA
             if (message.equalsIgnoreCase("game over")) {
+
                 //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
                 // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
                 //lastShot fixa
