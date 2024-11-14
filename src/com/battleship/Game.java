@@ -3,10 +3,7 @@ package com.battleship;
 import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
-
-
 import java.io.IOException;
-
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
@@ -49,7 +46,7 @@ public class Game {
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
 
-        waitThreeSec();
+        waitOneSec();
 
         if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
@@ -62,6 +59,7 @@ public class Game {
     private void gameLoop(){
         boolean gameOver = false;
         boolean firstMove = true;
+
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
@@ -70,25 +68,30 @@ public class Game {
                 } else {
                     gameOver = checkIfGameOver();
                     makeMove(player);
-                    getShotOutcome();
-                    //updateMaps("4b", enemyGameBoard);   //GB-26-SA. Skriver in test koordinater och vilken bord man skjuter på
                     isClientTurn = false;
+                    if (gameOver){
+                        break;
+                    }
                 }
             } else {
                 gameOver = checkIfGameOver();
                 makeMove(player);
                 isClientTurn = true;
-                //updateMaps("5c", myGameBoard);       //GB-26-SA.Skriver in test koordinater
+                if (gameOver){
+                    break;
+                }
             }
-            waitThreeSec();
+
+            gameOver = checkIfGameOver();
+            waitOneSec();
         }
         System.out.println("Game over!");
     }
 
     //GB-31-AA
-    private void waitThreeSec(){
+    private void waitOneSec(){
         try {
-            Thread.sleep(3000);  //Väntar 3 sek
+            Thread.sleep(1000);  //Vänta 1 sek.
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -174,7 +177,23 @@ public class Game {
     //GB-25-AA
     private boolean checkIfGameOver(){
         boolean gameOver;
+        //GB-33-SA
+        String message = " ";
         try {
+            message = String.valueOf(player.getReader().readLine());//Samlar texten från players reader
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        /*
+        String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
+        //Samlar om de två sista arrays i isGameOver
+        String isGameOver = isGameOverArray[isGameOverArray.length-2] + " " + isGameOverArray[isGameOverArray.length-1];
+        //Kan använda String message rakt av om jag bara får tillbaka "game over"
+*/
+
+        //GB-25-AA
+        /*try {
             if (player.getReader().readLine().equals("game over")) {
                 gameOver = true;
             } else {
@@ -184,6 +203,22 @@ public class Game {
             throw new RuntimeException(e);
         }
         //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
+        return gameOver;*/
+
+
+        //GB-33-SA
+        if (message.equalsIgnoreCase("game over")) {
+            gameOver = true;
+
+            //updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
+            // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
+            //lastShot fixa
+        } else {
+            gameOver = false;
+        }
+
+        //"protokoll" för att se om spelet är slut / uppdatera GUI/ GameView med "Game Over" - Vinnare är:
+        //AlertBox for winner/loser
         return gameOver;
     }
 
