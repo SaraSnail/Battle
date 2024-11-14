@@ -1,6 +1,7 @@
 package com.battleship.graphic;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -71,7 +72,11 @@ public class LoginView extends Application{
             //Skicka vidare vilken player det är
             //New Scene
             whichPlayer(1);
-            window.setScene(sceneClient);
+            //GB-37-SA, la till Platform.runLater
+            Platform.runLater(()->{
+                window.setScene(sceneClient);
+            });
+
             //window.setFullScreen(true);
         });
 
@@ -79,7 +84,11 @@ public class LoginView extends Application{
             System.out.println("Player 2");
             //Lägg in att användaren får skriva in port
             whichPlayer(2);
-            window.setScene(sceneServer);
+            //GB-37-SA, la till Platform.runLater
+            Platform.runLater(()->{
+                window.setScene(sceneServer);
+            });
+
             //window.setFullScreen(true);
         });
 
