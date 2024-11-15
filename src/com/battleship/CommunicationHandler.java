@@ -28,6 +28,8 @@ public class CommunicationHandler implements AutoCloseable{
         this.name = name;
         this.host = host;
         this.port = port;
+        setReader(reader);
+        setWriter(writer);
         connectToServer();
     }
 
@@ -35,6 +37,8 @@ public class CommunicationHandler implements AutoCloseable{
     public CommunicationHandler(String name, int port){
         this.name = name;
         this.port = port;
+        setReader(reader);
+        setWriter(writer);
         connectToClient();
     }
 
@@ -77,25 +81,36 @@ public class CommunicationHandler implements AutoCloseable{
     }
 
     //GB-10-AA
-    public void handleIncomingMessages (){
-        String incomingMessage;
+    public String handleIncomingMessages (){
+        System.out.println("Start på handleIncomingMessages");
         try{
-            while ((incomingMessage = reader.readLine()) != null){
+            if(reader.ready()){
+                System.out.println("Början på try-catch");
+                String incomingMessage = reader.readLine();
+                System.out.println("incomingMessage = reader.readLine()");
+                System.out.println("incominMessage "+ incomingMessage);
+
+                System.out.println("While-loop start");
                 System.out.println("Mottaget: " + incomingMessage); // ska nog göras om och flyttas till grafisk vy
                 //Uppdatera spel, vet ej om metoden ska ligga här eller på annan plats
+                System.out.println("Skicka tillbaka incomingMessage");
+                return incomingMessage;
             }
+
+
 
         } catch (IOException e){
             System.out.println("Connection closed by other side");
         }
+        return null;
     }
 
     //GB-10-AA
     public void handleSendingMessages(String message){
-        if (message != null && !message.trim().isEmpty()){
+
             writer.println(message);
             //Uppdatera egen spelplan (vet ej om metoden ska ligga här eller på annan plats)
-        }
+
     }
 
     public String getName() {

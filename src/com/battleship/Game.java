@@ -62,8 +62,8 @@ public class Game {
             System.out.println("Waiting for client to connect and make it's fist move");
         }
 
-
-        new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+        Thread gameLoop = new Thread(this::gameLoop); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+        gameLoop.start();
     }
 
     //GB-25-AA //GB-35-AA
@@ -72,10 +72,13 @@ public class Game {
         boolean firstMove = true;
 
         while (!gameOver) {
+            System.out.println("Loop top");
             if (isClientTurn) {
                 if (firstMove){
                     makeMove(player,true);
+                    System.out.println("Move made");
                     firstMove = false;
+                    System.out.println("firstMove false");
                 } else {
                     gameOver = checkIfGameOver();
                     makeMove(player, false);
@@ -84,7 +87,9 @@ public class Game {
                         break;
                     }
                 }
+
             } else {
+                System.out.println("Servers turn");
                 gameOver = checkIfGameOver();
                 makeMove(player, false);
                 isClientTurn = true;
@@ -92,7 +97,10 @@ public class Game {
                     break;
                 }
             }
+
+            System.out.println("Check if gameOver");
             gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
+            System.out.println("Wait one second");
             waitOneSec();
         }
         System.out.println("Game over!");
@@ -119,15 +127,10 @@ public class Game {
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
-            updateMaps(myShotCoordinates,enemyGameBoard);
-            player.getWriter().println(myMove);
+            updateMaps(myMove,enemyGameBoard);
+            player.handleSendingMessages(myMove);
         } else {
-            try {
-                enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
-            } catch (IOException e) {
-                System.out.println("Could not receive move from other player");
-                throw new RuntimeException(e);
-            }
+            enemyMove = player.handleIncomingMessages();  //Tar emot sträng från mottagaren
             updateMaps(enemyMove, myGameBoard);
             char myShotHitOrMiss = setShotOutcome(enemyMove);
 
@@ -154,11 +157,13 @@ public class Game {
             if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
                 iLose = true;    //Ändra till iLoose
                 System.out.println("Sträng till motståndaren: " + myMove);
-                player.getWriter().println(enemyHitOrMiss.toLowerCase());
+                player.handleSendingMessages(enemyHitOrMiss.toLowerCase());
+                //player.getWriter().println();
             } else {
                 myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                 System.out.println("Sträng till motståndaren: " + myMove);
-                player.getWriter().println(myMove);
+                player.handleSendingMessages(myMove);
+                //player.getWriter().println(myMove);
                 updateMaps(myShotCoordinates, enemyGameBoard);
             }
         }
@@ -295,12 +300,13 @@ public class Game {
         */
 
         //GB-33-SA
-        String message = " ";
+        /*
+        String message = " ";//SA-Debug. Det är här den stänger Streamen, får "Error: null" i Server
         try {
-            message = String.valueOf(player.getReader().readLine());//Samlar texten från players reader
+            message = String.valueOf(player.handleIncomingMessages());//Samlar texten från players reader
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         //GB-35-AA (Alertbox och .exit)
         if (iLose){ // iLose kommer fungera när makeMove är mergeat!
             Platform.runLater(() ->{
@@ -310,7 +316,7 @@ public class Game {
             return true;
         } else {
             //GB-33-SA
-            if (message.equalsIgnoreCase("game over")) {
+            if (player.handleIncomingMessages().equalsIgnoreCase("game over")) {
 
                 updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
                 // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
