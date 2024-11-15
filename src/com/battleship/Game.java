@@ -279,8 +279,17 @@ public class Game {
 
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
-            //loginView.window.setScene(GameView.gameView(loginView.window));
-            GameView.updateMapFX(col, row, gameBoard);
+            try {
+                //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard, enemyGameBoard));
+                System.out.println("column: " + col);
+                System.out.println("row: " + row);
+                System.out.println("Update GUI map");
+                GameView.updateMapFX(col, row, gameBoard);
+            } catch (Exception e) {
+                System.out.println("Error: "+e.getMessage());
+                throw new RuntimeException(e);
+            }
+
             //Uppdatera GUI/GameView
         });
     }

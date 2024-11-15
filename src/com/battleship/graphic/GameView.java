@@ -249,14 +249,19 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         //Designed by Freepik
 
 
-        if(boardFX[col][row] == 'X'){//A miss
-            cell.setFill(new ImagePattern(fire));//Kanske fungerar?
-            //cell.setFill(Color.BLUE);
-        } else if (boardFX[col][row] == '0') {//A hit
-            cell.setFill(Color.RED);
-        }else {
-            System.out.println("gameBoardFX not working");
+        try {
+            if(boardFX[col][row] == 'X'){//A miss
+                //cell.setFill(new ImagePattern(fire));//Kanske fungerar?
+                cell.setFill(Color.BLUE);
+            } else if (boardFX[col][row] == '0') {//A hit
+                cell.setFill(Color.RED);
+            }else {
+                System.out.println("gameBoardFX not working");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
     }
 
 }
