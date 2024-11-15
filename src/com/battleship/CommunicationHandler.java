@@ -29,6 +29,8 @@ public class CommunicationHandler implements AutoCloseable{
         this.host = host;
         this.port = port;
         connectToServer();
+        setReader(reader);
+        setWriter(writer);
     }
 
     //BG-10-AA
@@ -36,6 +38,8 @@ public class CommunicationHandler implements AutoCloseable{
         this.name = name;
         this.port = port;
         connectToClient();
+        setReader(reader);
+        setWriter(writer);
     }
 
     //BG-10-AA
@@ -82,7 +86,6 @@ public class CommunicationHandler implements AutoCloseable{
         try {
             System.out.println("waiting for move...");
             while (true) {
-                if (reader.ready()) {
                     if (reader.ready()) { // Kontrollera om det finns data att läsa
                         incomingMessage = reader.readLine();
                         if (incomingMessage == null) { // Kontroll om strömmen är stängd
@@ -92,7 +95,6 @@ public class CommunicationHandler implements AutoCloseable{
                         System.out.println("Mottaget: " + incomingMessage); // Hantera meddelandet
                         // Uppdatera spel, hantera logik här
                     }
-                }
             }
         } catch (IOException e) {
             System.out.println("Connection closed by other side");

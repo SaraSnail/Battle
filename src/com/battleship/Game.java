@@ -78,7 +78,7 @@ public class Game {
                     makeMove(player,true);
                     firstMove = false;
                 } else {
-                    gameOver = checkIfGameOver();
+                    //gameOver = checkIfGameOver();
                     makeMove(player, false);
                     isClientTurn = false;
                     if (gameOver){
@@ -86,14 +86,14 @@ public class Game {
                     }
                 }
             } else {
-                gameOver = checkIfGameOver();
+                //gameOver = checkIfGameOver();
                 makeMove(player, false);
                 isClientTurn = true;
                 if (gameOver){
                     break;
                 }
             }
-            gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
+           // gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
         }
         System.out.println("Game over!");
@@ -136,14 +136,16 @@ public class Game {
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
             updateMaps(myShotCoordinates,enemyGameBoard);
-            player.getWriter().println(myMove);
+            //player.getWriter().println(myMove);
+            player.handleSendingMessages(myMove);
         } else {
-            try {
+            /*try {
                 enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
             } catch (IOException e) {
                 System.out.println("Could not receive move from other player");
                 throw new RuntimeException(e);
-            }
+            }*/
+            enemyMove = player.handleIncomingMessages();
             updateMaps(enemyMove, myGameBoard);
             char myShotHitOrMiss = setShotOutcome(enemyMove);
 
@@ -170,11 +172,13 @@ public class Game {
             if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
                 iLose = true;    //Ändra till iLoose
                 System.out.println("Sträng till motståndaren: " + myMove);
-                player.getWriter().println(enemyHitOrMiss.toLowerCase());
+                //player.getWriter().println(enemyHitOrMiss.toLowerCase());
+                player.handleSendingMessages(enemyHitOrMiss);
             } else {
                 myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                 System.out.println("Sträng till motståndaren: " + myMove);
-                player.getWriter().println(myMove);
+                player.handleSendingMessages(myMove);
+                //player.getWriter().println(myMove);
                 updateMaps(myShotCoordinates, enemyGameBoard);
             }
         }
@@ -295,7 +299,7 @@ public class Game {
 
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
-            loginView.window.setScene(GameView.gameView(loginView.window));
+          //loginView.window.setScene(GameView.gameView(loginView.window.));
             //Uppdatera GUI/GameView
         });
     }
