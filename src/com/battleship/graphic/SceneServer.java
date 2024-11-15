@@ -61,16 +61,18 @@ public class SceneServer {
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
                 Game game = new Game(communicationHandler, false, login);
-                game.startGame();
+                game.createBoards();
 
                 //GB-18-SA
 
                 try{
-                    Scene view = GameView.gameView(window);
+                    Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
                     //GB-37-SA, la till Platform.runLater
                     Platform.runLater(()->{
                         window.setScene(view);
+                        game.startGame();
                     });
+
 
 
                 }catch(Exception ex){
