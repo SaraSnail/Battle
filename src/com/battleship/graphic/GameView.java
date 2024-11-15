@@ -39,6 +39,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
 
 
+
         AnchorPane myGame = new AnchorPane();        // Min Spelplan
         AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
 

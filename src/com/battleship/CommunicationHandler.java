@@ -77,9 +77,30 @@ public class CommunicationHandler implements AutoCloseable{
     }
 
     //GB-10-AA
-    public void handleIncomingMessages (){
-        String incomingMessage;
-        try{
+    public String handleIncomingMessages (){
+        String incomingMessage = "";
+        try {
+            System.out.println("waiting for move...");
+            while (true) {
+                if (reader.ready()) {
+                    if (reader.ready()) { // Kontrollera om det finns data att läsa
+                        incomingMessage = reader.readLine();
+                        if (incomingMessage == null) { // Kontroll om strömmen är stängd
+                            System.out.println("Connection closed by other side - i whileloopen");
+                            break;
+                        }
+                        System.out.println("Mottaget: " + incomingMessage); // Hantera meddelandet
+                        // Uppdatera spel, hantera logik här
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Connection closed by other side");
+            throw new RuntimeException(e);
+        }
+        return incomingMessage;
+        /*try{
+            System.out.println("Waiting for move...");
             while ((incomingMessage = reader.readLine()) != null){
                 System.out.println("Mottaget: " + incomingMessage); // ska nog göras om och flyttas till grafisk vy
                 //Uppdatera spel, vet ej om metoden ska ligga här eller på annan plats
@@ -88,12 +109,26 @@ public class CommunicationHandler implements AutoCloseable{
         } catch (IOException e){
             System.out.println("Connection closed by other side");
         }
+        return incomingMessage;*/
+
+
+        /*try {
+            String incomingMessage = reader.readLine();
+            System.out.println("Mottaget: " + incomingMessage);
+            return incomingMessage;
+
+        } catch (IOException e) {
+            System.out.println("Connection closed by other side");
+            throw new RuntimeException(e);
+        }*/
     }
 
     //GB-10-AA
     public void handleSendingMessages(String message){
         if (message != null && !message.trim().isEmpty()){
             writer.println(message);
+            writer.flush();
+            System.out.println("Skickat: " + message);
             //Uppdatera egen spelplan (vet ej om metoden ska ligga här eller på annan plats)
         }
     }

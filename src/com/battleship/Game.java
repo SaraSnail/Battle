@@ -42,8 +42,20 @@ public class Game {
     //GB-13-AA //GB-25-AA //GB-30-AA
     public void startGame() {
 
-        myGameBoard = new GameBoard(true);
-        enemyGameBoard = new GameBoard(false);
+      /*  //serven skapar spelplanen först för att inte orsaka synkroniseringsfel
+        if (!isClientTurn) {
+            System.out.println("server creating game board");
+            myGameBoard = new GameBoard(true);
+            sendSignal();
+        } else if (isClientTurn){
+            waitForSignal()
+            System.out.println("client creating game board");
+            waitFiveSec();
+            myGameBoard = new GameBoard(true);
+        }
+
+        System.out.println("creating enemy game board");
+        enemyGameBoard = new GameBoard(false);*/
 
         waitOneSec();
 
@@ -51,7 +63,9 @@ public class Game {
             System.out.println("Waiting for client to connect and make it's fist move");
         }
 
-        new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+
+        Thread gameLoop = new Thread(this::gameLoop);//startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+        gameLoop.start();
     }
 
     //GB-25-AA //GB-35-AA
@@ -72,7 +86,7 @@ public class Game {
                         break;
                     }
                 }
-            } else {
+            } else if (!isClientTurn) {
                 gameOver = checkIfGameOver();
                 makeMove(player, false);
                 isClientTurn = true;
@@ -84,12 +98,27 @@ public class Game {
             waitOneSec();
         }
         System.out.println("Game over!");
+
+        //Stäcker CommunicationHandler (socket)
+        try {
+            player.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //GB-31-AA
     private void waitOneSec(){
         try {
             Thread.sleep(1000); //vänta 1 sek
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //Gb-41-AA
+    private void waitFiveSec(){
+        try {
+            Thread.sleep(5000); //vänta 5 sek
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -102,21 +131,26 @@ public class Game {
         String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
         String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
-        if (firstMove){
-            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
-            myMove = "i " + myMove + myShotCoordinates;
-            System.out.println("Sträng till motståndaren: " + myMove);
-            updateMaps(myShotCoordinates,enemyGameBoard);
-            player.getWriter().println(myMove);
+        if (firstMove) {
+            System.out.println("client first move");
+
+            //myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+           // myMove = "i " + myMove + myShotCoordinates;
+            //System.out.println("Sträng till motståndaren: " + myMove);
+            //updateMaps(myShotCoordinates,enemyGameBoard);
+            //player.getWriter().println(myMove);
+            //player.handleSendingMessages(myMove);
+
+            player.handleSendingMessages("test första strängen");
         } else {
-            try {
-                enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
-            } catch (IOException e) {
-                System.out.println("Could not receive move from other player");
-                throw new RuntimeException(e);
-            }
-            updateMaps(enemyMove, myGameBoard);
-            char myShotHitOrMiss = setShotOutcome(enemyMove);
+            enemyMove = player.handleIncomingMessages();
+
+            //enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
+            // System.out.println("Sträng mottagen från motståndaren: " +enemyMove);
+
+            //updateMaps(enemyMove, myGameBoard);
+
+           /* char myShotHitOrMiss = setShotOutcome(enemyMove);
 
             if (myShotHitOrMiss == 'h') {
                 myShotCoordinates = Shoot.hitShot(enemyGameBoard);
@@ -124,10 +158,10 @@ public class Game {
                 lastHitShot = myShotCoordinates;
                 sunk = false;
 
-            } else if (myShotHitOrMiss == 'm' && !sunk){
-                   myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+            } else if (myShotHitOrMiss == 'm' && !sunk) {
+                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
 
-            } else if (myShotHitOrMiss == 's'){
+            } else if (myShotHitOrMiss == 's') {
                 sunk = true;
                 myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             } else {
@@ -136,19 +170,26 @@ public class Game {
 
             lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
 
-            enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
+            enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);*/
 
-            if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
+            if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
                 iLose = true;    //Ändra till iLoose
-                System.out.println("Sträng till motståndaren: " + myMove);
-                player.getWriter().println(enemyHitOrMiss.toLowerCase());
+
+               // System.out.println("Sträng till motståndaren: " + myMove);
+                //player.getWriter().println(enemyHitOrMiss.toLowerCase());
+               // player.handleSendingMessages(enemyHitOrMiss.toLowerCase());
+
+                player.handleSendingMessages("game over");
             } else {
-                myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
+               /* myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                 System.out.println("Sträng till motståndaren: " + myMove);
-                player.getWriter().println(myMove);
-                updateMaps(myShotCoordinates, enemyGameBoard);
+                //player.getWriter().println(myMove);
+                player.handleSendingMessages(myMove);
+                updateMaps(myShotCoordinates, enemyGameBoard);*/
+                player.handleSendingMessages("test skicka efter första strängen");
             }
         }
+
     }
 
 
@@ -200,7 +241,7 @@ public class Game {
             gameBoard.getBoard()[col][row] = 'X';
 
         }
-        gameBoard.displayBoard();
+        //gameBoard.displayBoard();
 
 
         //GB-25-AA
@@ -267,6 +308,21 @@ public class Game {
                 return false;
             }
         }
+    }
+
+    private boolean waitForSignal(){
+
+        String  ready = player.handleIncomingMessages();
+        if (ready.equalsIgnoreCase("ready")) {
+            return true;
+
+        }
+        return false;
+    }
+
+    private void sendSignal(){
+        player.handleSendingMessages("ready");
+        System.out.println("sent ready signal");
     }
 
     public CommunicationHandler getPlayer() {
