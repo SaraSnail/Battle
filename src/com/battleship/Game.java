@@ -60,6 +60,7 @@ public class Game {
 
         if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
+            waitForSignal();
         }
 
 
@@ -76,10 +77,20 @@ public class Game {
             if (isClientTurn) {
                 if (firstMove){
                     makeMove(player,true);
+
+                    sendSignal();
+                    System.out.println("väntar på motståndarens ready-signal");
+                    waitForSignal();
+
                     firstMove = false;
                 } else {
                     //gameOver = checkIfGameOver();
                     makeMove(player, false);
+
+                    sendSignal();
+                    System.out.println("väntar på motståndarens ready-signal");
+                    waitForSignal();
+
                     isClientTurn = false;
                     if (gameOver){
                         break;
@@ -88,6 +99,11 @@ public class Game {
             } else {
                 //gameOver = checkIfGameOver();
                 makeMove(player, false);
+
+                sendSignal();
+                System.out.println("väntar på motståndarens ready-signal");
+                waitForSignal();
+
                 isClientTurn = true;
                 if (gameOver){
                     break;
@@ -351,19 +367,25 @@ public class Game {
         }
     }
 
+    //GB-41-AA
     private boolean waitForSignal(){
+        try{
+            String  ready = player.handleIncomingMessages();
+            if (ready.equalsIgnoreCase("ready")) {
+                System.out.println("recieved 'ready' signal from opponent");
+                return true;
 
-        String  ready = player.handleIncomingMessages();
-        if (ready.equalsIgnoreCase("ready")) {
-            return true;
-
+            }
+        } catch (Exception e) {
+            System.out.println("Error while waiting on 'ready' signal: " + e.getMessage());
         }
         return false;
     }
 
+    //GB-41-AA
     private void sendSignal(){
         player.handleSendingMessages("ready");
-        System.out.println("sent ready signal");
+        System.out.println("sent ready signal to opponent");
     }
 
     public CommunicationHandler getPlayer() {
