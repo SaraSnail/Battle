@@ -39,17 +39,29 @@ public class Game {
         this.loginView = loginView;
     }
 
-    //GB-13-AA //GB-25-AA //GB-30-AA
-    public void startGame() {
-
+    //GB-42-SA, la att boards skapas separat från startGame
+    public void createBoards(){
+        //GB-13-AA //GB-25-AA //GB-30-AA
         myGameBoard = new GameBoard(true);
         enemyGameBoard = new GameBoard(false);
+
+        //GB-42-SA, testar lite
+        /*
+        System.out.println("My gameBoard");
+        myGameBoard.displayBoard();
+        System.out.println("Enemy gameBoard");
+        enemyGameBoard.displayBoard();*/
+    }
+
+    //GB-13-AA //GB-25-AA //GB-30-AA
+    public void startGame() {
 
         waitOneSec();
 
         if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
         }
+
 
         new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
     }
@@ -97,6 +109,7 @@ public class Game {
 
     //GB-19-AA
    private void makeMove(CommunicationHandler player, boolean firstMove){
+
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
         String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
@@ -209,9 +222,6 @@ public class Game {
         return "m"; // miss
 
     }
-
-}
-
     //GB-26-SA, ändrar för test till public
     public void updateMaps(String message, GameBoard gameBoard){
 
@@ -269,7 +279,7 @@ public class Game {
 
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
-            loginView.window.setScene(GameView.gameView(loginView.window));
+            //loginView.window.setScene(GameView.gameView(loginView.window));
             //Uppdatera GUI/GameView
         });
     }
@@ -352,4 +362,8 @@ public class Game {
     public void setEnemyGameBoard(GameBoard enemyGameBoard) {
         this.enemyGameBoard = enemyGameBoard;
     }
+
+}
+
+
 
