@@ -74,7 +74,7 @@ public class Game {
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
-                    makeMove(player,true);
+                    firstMove(player);
                     firstMove = false;
                 } else {
                     gameOver = checkIfGameOver();
@@ -107,6 +107,18 @@ public class Game {
         }
     }
 
+    private void firstMove(CommunicationHandler player){
+        String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
+        String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
+        String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
+        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
+        myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+        myMove = "i " + myMove + myShotCoordinates;
+        System.out.println("Sträng till motståndaren: " + myMove);
+        updateMaps(myShotCoordinates,enemyGameBoard);
+        player.getWriter().println("game over");
+    }
+
     //GB-19-AA
    private void makeMove(CommunicationHandler player, boolean firstMove){
 
@@ -114,20 +126,34 @@ public class Game {
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
         String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
         String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
+        /*if (firstMove) {
+            player.getWriter().println("test");
+            System.out.println("skickat: test");
+            player.getWriter().println("game over");
+            System.out.println("Skickat game over");
+            iLose = true;
+        } else {
+            player.getWriter().println("else-test");
+            System.out.println("skickat: else-test");
+        }*/
 
-        if (firstMove){
-            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+        /*if (firstMove){
+           *//* myShotCoordinates = Shoot.randomShot(enemyGameBoard);
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
-            updateMaps(myShotCoordinates,enemyGameBoard);
-            player.getWriter().println(myMove);
+            updateMaps(myShotCoordinates,enemyGameBoard);*//*
+            player.getWriter().println("game over");
         } else {
             try {
-                enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
+                enemyMove = String.valueOf(player.getReader().readLine());  //Tar emot sträng från mottagaren
+                System.out.println("mottagen sträng i MakeMove: " + enemyMove);
             } catch (IOException e) {
                 System.out.println("Could not receive move from other player");
                 throw new RuntimeException(e);
-            }
+            }*/
+            enemyMove = player.handleIncomingMessages();
+        System.out.println("inkommen fräng i makeMove: " + enemyMove);
+
             updateMaps(enemyMove, myGameBoard);
             char myShotHitOrMiss = setShotOutcome(enemyMove);
 
@@ -162,7 +188,7 @@ public class Game {
                 updateMaps(myShotCoordinates, enemyGameBoard);
             }
         }
-    }
+
 
     //GB-21-DE
     private char setShotOutcome(String enemyMove){ //denna metod bör kanske i BoardGame
@@ -298,6 +324,7 @@ public class Game {
         String message = " ";
         try {
             message = String.valueOf(player.getReader().readLine());//Samlar texten från players reader
+            System.out.println("mottaget i checkIfGameOver: " + message);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

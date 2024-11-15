@@ -77,17 +77,19 @@ public class CommunicationHandler implements AutoCloseable{
     }
 
     //GB-10-AA
-    public void handleIncomingMessages (){
+    public String handleIncomingMessages (){
         String incomingMessage;
         try{
-            while ((incomingMessage = reader.readLine()) != null){
+            while ((incomingMessage = String.valueOf(reader.readLine())) != null){
                 System.out.println("Mottaget: " + incomingMessage); // ska nog göras om och flyttas till grafisk vy
                 //Uppdatera spel, vet ej om metoden ska ligga här eller på annan plats
+                return incomingMessage;
             }
 
         } catch (IOException e){
-            System.out.println("Connection closed by other side");
+            System.out.println("Connection closed by other side - i handelingIncomingMessages");
         }
+        return null;
     }
 
     //GB-10-AA
