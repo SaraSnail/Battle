@@ -85,6 +85,9 @@ public class CommunicationHandler implements AutoCloseable{
         String incomingMessage = "";
         try {
             System.out.println("waiting for move...");
+            incomingMessage = reader.readLine();//Är "null"
+            System.out.println("incomingMessage: " + incomingMessage);
+
             while (true) {
                     if (reader.ready()) { // Kontrollera om det finns data att läsa
                         incomingMessage = reader.readLine();
@@ -98,7 +101,8 @@ public class CommunicationHandler implements AutoCloseable{
             }
         } catch (IOException e) {
             System.out.println("Connection closed by other side");
-            throw new RuntimeException(e);
+            e.getMessage();
+            //throw new RuntimeException(e);
         }
         return incomingMessage;
         /*try{
@@ -131,6 +135,7 @@ public class CommunicationHandler implements AutoCloseable{
             writer.println(message);
             writer.flush();
             System.out.println("Skickat: " + message);
+            System.out.println("I handleSendingMessages");
             //Uppdatera egen spelplan (vet ej om metoden ska ligga här eller på annan plats)
         }
     }

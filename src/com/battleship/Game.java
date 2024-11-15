@@ -73,43 +73,76 @@ public class Game {
         boolean gameOver = false;
         boolean firstMove = true;
 
+
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
-                    makeMove(player,true);
+                    player.getWriter().println("ready");
+                    try {
+                        if(player.getReader().readLine().equalsIgnoreCase("ready")){
+                            makeMove(player,true);
 
-                    sendSignal();
+
+                            firstMove = false;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+
+                    /*sendSignal();
                     System.out.println("väntar på motståndarens ready-signal");
-                    waitForSignal();
+                    waitForSignal();*/
 
-                    firstMove = false;
+
+
                 } else {
                     //gameOver = checkIfGameOver();
-                    makeMove(player, false);
-
+                    /*
                     sendSignal();
                     System.out.println("väntar på motståndarens ready-signal");
-                    waitForSignal();
+                    waitForSignal();*/
 
-                    isClientTurn = false;
+                    try{
+                        if(player.getReader().readLine().equalsIgnoreCase("ready"));
+                        makeMove(player, false);
+
+
+
+                        isClientTurn = false;
+                    }catch(IOException e){
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+
+
                     if (gameOver){
                         break;
                     }
                 }
             } else {
+                player.getWriter().println("ready");
                 //gameOver = checkIfGameOver();
                 makeMove(player, false);
 
+                /*
                 sendSignal();
                 System.out.println("väntar på motståndarens ready-signal");
-                waitForSignal();
+                waitForSignal();*/
 
                 isClientTurn = true;
                 if (gameOver){
                     break;
                 }
             }
-           // gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
+            /*
+            if(firstMove){
+                System.out.println("firstMove true till false");
+                firstMove = false;
+            }else {
+                gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
+            }*/
+            gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
         }
         System.out.println("Game over!");
@@ -152,8 +185,8 @@ public class Game {
             myMove = "i " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren: " + myMove);
             updateMaps(myShotCoordinates,enemyGameBoard);
-            //player.getWriter().println(myMove);
-            player.handleSendingMessages(myMove);
+            player.getWriter().println(myMove);
+            //player.handleSendingMessages(myMove);
         } else {
             /*try {
                 enemyMove = player.getReader().readLine();  //Tar emot sträng från mottagaren
@@ -161,7 +194,15 @@ public class Game {
                 System.out.println("Could not receive move from other player");
                 throw new RuntimeException(e);
             }*/
-            enemyMove = player.handleIncomingMessages();
+            try {
+                enemyMove = player.getReader().readLine();
+                System.out.println("enemyMove: " + enemyMove);
+            } catch (Exception e) {
+                e.getMessage();
+                e.getStackTrace();
+                //throw new RuntimeException(e);
+            }
+
             updateMaps(enemyMove, myGameBoard);
             char myShotHitOrMiss = setShotOutcome(enemyMove);
 
@@ -188,13 +229,13 @@ public class Game {
             if (enemyHitOrMiss.equalsIgnoreCase("Game Over")){
                 iLose = true;    //Ändra till iLoose
                 System.out.println("Sträng till motståndaren: " + myMove);
-                //player.getWriter().println(enemyHitOrMiss.toLowerCase());
-                player.handleSendingMessages(enemyHitOrMiss);
+                player.getWriter().println(enemyHitOrMiss.toLowerCase());
+                //player.handleSendingMessages(enemyHitOrMiss);
             } else {
                 myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                 System.out.println("Sträng till motståndaren: " + myMove);
-                player.handleSendingMessages(myMove);
-                //player.getWriter().println(myMove);
+                //player.handleSendingMessages(myMove);
+                player.getWriter().println(myMove);
                 updateMaps(myShotCoordinates, enemyGameBoard);
             }
         }
@@ -333,9 +374,10 @@ public class Game {
         //GB-33-SA
         String message = " ";
         try {
-            message = String.valueOf(player.getReader().readLine());//Samlar texten från players reader
+            message = player.getReader().readLine();//Samlar texten från players reader
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.getMessage();
+            //throw new RuntimeException(e);
         }
         //GB-35-AA (Alertbox och .exit)
         if (iLose){ // iLose kommer fungera när makeMove är mergeat!
@@ -371,6 +413,7 @@ public class Game {
     private boolean waitForSignal(){
         try{
             String  ready = player.handleIncomingMessages();
+            System.out.println("ready: " + ready);
             if (ready.equalsIgnoreCase("ready")) {
                 System.out.println("recieved 'ready' signal from opponent");
                 return true;
