@@ -71,7 +71,7 @@ public class SceneClient {
 
                     //GB-18-SA
                     try{
-                        Scene view = GameView.gameView(window);
+                        Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
                             window.setScene(view);

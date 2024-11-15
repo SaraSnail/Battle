@@ -217,7 +217,7 @@ public class Game {
 
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
-            loginView.window.setScene(GameView.gameView(loginView.window));
+            //loginView.window.setScene(GameView.gameView(loginView.window));
             //Uppdatera GUI/GameView
         });
     }
