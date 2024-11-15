@@ -66,7 +66,8 @@ public class SceneClient {
                     host.clear();
                     port1.clear();
                     Game game = new Game(communicationHandler, true, login);
-                    game.createBoards();
+                    //game.createBoards();
+                    game.startGame();
 
 
                     //GB-18-SA
@@ -75,7 +76,7 @@ public class SceneClient {
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
                             window.setScene(view);
-                            game.startGame();
+                            //game.startGame();
                         });
 
 
