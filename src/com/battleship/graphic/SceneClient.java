@@ -63,11 +63,11 @@ public class SceneClient {
                 //Denna CommunicationHandler ska ha vilken spelare det är, host och port
                 //GB-34-AA (try-catch - AA skrev catch connection refused)
                 try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
-
                     host.clear();
                     port1.clear();
                     Game game = new Game(communicationHandler, true, login);
-                    game.startGame();
+                    game.createBoards();
+
 
                     //GB-18-SA
                     try{
@@ -75,7 +75,9 @@ public class SceneClient {
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
                             window.setScene(view);
+                            game.startGame();
                         });
+
 
 
                     }catch(Exception ex){
