@@ -26,16 +26,12 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     //GB-18-SA, la till scene
     public static Scene scene;
 
-    //GB-14-aws
-   /* @Override
-    public void start(Stage primaryStage) throws Exception {*/
-    //aws
     //aws hade skrivit detta som en start metod, GB-18-SA, behövde göra om den till en scene istället
 
     public static Scene gameView (Stage window){
         //aws
-        myGameBoard = new GameBoard(true);
-        enemyGameBoard = new GameBoard(false);
+        /*myGameBoard = new GameBoard(true);
+        enemyGameBoard = new GameBoard(false);*/
 
 
 
@@ -82,13 +78,12 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         //GB-18-SA, gjorde att den "skapas" utanför metoden
         scene = new Scene(stack, 1450, 700);
 
+        stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
         //GB-18-SA, kommenterade ut detta
         /*
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
-        stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
-
         primaryStage.show();*/
 
         myGameBoard.displayBoard();
