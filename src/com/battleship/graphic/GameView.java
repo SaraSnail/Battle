@@ -1,10 +1,8 @@
 package com.battleship.graphic;
 
-import com.battleship.CommunicationHandler;
-import com.battleship.Game;
+
 import com.battleship.GameBoard;
 import com.battleship.Ship;
-import com.battleship.Game;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -36,8 +34,9 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                                                 //GB-42-SA, la till gameboard som inparametrar så vi når rätt spelplaner
     public static Scene gameView (Stage window, GameBoard myGameBoard, GameBoard enemyGameBoard){
         //aws
-        myGameBoard = new GameBoard(true);
-        enemyGameBoard = new GameBoard(false);
+
+        //myGameBoard = new GameBoard(true);
+        //enemyGameBoard = new GameBoard(false);
 
 
 

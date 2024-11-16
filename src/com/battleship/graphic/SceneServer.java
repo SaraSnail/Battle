@@ -61,7 +61,7 @@ public class SceneServer {
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
                 Game game = new Game(communicationHandler, false, login);
-                //game.createBoards();
+                game.createBoards();
                 game.startGame();
 
                 //GB-18-SA
@@ -71,7 +71,7 @@ public class SceneServer {
                     //GB-37-SA, la till Platform.runLater
                     Platform.runLater(()->{
                         window.setScene(view);
-                        //game.startGame();
+                       game.startGame();
                     });
 
 

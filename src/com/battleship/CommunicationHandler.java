@@ -1,5 +1,9 @@
 package com.battleship;
 
+import com.battleship.graphic.LoginView;
+
+import java.io.IOException;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,6 +19,7 @@ public class CommunicationHandler implements AutoCloseable{
     private ServerSocket serverSocket;
     private BufferedReader reader;
     private PrintWriter writer;
+
 
     //GB-26-SA
     //Tom constructor för testning
@@ -48,6 +53,13 @@ public class CommunicationHandler implements AutoCloseable{
             this.writer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+/*            String message = "hallo server!";
+            writer.println(message);
+            System.out.println("sent: " + message);*/
+
+            handleSendingMessages("hej serven!"); // funkar
+
+
             //GB-34-AA (connectionExpectation)
         } catch (java.net.ConnectException e) {
             throw new ConnectException("Connection refused: " + e.getMessage());
@@ -63,12 +75,22 @@ public class CommunicationHandler implements AutoCloseable{
         // Annars använd closeSocket()- metod.
         try {
             serverSocket = new ServerSocket(this.port);
+
             System.out.println("Waiting for client to connect");
             clientSocket = serverSocket.accept();
             System.out.println("Client connected");
 
-            this.writer = new PrintWriter(clientSocket.getOutputStream(),true);
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
+
+/*            String message;
+            while ((message = reader.readLine()) != null) {
+                System.out.println(message);
+            }*/
+
+            String me = handleIncomingMessages();
+            System.out.println(me); // funkar!
+
 
         } catch (Exception e) {
             System.out.println("Could not start server on port " + this.port );

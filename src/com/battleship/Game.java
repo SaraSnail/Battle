@@ -53,29 +53,58 @@ public class Game {
         enemyGameBoard.displayBoard();*/
     }
 
+    private boolean waitForReady(){
+        String readySignal = player.handleIncomingMessages();
+        if (readySignal.equals("ready")) {
+            return true;
+        }
+        return false;
+    }
+
+    private void sendReady(){
+       player.handleSendingMessages("ready");
+    }
+
+
     //GB-13-AA //GB-25-AA //GB-30-AA
     public void startGame() {
-        createBoards();
+        //createBoards();
 
-        waitOneSec();
+        if (!isClientTurn){
 
-        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
-            System.out.println("Waiting for client to connect and make it's fist move");
+            waitForReady();
+            waitOneSec();
+            new Thread(this::gameLoop).start();
+
+        } else {
+            sendReady();
+            waitOneSec();
+            new Thread(this::gameLoop).start();
         }
 
 
-        new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+
+/*        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
+            System.out.println("Waiting for client to connect and make it's fist move");
+        }*/
+
+
+        //new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
     }
 
     //GB-25-AA //GB-35-AA
     private void gameLoop(){
         boolean gameOver = false;
-        boolean firstMove = true;
+        boolean firstMove = false;
+
+        if (isClientTurn){
+            firstMove = true;
+        }
 
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
-                    firstMove(player);
+                    makeMove(player,true);
                     firstMove = false;
                 } else {
                     gameOver = checkIfGameOver();
@@ -131,9 +160,9 @@ public class Game {
        if (firstMove) {
            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
            myMove = "i " + myMove + myShotCoordinates;
-           System.out.println("Sträng till motståndaren: " + myMove);
+           System.out.println("Sträng till motståndaren i makeMove, fristMove: " + myMove);
            updateMaps(myShotCoordinates, enemyGameBoard);
-           player.getWriter().println("game over");
+           player.getWriter().println(myMove);
        } else {
            try {
                enemyMove = String.valueOf(player.getReader().readLine());  //Tar emot sträng från mottagaren
@@ -170,11 +199,11 @@ public class Game {
 
            if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
                iLose = true;    //Ändra till iLoose
-               System.out.println("Sträng till motståndaren: " + myMove);
+               System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
                player.getWriter().println(enemyHitOrMiss.toLowerCase());
            } else {
                myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
-               System.out.println("Sträng till motståndaren: " + myMove);
+               System.out.println("Sträng till motståndaren i makeMove: " + myMove);
                player.getWriter().println(myMove);
                updateMaps(myShotCoordinates, enemyGameBoard);
            }

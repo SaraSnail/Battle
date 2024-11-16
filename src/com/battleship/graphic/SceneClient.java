@@ -65,8 +65,9 @@ public class SceneClient {
                 try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
                     host.clear();
                     port1.clear();
+
                     Game game = new Game(communicationHandler, true, login);
-                    //game.createBoards();
+                    game.createBoards();
                     game.startGame();
 
 
@@ -76,7 +77,7 @@ public class SceneClient {
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
                             window.setScene(view);
-                            //game.startGame();
+                            game.startGame();
                         });
 
 
