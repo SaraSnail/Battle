@@ -2,6 +2,7 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -11,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -79,6 +82,7 @@ public class SceneClient {
                             window.setScene(view);
                             //game.startGame();
                         });
+
 
                         game.startGame();
 

@@ -95,6 +95,8 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
         myGameBoard.displayBoard();
 
+
+
         //GB-18-SA
         return scene;
 
