@@ -154,8 +154,9 @@ public class Game {
         myShotCoordinates = Shoot.randomShot(enemyGameBoard);
         myMove = "i " + myMove + myShotCoordinates;
         System.out.println("Sträng till motståndaren: " + myMove);
-        updateMaps(myShotCoordinates,enemyGameBoard);
+
         player.getWriter().println(myMove);
+        updateMaps(myMove,enemyGameBoard);
     }
 
     //GB-19-AA
@@ -183,8 +184,9 @@ public class Game {
            //enemyMove = player.handleIncomingMessages();
            System.out.println("inkommen Sträng i makeMove: " + enemyMove);
 
-           updateMaps(enemyMove, myGameBoard);
+
            char myShotHitOrMiss = setShotOutcome(enemyMove);
+       updateMaps(enemyMove, myGameBoard);
 
            if (myShotHitOrMiss == 'h') {
                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
@@ -205,6 +207,7 @@ public class Game {
            lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
 
            enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
+
 
            if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
                iLose = true;    //Ändra till iLoose
@@ -249,7 +252,8 @@ public class Game {
         // spara värde i träffad ruta för att se om den är en del av ett skepp
         char outcome = myBoard[row][col];
         // uppdatera brädet vid träffens position ,x för träff eller 0 för miss
-        myBoard[row][col] = outcome == 'S' ? 'X' : 'O';
+
+        //myBoard[row][col] = outcome == 'S' ? 'X' : '0';//debug-SA tog bort denna, den ändra värdet på koordinaten
 
         // kollar om träffen var en träff på ett skepp. s betyder träff på skepp
 
@@ -297,10 +301,13 @@ public class Game {
 
             //Sätter in row och column från klassen i variablerna row och column
             row = coords.getRow();
+            System.out.println("row: " + row);
             col = coords.getCol();
+            System.out.println("col: " + col);
 
             //Samlar värdet på koordinaten på spelplanen
             valueAtCoordinates = gameBoard.getBoard()[row][col];
+            System.out.println("valueAtCoordinates: " + valueAtCoordinates);
             //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
 
         } catch (Exception e) {
