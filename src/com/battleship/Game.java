@@ -110,6 +110,7 @@ public class Game {
                     firstMove(player);
                     firstMove = false;
                 } else {
+                    System.out.println("I if-satsen, clientTurn");
                     enemymove = player.handleIncomingMessages();
                     gameOver = checkIfGameOver(enemymove);
                     makeMove(player, false, enemymove);
@@ -119,6 +120,7 @@ public class Game {
                     }
                 }
             } else {
+                System.out.println("I if-satsen, !clientTurn");
                 enemymove = player.handleIncomingMessages();
                 gameOver = checkIfGameOver(enemymove);
                 makeMove(player, false, enemymove);
@@ -127,6 +129,7 @@ public class Game {
                     break;
                 }
             }
+            System.out.println("Utanför if-satsen");
             enemymove = player.handleIncomingMessages();
             gameOver = checkIfGameOver(enemymove); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
@@ -238,11 +241,11 @@ public class Game {
         int col = shotCoordinates.getCol();
         char[][] myBoard = myGameBoard.getBoard();
 
-
+        /*
         if (myBoard[row][col] == ' ') { // Om det är tomt är det första skottet. returnerar "i"
             return "i";
 
-        }
+        }*/
         // spara värde i träffad ruta för att se om den är en del av ett skepp
         char outcome = myBoard[row][col];
         // uppdatera brädet vid träffens position ,x för träff eller 0 för miss
@@ -383,7 +386,7 @@ public class Game {
                 return true;
 
             } else {
-
+                System.out.println("Not game over");
                 return false;
             }
         }
