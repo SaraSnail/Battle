@@ -1,7 +1,5 @@
 package com.battleship;
 
-import com.battleship.graphic.LoginView;
-
 import java.io.IOException;
 
 import java.io.*;
@@ -19,6 +17,7 @@ public class CommunicationHandler implements AutoCloseable{
     private ServerSocket serverSocket;
     private BufferedReader reader;
     private PrintWriter writer;
+
 
 
     //GB-26-SA
