@@ -68,7 +68,7 @@ public class SceneClient {
 
                     Game game = new Game(communicationHandler, true, login);
                     game.createBoards();
-                    game.startGame();
+                    //game.startGame();
 
 
                     //GB-18-SA
@@ -77,10 +77,10 @@ public class SceneClient {
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
                             window.setScene(view);
-                            game.startGame();
+                            //game.startGame();
                         });
 
-
+                    game.startGame();
 
                     }catch(Exception ex){
                         ex.printStackTrace();

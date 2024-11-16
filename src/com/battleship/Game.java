@@ -74,12 +74,14 @@ public class Game {
 
             waitForReady();
             waitOneSec();
-            new Thread(this::gameLoop).start();
+            //new Thread(this::gameLoop).start();
+            gameLoop();
 
         } else {
             sendReady();
             waitOneSec();
-            new Thread(this::gameLoop).start();
+            //new Thread(this::gameLoop).start();
+            gameLoop();
         }
 
 
