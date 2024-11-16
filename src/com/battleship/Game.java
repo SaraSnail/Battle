@@ -98,6 +98,7 @@ public class Game {
     private void gameLoop(){
         boolean gameOver = false;
         boolean firstMove = false;
+        String enemymove;
 
         if (isClientTurn){
             firstMove = true;
@@ -106,25 +107,28 @@ public class Game {
         while (!gameOver) {
             if (isClientTurn) {
                 if (firstMove){
-                    makeMove(player,true);
+                    firstMove(player);
                     firstMove = false;
                 } else {
-                    gameOver = checkIfGameOver();
-                    makeMove(player, false);
+                    enemymove = player.handleIncomingMessages();
+                    gameOver = checkIfGameOver(enemymove);
+                    makeMove(player, false, enemymove);
                     isClientTurn = false;
                     if (gameOver){
                         break;
                     }
                 }
             } else {
-                gameOver = checkIfGameOver();
-                makeMove(player, false);
+                enemymove = player.handleIncomingMessages();
+                gameOver = checkIfGameOver(enemymove);
+                makeMove(player, false, enemymove);
                 isClientTurn = true;
                 if (gameOver){
                     break;
                 }
             }
-            gameOver = checkIfGameOver(); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
+            enemymove = player.handleIncomingMessages();
+            gameOver = checkIfGameOver(enemymove); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
         }
         System.out.println("Game over!");
@@ -152,29 +156,29 @@ public class Game {
     }
 
     //GB-19-AA
-   private void makeMove(CommunicationHandler player, boolean firstMove) {
+   private void makeMove(CommunicationHandler player, boolean firstMove, String enemyMove ) {
 
        String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
        String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
-       String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
+       //String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
-       if (firstMove) {
+/*       if (firstMove) {
            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
            myMove = "i " + myMove + myShotCoordinates;
            System.out.println("Sträng till motståndaren i makeMove, fristMove: " + myMove);
            updateMaps(myShotCoordinates, enemyGameBoard);
            player.getWriter().println(myMove);
-       } else {
-           try {
+       } else {*/
+          /* try {
                enemyMove = String.valueOf(player.getReader().readLine());  //Tar emot sträng från mottagaren
                System.out.println("mottagen sträng i MakeMove: " + enemyMove);
            } catch (IOException e) {
                System.out.println("Could not receive move from other player");
                throw new RuntimeException(e);
-           }
-           enemyMove = player.handleIncomingMessages();
-           System.out.println("inkommen fräng i makeMove: " + enemyMove);
+           }*/
+           //enemyMove = player.handleIncomingMessages();
+           System.out.println("inkommen Sträng i makeMove: " + enemyMove);
 
            updateMaps(enemyMove, myGameBoard);
            char myShotHitOrMiss = setShotOutcome(enemyMove);
@@ -209,7 +213,7 @@ public class Game {
                player.getWriter().println(myMove);
                updateMaps(myShotCoordinates, enemyGameBoard);
            }
-       }
+       //}
    }
 
 
@@ -334,7 +338,7 @@ public class Game {
     }
 
     //GB-25-AA
-    private boolean checkIfGameOver(){
+    private boolean checkIfGameOver(String message){
         //GB-33-SA
         /*
         String[] isGameOverArray = message.split(" ");//Delar upp i array så jag kan få bort "h shot"
@@ -344,13 +348,17 @@ public class Game {
         */
 
         //GB-33-SA
-        String message = " ";
-        try {
+        //String message = """";
+
+       /* try {
             message = String.valueOf(player.getReader().readLine());//Samlar texten från players reader
             System.out.println("mottaget i checkIfGameOver: " + message);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+
+
+
         //GB-35-AA (Alertbox och .exit)
         if (iLose){ // iLose kommer fungera när makeMove är mergeat!
             Platform.runLater(() ->{
