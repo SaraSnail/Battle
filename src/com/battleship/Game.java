@@ -224,7 +224,7 @@ public class Game {
         if (resultCode != 'i' && resultCode != 'h' && resultCode != 'm' && resultCode != 's') {
             throw new IllegalArgumentException(" Ogiltig input" + resultCode);
         }
-
+        System.out.println("result i setShotOutCome: " + resultCode);
 
         return resultCode;
     }

@@ -80,7 +80,7 @@ public class SceneClient {
                             //game.startGame();
                         });
 
-                    game.startGame();
+                        game.startGame();
 
                     }catch(Exception ex){
                         ex.printStackTrace();
