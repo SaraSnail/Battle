@@ -130,6 +130,7 @@ public class Game {
         //new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet (AA).
     }
 
+    //GB-43-AA
     private void handleClientsTurn(boolean firstMove){
         System.out.println("Clients turn");
         if (firstMove){
@@ -141,6 +142,7 @@ public class Game {
         }
     }
 
+    //GB-43-AA
     private void handlePlayersTurn(){
         System.out.println("I playersTurn");
 
@@ -213,6 +215,7 @@ public class Game {
         }
     }
 
+    //GB-43-AA
     private void firstMove(CommunicationHandler player){
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
@@ -257,6 +260,7 @@ public class Game {
            updateMaps(enemyMove, myGameBoard);
 
            if (myShotHitOrMiss == 'h') {
+               //GB-43-AA kommenterade ut hitSot
                /*Shoot.setLastHit(lastShot); //sträng med tex "5b"
                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
                lastHitShot = myShotCoordinates;
@@ -264,6 +268,7 @@ public class Game {
                myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
            } else if (myShotHitOrMiss == 'm' && !sunk) {
+               //GB-43-AA kommenterade ut hitSot
                //myShotCoordinates = Shoot.hitShot(enemyGameBoard);
                myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
