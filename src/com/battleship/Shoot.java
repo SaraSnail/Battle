@@ -7,6 +7,7 @@ package com.battleship;//GB-17-cf
 
 
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class Shoot {
@@ -20,6 +21,8 @@ public class Shoot {
 
 
     static char[] yAxis= {'a','b','c','d','e','f','g','h','i','j'};
+    static HashSet<String> shotsFired = new HashSet<>();
+
 
     static Random random = new Random();
 
@@ -49,10 +52,11 @@ public class Shoot {
                 String numberCoordinate = Integer.toString(randomX);
                 String result = numberCoordinate+letterCoordinate;
 
-                randomShotTaken = true;
-
-
-                return result;
+                if (!shotsFired.contains(result)) {
+                    shotsFired.add(result);
+                    randomShotTaken = true;
+                    return result;
+                }
 
             }
         }
@@ -92,10 +96,11 @@ public class Shoot {
                 String numberCoordinate = Integer.toString(randomX);
                 String result = numberCoordinate + letterCoordinate;
 
-                randomShotTaken = true;
-
-                return result;
-
+                if (!shotsFired.contains(result)) {
+                    shotsFired.add(result);
+                    randomShotTaken = true;
+                    return result;
+                }
             }
         }
         return "No valid shot";
