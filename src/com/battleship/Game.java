@@ -26,9 +26,9 @@ public class Game {
     private LoginView loginView;
 
     //GB-26-SA
-    private char valueAtCoordinates;
-    private int row;
-    private int col;
+    //private char valueAtCoordinates;
+    //private int row;
+    //private int col;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient, LoginView loginView) {
@@ -100,6 +100,13 @@ public class Game {
         boolean firstMove = false;
         String enemymove;
 
+        System.out.println("------------------");
+        System.out.println("My gameBoard");
+        myGameBoard.displayBoard();
+        System.out.println("EnemyBoard");
+        enemyGameBoard.displayBoard();
+        System.out.println("------------------");
+
         if (isClientTurn){
             firstMove = true;
         }
@@ -114,7 +121,7 @@ public class Game {
                     enemymove = player.handleIncomingMessages();
                     gameOver = checkIfGameOver(enemymove);
                     makeMove(player, false, enemymove);
-                    isClientTurn = false;
+                    //isClientTurn = false;
                     if (gameOver){
                         break;
                     }
@@ -124,7 +131,7 @@ public class Game {
                 enemymove = player.handleIncomingMessages();
                 gameOver = checkIfGameOver(enemymove);
                 makeMove(player, false, enemymove);
-                isClientTurn = true;
+                //isClientTurn = true;
                 if (gameOver){
                     break;
                 }
@@ -186,7 +193,7 @@ public class Game {
 
 
            char myShotHitOrMiss = setShotOutcome(enemyMove);
-       updateMaps(enemyMove, myGameBoard);
+
 
            if (myShotHitOrMiss == 'h') {
                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
@@ -204,9 +211,13 @@ public class Game {
                myShotCoordinates = Shoot.randomShot(enemyGameBoard);
            }
 
+       updateMaps(enemyMove, myGameBoard);
+
            lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
 
            enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
+
+
 
 
            if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
@@ -300,51 +311,68 @@ public class Game {
             //Coordinates constructor ska innehålla row och col, delar message och får tillbaka row och column
 
             //Sätter in row och column från klassen i variablerna row och column
-            row = coords.getRow();
+            int row = coords.getRow();
             System.out.println("row: " + row);
-            col = coords.getCol();
+            int col = coords.getCol();
             System.out.println("col: " + col);
 
             //Samlar värdet på koordinaten på spelplanen
-            valueAtCoordinates = gameBoard.getBoard()[row][col];
+            char valueAtCoordinates = gameBoard.getBoard()[row][col];
             System.out.println("valueAtCoordinates: " + valueAtCoordinates);
+            System.out.println("gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
             //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
+
+            //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
+            //Kan ta bort sout senare, finns där för att se att allting fungerar
+            System.out.println("if-sats");
+            if(gameBoard.getBoard()[row][col] == 'S'){
+                System.out.println("A ship");
+                gameBoard.getBoard()[row][col] = '0';
+                System.out.println("Träff gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
+
+            } else if (gameBoard.getBoard()[row][col] == ' ') {
+                System.out.println("No ship");
+                gameBoard.getBoard()[row][col] = 'X';
+                System.out.println("Miss gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
+
+            } else if (gameBoard.getBoard()[row][col] == '0') {
+                System.out.println("A ship, 0 else-if");
+                gameBoard.getBoard()[row][col] = '0';
+
+            } else if (gameBoard.getBoard()[row][col] == 'X') {
+                System.out.println("A ship, X else-if");
+                gameBoard.getBoard()[row][col] = 'X';
+            }
+            System.out.println("Efter if-sats valueAtCoordinates: "+valueAtCoordinates);
+            System.out.println("gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
+            gameBoard.displayBoard();
+
+
+            //GB-25-AA
+            //Uppdatera GameBoard-metod(coordinates)
+            //GB-18-SA
+            //updateGameView(row, col, gameBoard);//GB-18-SA, behöver inte skicka med row och col
 
         } catch (Exception e) {
             System.out.println("Error: "+e.getMessage());
         }
 
-        //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
-        //Kan ta bort sout senare, finns där för att se att allting fungerar
-        if(valueAtCoordinates == 'S'){
-            System.out.println("A ship");
-            gameBoard.getBoard()[col][row] = '0';
 
-        } else if (valueAtCoordinates == ' ') {
-            System.out.println("No ship");
-            gameBoard.getBoard()[col][row] = 'X';
-
-        }
-        gameBoard.displayBoard();
-
-
-        //GB-25-AA
-        //Uppdatera GameBoard-metod(coordinates)
-        //GB-18-SA
-        updateGameView();//GB-18-SA, behöver inte skicka med row och col
 
     }
 
 
     //GB-25-AA
-    private void updateGameView(){ // denna metod kanske bör ligga i GameBoard
+    private void updateGameView(int row, int col, GameBoard gameBoard){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
 
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
             //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard,enemyGameBoard));
             //Uppdatera GUI/GameView
+            GameView.updateMapFX(row, col, gameBoard);
         });
+        System.out.println("After Platform.runLater");
     }
 
     //GB-25-AA

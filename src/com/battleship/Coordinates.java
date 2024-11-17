@@ -9,9 +9,9 @@ public class Coordinates {
     private int col;
 
     //GB-26-SA
-    public Coordinates(int row, int col) {
-        this.row = row;
+    public Coordinates(int col, int row) {
         this.col = col;
+        this.row = row;
     }
 
     //GB-26-SA
@@ -38,13 +38,16 @@ public class Coordinates {
         int boardSize = 10;// Spelplanen är 10x10, börjar på 0 och A och går till 9 och J
 
         //Tar char på plats 0 och sätter det som row. I ex 4b är 4:ran row, gör om det från char till ett siffer tal
-        int row  = Character.getNumericValue(coordinates.charAt(0));
+        int col  = Character.getNumericValue(coordinates.charAt(0));
+        System.out.println("Coordinates col: " + col);
 
         //Tar char på plats 1 som ska bli column. I ex 4b är b column. Gör om till LowerCase så det stämmer med listan
         char letter = coordinates.toLowerCase().charAt(1);
+        System.out.println("Letter: " + letter);
 
         //Tar listan och den bokstav som är den samma på listan dens index säts som column
-        int col = letters.indexOf(letter);
+        int row = letters.indexOf(letter);
+        System.out.println("Coordinates row: " + row);
 
         //Kollar att row och col är inom board storleken
         //Så om row eller col är mindre än 0 eller större eller lika som boardSize (10) ska den kasta "IllegalArgumentException"
@@ -53,7 +56,7 @@ public class Coordinates {
         }
 
         //Skickar tillbaka det som finns på koordinaterna
-        return new Coordinates(row, col);
+        return new Coordinates(col, row);
     }
 
     //GB-26-SA
