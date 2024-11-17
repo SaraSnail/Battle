@@ -71,27 +71,19 @@ public class Game {
         //createBoards();
 
         if (!isClientTurn){
-
             waitForReady();
-            waitOneSec();
-            //new Thread(this::gameLoop).start();
-            gameLoop();
-
         } else {
             sendReady();
-            waitOneSec();
-            //new Thread(this::gameLoop).start();
-            gameLoop();
         }
 
+        waitOneSec();
+        gameLoop();
 
-
-/*        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
+        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
-        }*/
+        }
 
-
-        //new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+        //new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet (AA).
     }
 
     //GB-25-AA //GB-35-AA
@@ -104,7 +96,10 @@ public class Game {
             firstMove = true;
         }
 
+        int counter = 1;
         while (!gameOver) {
+
+            System.out.println("Whale-loopen startar. isClientsTurn: " + isClientTurn + ". varv: " + counter);
             if (isClientTurn) {
                 if (firstMove){
                     firstMove(player);
@@ -133,6 +128,7 @@ public class Game {
             enemymove = player.handleIncomingMessages();
             gameOver = checkIfGameOver(enemymove); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
+            counter ++;
         }
         System.out.println("Game over!");
     }
