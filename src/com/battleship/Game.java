@@ -230,7 +230,7 @@ public class Game {
         updateMaps(myMove,enemyGameBoard);
     }
 
-    //GB-19-AA
+    //GB-19-AA //GB-45-AA
    private void makeMove(CommunicationHandler player, boolean firstMove, String enemyMove ) {
 
        String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
@@ -238,63 +238,60 @@ public class Game {
        //String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
-/*       if (firstMove) {
-           myShotCoordinates = Shoot.randomShot(enemyGameBoard);
-           myMove = "i " + myMove + myShotCoordinates;
-           System.out.println("Sträng till motståndaren i makeMove, fristMove: " + myMove);
-           updateMaps(myShotCoordinates, enemyGameBoard);
+
+       System.out.println("inkommen Sträng i makeMove: " + enemyMove);
+       char myShotHitOrMiss = setShotOutcome(enemyMove);
+       updateMaps(enemyMove, myGameBoard);
+       selectShot(myShotHitOrMiss);
+       enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
+
+
+       if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
+           iLose = true;    //Ändra till iLoose
+           System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
+           player.getWriter().println(enemyHitOrMiss.toLowerCase());
+       } else {
+           myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
+           System.out.println("Sträng till motståndaren i makeMove: " + myMove);
            player.getWriter().println(myMove);
-       } else {*/
-          /* try {
-               enemyMove = String.valueOf(player.getReader().readLine());  //Tar emot sträng från mottagaren
-               System.out.println("mottagen sträng i MakeMove: " + enemyMove);
-           } catch (IOException e) {
-               System.out.println("Could not receive move from other player");
-               throw new RuntimeException(e);
-           }*/
-           //enemyMove = player.handleIncomingMessages();
-           System.out.println("inkommen Sträng i makeMove: " + enemyMove);
+           updateMaps(myShotCoordinates, enemyGameBoard);
+       }
+   }
+
+   //Gb-45-AA
+   private void selectShot(char myShotHitOrMiss){
+       String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
 
 
-           char myShotHitOrMiss = setShotOutcome(enemyMove);
-           updateMaps(enemyMove, myGameBoard);
+       if (myShotHitOrMiss == 'h') {
+           //GB-43-AA kommenterade ut hitSot
+           System.out.println("Föregående skott var h. lagrat i lastShot är: " +lastShot);
+           Shoot.setLastHit(lastShot); //sträng med tex "5b"
+           myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+           System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
+           sunk = false;
+           myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
-           if (myShotHitOrMiss == 'h') {
-               //GB-43-AA kommenterade ut hitSot
-               /*Shoot.setLastHit(lastShot); //sträng med tex "5b"
-               myShotCoordinates = Shoot.hitShot(enemyGameBoard);
-               lastHitShot = myShotCoordinates;
-               sunk = false;*/
-               myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+       } else if (myShotHitOrMiss == 'm' && !sunk) {
+           System.out.println("Föregående skott var miss men skepp ej sänkt");
+           //GB-43-AA kommenterade ut hitSot
+           myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+           System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
+           //myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
-           } else if (myShotHitOrMiss == 'm' && !sunk) {
-               //GB-43-AA kommenterade ut hitSot
-               //myShotCoordinates = Shoot.hitShot(enemyGameBoard);
-               myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+       } else if (myShotHitOrMiss == 's') {
+           System.out.println("Föregående skott sänkte skepp");
+           sunk = true;
+           myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+           System.out.println("Kordinater från randomShot: " + myShotCoordinates);
+       } else {
+           System.out.println("Föregående skott var miss");
+           myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+           System.out.println("Kordinater från randomShot: " + myShotCoordinates);
+       }
 
-           } else if (myShotHitOrMiss == 's') {
-               sunk = true;
-               myShotCoordinates = Shoot.randomShot(enemyGameBoard);
-           } else {
-               myShotCoordinates = Shoot.randomShot(enemyGameBoard);
-           }
-
-           lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
-
-           enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
-
-
-           if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
-               iLose = true;    //Ändra till iLoose
-               System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
-               player.getWriter().println(enemyHitOrMiss.toLowerCase());
-           } else {
-               myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
-               System.out.println("Sträng till motståndaren i makeMove: " + myMove);
-               player.getWriter().println(myMove);
-               updateMaps(myShotCoordinates, enemyGameBoard);
-           }
-       //}
+       lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+       System.out.println("LastShot (skottet som skickas till motståndaren): " + lastShot);
    }
 
 
