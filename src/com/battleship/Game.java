@@ -177,51 +177,47 @@ public class Game {
     }
     // GB-lapp ej funnen-D.E
 
-    private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //denna metod bör kanske i BoardGame
-        //Tillfällig sträng tills metoden är klar.
-        //Läser enemyMove för att få rad och kolumnindex på brädet
+    private String getShotOutcome(String enemyMove, GameBoard myGameBoard) {
+        if (myGameBoard.isBoardEmpty()) {
+        return "i"; // Första skottet
+    }
+
+        // Hämta koordinater för fiendens skott
         Coordinates shotCoordinates = Coordinates.getValueAtCoordinates(enemyMove, myGameBoard.getBoard());
         int row = shotCoordinates.getRow();
         int col = shotCoordinates.getCol();
-        char[][] myBoard = myGameBoard.getBoard();
 
+        char outcome = myGameBoard.getBoard()[row][col];
 
-        if (myBoard[row][col] == ' ') { // Om det är tomt är det första skottet. returnerar "i"
-            return "i";
-
-        }
-        // spara värde i träffad ruta för att se om den är en del av ett skepp
-        char outcome = myBoard[row][col];
-        // uppdatera brädet vid träffens position ,x för träff eller 0 för miss
-        myBoard[row][col] = outcome == 'S' ? 'X' : 'O';
-
-        // kollar om träffen var en träff på ett skepp. s betyder träff på skepp
-
+        // Hantera träffar och missa
         if (outcome == 'S') {
-            for (Ship ship : myGameBoard.getShips()) { //Loopa genom varje skepp,se om något av dom innehåller koordinaterna
-
+            for (Ship ship : myGameBoard.getShips()) {
+                // Kontrollera vilket skepp som träffas
                 if (ship.getCoordinates().stream().anyMatch(coord -> coord[0] == row && coord[1] == col)) {
-                    ship.setNumberOfHits(ship.getNumberOfHits() + 1); // Använder stream API för att kolla
-                    // om skeppets koordinater innehåller det träffade området,
-                    // Träff
+                    ship.setNumberOfHits(ship.getNumberOfHits() + 1);
 
-                    // Är skeppet sänkt?
+                    // SKepp sänkts?
                     if (ship.getNumberOfHits() == ship.getSize()) {
                         ship.setSunk(true);
-                        // Är alla skepp sänkta?
-                        if (myGameBoard.getShips().stream().allMatch(Ship::isSunk)) {
-                            return "game over";
-                        } // Om bara detta skepp är sänkt men fler finns kvar returneras "s"
-                        return "s"; // Träff med sänkt skepp
-                    }
-                    return "h"; // Endast träff
-                }
 
+                        // Kontrollera om alla skepp är sänkta
+                        if (myGameBoard.getShips().stream().allMatch(Ship::isSunk)) {
+                            return "game over"; // Alla skepp är sänkta
+                        }
+                        return "s"; // Träff som sänkte skeppet
+                    }
+                    return "h"; // Träff utan att sänka skeppet
+                }
             }
         }
-        return "m"; // miss
 
+        // Om det är en miss
+        return "m";
     }
+
+}
+
+
     //GB-26-SA, ändrar för test till public
     public void updateMaps(String message, GameBoard gameBoard){
 

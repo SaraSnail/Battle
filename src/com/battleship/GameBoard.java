@@ -7,9 +7,10 @@ import java.util.Random;
 // GB-8-AWS
 public class GameBoard {
     private char[][] board;
-   private List<Ship> ships;
+    private List<Ship> ships;
+
     // GB-8-AWS
-    public GameBoard(boolean myBoard){
+    public GameBoard(boolean myBoard) {
         board = new char[10][10];
         ships = new ArrayList<>();
         initializeBoard();
@@ -18,38 +19,40 @@ public class GameBoard {
             placeAllShips();
         }
     }
-           // GB-8-AWS
-    private void initializeBoard(){
+
+    // GB-8-AWS
+    private void initializeBoard() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 board[i][j] = ' ';
             }
         }
     }
-        // GB-8-AWS-
-    private void initializeFleet(){
-        ships.add( new Ship("Hangarfartyg", 5, false, 0));
-        ships.add( new Ship("Slagskepp", 4, false, 0));
-        ships.add( new Ship("Slagskepp", 4, false, 0));
-        ships.add( new Ship("Kryssare", 3, false, 0));
-        ships.add( new Ship("Kryssare", 3, false, 0));
-        ships.add( new Ship("Kryssare", 3, false, 0));
-        ships.add( new Ship("Ubåt", 2, false, 0));
-        ships.add( new Ship("Ubåt", 2, false, 0));
-        ships.add( new Ship("Ubåt", 2, false, 0));
-        ships.add( new Ship("Ubåt", 2, false, 0));
+
+    // GB-8-AWS-
+    private void initializeFleet() {
+        ships.add(new Ship("Hangarfartyg", 5, false, 0));
+        ships.add(new Ship("Slagskepp", 4, false, 0));
+        ships.add(new Ship("Slagskepp", 4, false, 0));
+        ships.add(new Ship("Kryssare", 3, false, 0));
+        ships.add(new Ship("Kryssare", 3, false, 0));
+        ships.add(new Ship("Kryssare", 3, false, 0));
+        ships.add(new Ship("Ubåt", 2, false, 0));
+        ships.add(new Ship("Ubåt", 2, false, 0));
+        ships.add(new Ship("Ubåt", 2, false, 0));
+        ships.add(new Ship("Ubåt", 2, false, 0));
     }
 
-            //GB-8-AWS
-    private void placeShip(Ship ship, int row, int col, boolean horizontal){
+    //GB-8-AWS
+    private void placeShip(Ship ship, int row, int col, boolean horizontal) {
         int size = ship.getSize();
 
-        if(horizontal){
+        if (horizontal) {
             for (int i = 0; i < size; i++) {
                 board[row][col + i] = 'S';
                 ship.addCoordinates(row, col + i);
             }
-        }else{
+        } else {
             for (int i = 0; i < size; i++) {
                 board[row + i][col] = 'S';
                 ship.addCoordinates(row + i, col);
@@ -57,7 +60,7 @@ public class GameBoard {
         }
     }
 
-   // GB-8-AWS
+    // GB-8-AWS
     private void placeAllShips() {
         Random random = new Random();
         ships.sort((s1, s2) -> Integer.compare(s2.getSize(), s1.getSize()));
@@ -102,7 +105,7 @@ public class GameBoard {
 
     //GB-8-AWS
     private boolean isAreaAvailable(int row, int col, int size, boolean horizontal) {
-        if((horizontal && col + size > 10) || (!horizontal && row + size > 10)){
+        if ((horizontal && col + size > 10) || (!horizontal && row + size > 10)) {
             return false;
         }
         for (int i = 0; i < size; i++) {
@@ -110,7 +113,7 @@ public class GameBoard {
             int shipCol = horizontal ? col + i : col;
 
             for (int r = shipRow - 1; r <= shipRow + 1; r++) {
-                for (int c = shipCol -1; c <= shipCol + 1; c++) {
+                for (int c = shipCol - 1; c <= shipCol + 1; c++) {
                     if (r >= 0 && c < 10 && c >= 0 && r < 10) {
                         if (board[r][c] != ' ') {
                             return false;
@@ -123,7 +126,7 @@ public class GameBoard {
     }
 
     // GB-8-AWS metod för att testa i intellij hur det ser ut kommer att tas bort senare när grafisk funktion är inlagd.
-    public void displayBoard(){
+    public void displayBoard() {
         System.out.println("------------GameBoard------------");
         System.out.println("   0 1 2 3 4 5 6 7 8 9");
         for (int i = 0; i < 10; i++) {
@@ -145,4 +148,18 @@ public class GameBoard {
     public List<Ship> getShips() {
         return ships;
     }
+
+    public boolean isBoardEmpty() {
+        // Gå igenom hela brädet för att se om det finns några träffar eller missar
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                // Om det finns ett "X" eller "0" betyder det att skott har avfyrats
+                if (board[row][col] == 'X' || board[row][col] == '0') {
+                    return false; // Brädet är inte tomt, det har skjutits på
+                }
+            }
+        }
+        return true; // inget har skjutits på
+    }
 }
+
