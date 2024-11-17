@@ -43,7 +43,7 @@ public class Shoot {
 
 
 
-            if(randomCoordinate==' '|| randomCoordinate == 'S') {
+            if(randomCoordinate==' ' || randomCoordinate=='S') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
@@ -86,7 +86,7 @@ public class Shoot {
 
             char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
-            if (randomSecondShotCoordinate == ' '|| randomSecondShotCoordinate == 'S') {
+            if (randomSecondShotCoordinate == ' ' || randomSecondShotCoordinate == 'S') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);

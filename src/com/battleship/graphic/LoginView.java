@@ -27,8 +27,8 @@ public class LoginView extends Application{
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
 
-    public final int windowSizeHeight = 1080;
-    public final int windowSizeWidth = 1920;
+    public final int windowSizeHeight = 700; // 1080, debug-SA, ändra fönster storleken
+    public final int windowSizeWidth = 1450; // 1920
 
     public final int COLUMN = 25;
 

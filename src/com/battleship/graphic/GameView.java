@@ -1,7 +1,6 @@
 package com.battleship.graphic;
 
-import com.battleship.CommunicationHandler;
-import com.battleship.Game;
+
 import com.battleship.GameBoard;
 import com.battleship.Ship;
 
@@ -35,6 +34,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                                                 //GB-42-SA, la till gameboard som inparametrar så vi når rätt spelplaner
     public static Scene gameView (Stage window, GameBoard myGameBoard, GameBoard enemyGameBoard){
         //aws
+
         //myGameBoard = new GameBoard(true);
         //enemyGameBoard = new GameBoard(false);
 
@@ -94,6 +94,8 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
         myGameBoard.displayBoard();
+
+
 
         //GB-18-SA
         return scene;
