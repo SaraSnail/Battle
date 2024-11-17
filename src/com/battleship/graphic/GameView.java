@@ -1,6 +1,5 @@
 package com.battleship.graphic;
 
-
 import com.battleship.GameBoard;
 import com.battleship.Ship;
 
@@ -13,15 +12,16 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 import java.util.List;
-
 //GB-14-aws
 public class GameView {//GB-18-SA, tog bort "extends applications"
     //GB-18-SA, gjorde dem static
     //aws
     private static GameBoard myGameBoard;
     private static GameBoard enemyGameBoard;
+    public static AnchorPane myGame;
+    public static AnchorPane enemyGame;
+
     //GB-18-SA, la till scene
     public static Scene scene;
 
@@ -38,10 +38,8 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         //myGameBoard = new GameBoard(true);
         //enemyGameBoard = new GameBoard(false);
 
-
-
-        AnchorPane myGame = new AnchorPane();        // Min Spelplan
-        AnchorPane enemyGame = new AnchorPane();    // Motståndare Spelplan
+        myGame = new AnchorPane();        // Min Spelplan
+        enemyGame = new AnchorPane();    // Motståndare Spelplan
 
         Label myLabel = new Label("--------MyGameBoard-------");
         myLabel.getStyleClass().add("text-stroke");
@@ -82,8 +80,6 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
         //GB-18-SA, gjorde att den "skapas" utanför metoden
         scene = new Scene(stack, 1450, 700);
-
-
         //GB-18-SA, kommenterade ut detta
         /*
         primaryStage.setScene(scene);
@@ -92,14 +88,9 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
         primaryStage.show();*/
         stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
-
         myGameBoard.displayBoard();
-
-
-
         //GB-18-SA
         return scene;
-
     }
 
     //GB-14-aws
@@ -133,14 +124,12 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                 if(isHorizontal) {
                     shipImage.setX(c * 50);
                     shipImage.setY(r * 50 - 25);
-
                 }else{
                     shipImage.setX(c * 50);
                     shipImage.setY(r * 50);
                 }
                 boardPane.getChildren().add(shipImage);
             }
-
         }
 
         for (int r = 0; r < 10; r++) {
@@ -157,8 +146,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                     } else{
                         continue;
                     }
-
-                } else{
+            } else{
                     if (gameBoardFX[r][c] == 'X') {      //Miss
                     cell.setFill(Color.BLUE);
                 } else if (gameBoardFX[r][c] == '0') {      //Träff
@@ -172,7 +160,6 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                 boardPane.getChildren().add(cell);
             }
         }
-
     }
     //GB-36-AWS
     private static void gameBoardGrid(AnchorPane boardPane, GameBoard board,boolean isEnemy){
@@ -218,7 +205,6 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         }
         return shipImage;
     }
-
     //GB-36-AWS
     private static void topNumberLabel(AnchorPane boardPane){
         for (int c = 0; c < 10; c++) {
@@ -238,6 +224,23 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
             letterLabel.setLayoutY(r * 50);
             boardPane.getChildren().add(letterLabel);
         }
+    }
+
+    public static void updateGameView(GameBoard myGameBoard, GameBoard enemyGameBoard,AnchorPane myGame, AnchorPane enemyGame ){
+        myGame.getChildren().clear();
+        enemyGame.getChildren().clear();
+
+        topNumberLabel(myGame);
+        sideCharLabel(myGame);
+
+        topNumberLabel(enemyGame);
+        sideCharLabel(enemyGame);
+
+        battleGroundFX(myGame, myGameBoard,false);
+        battleGroundFX(enemyGame, enemyGameBoard,true);
+
+        gameBoardGrid(myGame, myGameBoard,false);
+        gameBoardGrid(enemyGame,enemyGameBoard,true);
     }
 
 }

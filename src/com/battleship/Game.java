@@ -1,10 +1,13 @@
 package com.battleship;
 
 import com.battleship.graphic.AlertBox;
+import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
+import static com.battleship.graphic.GameView.enemyGame;
+import static com.battleship.graphic.GameView.myGame;
 
 public class Game {
 
@@ -105,6 +108,10 @@ public class Game {
                 System.out.println("Serverns drag - while-loopen");
                 handlePlayersTurn();
             }
+            //GB-44-AWS
+            Platform.runLater(() -> {
+                GameView.updateGameView(myGameBoard,enemyGameBoard,myGame,enemyGame);
+            });
             waitOneSec();
             counter ++;
         }
