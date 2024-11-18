@@ -240,7 +240,8 @@ public class Game {
 
     //GB-19-AA
     private void makeMove(CommunicationHandler player, boolean firstMove, String enemyMove) {
-
+        System.out.println("Debug: makeMove startar");
+        System.out.println("Debug: firstMove= " + firstMove + ", enemyMove = " + enemyMove);
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
         //String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
@@ -265,10 +266,13 @@ public class Game {
 
 
         char myShotHitOrMiss = setShotOutcome(enemyMove);
+        System.out.println("Debug: Resultat av motståndarens skott (h/m/s): " + myShotHitOrMiss);
+
         updateMyMap(enemyMove);
 
 
         if (myShotHitOrMiss == 'h') {
+            System.out.println("Debug: myShotHitOrMiss = h. Nya skott");
             //GB-43-AA kommenterade ut hitSot
                /*Shoot.setLastHit(lastShot); //sträng med tex "5b"
                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
@@ -279,12 +283,15 @@ public class Game {
         } else if (myShotHitOrMiss == 'm' && !sunk) {
             //GB-43-AA kommenterade ut hitSot
             //myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+            System.out.println("Debug: myShotHitOrMiss = m, nya skott");
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
         } else if (myShotHitOrMiss == 's') {
             sunk = true;
+            System.out.println("Debug: myShotHitOrMiss = s. Skeppet är sänkt. Nya skott");
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
         } else {
+            System.out.println("Debug: (else) nya skott slumpas");
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
         }
 
@@ -292,15 +299,19 @@ public class Game {
 
 
         enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
+        System.out.println("Debug: Resultat av motståndarens drag (getShotOutcome): " + enemyHitOrMiss);
 
 
         if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
+            System.out.println("Debug: Motståndaren har vunnit spelet.");
             iLose = true;    //Ändra till iLoose
             System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
             player.getWriter().println(enemyHitOrMiss.toLowerCase());
         } else {
             lastMove = myShotHitOrMiss + " " + myMove + lastShot;
+            System.out.println("Debug: Uppdaterar min karta med senaste draget (lastMove): " + lastMove);
             updateEnemyMap(lastMove);
+
 
             myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren i makeMove: " + myMove);
@@ -309,6 +320,7 @@ public class Game {
         }
 
         lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+        System.out.println("Debug: Sparar senaste skott: " + lastShot);
         //}
     }
 
@@ -324,16 +336,23 @@ public class Game {
         System.out.println("result i setShotOutCome: " + resultCode);
 
         return resultCode;*/
+        //System.out.println("Debug: från enemyMove" + enemyMove);
+        if (enemyMove == null || enemyMove.isEmpty()) {
+            throw new IllegalArgumentException("Ogiltig input: Strängen är null eller tom");
+        }
+        System.out.println("Debug: setShotOutcome fick input: " + enemyMove);
+
 
         char resultCode = enemyMove.charAt(0);
         System.out.println("Debug: Extraherad resultCode = " + resultCode);
 
         if (resultCode != 'i' && resultCode != 'h' && resultCode != 'm' && resultCode != 's') {
-            System.out.println("Debug: Ogiltig resultCode upptäcktes: " + resultCode);
+            System.out.println("Debug: ogiltig resultCode upptäcktes: " + resultCode + "i string" + enemyMove);
             throw new IllegalArgumentException("Ogiltig input: " + resultCode);
         }
 
         System.out.println("Debug: Giltlig input. Returnerar resultCode = " + resultCode);
+        System.out.println("Debug: Extraherat resultatkod: " + resultCode);
         return resultCode;
     }
 
@@ -448,6 +467,7 @@ private void updateMyMap(String message) {
 
     // i = x-led = row = letter
     // j = y-led = column = number
+    System.out.println("Debug: updateMyMap får message = " + message);
 
     try {
         //Skickar in tex "4b" och spelplanen
@@ -460,10 +480,15 @@ private void updateMyMap(String message) {
         int row = coords.getRow();
         int col = coords.getCol();
 
+        System.out.println("Debug: Extraherade koordinater - Row: " + row + ", Column: " + col);
+        // Kollar värden på brädet
+         char checkValue = myGameBoard.getBoard()[row][col];
+        System.out.println("Debug: Värde på brädet vid (" + row + ", " + col + ") = " + checkValue);
+
         System.out.println("Value at: " + message + " = [" + myGameBoard.getBoard()[row][col] + "]");
 
         //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
-        if (myGameBoard.getBoard()[row][col] == 'S') {
+        /*if (myGameBoard.getBoard()[row][col] == 'S') {
             System.out.println("A ship");
             myGameBoard.getBoard()[row][col] = '0';
 
@@ -471,8 +496,20 @@ private void updateMyMap(String message) {
             System.out.println("No ship");
             myGameBoard.getBoard()[row][col] = 'X';
 
+        }*/
+        // Uppdatera brädet baserat på vad som finns på platsen
+        if (checkValue == 'S') { // Skepp finns på rutan
+            System.out.println("Debug: Skepp träffat vid (" + row + ", " + col + ")");
+            myGameBoard.getBoard()[row][col] = '0'; // Markera skeppet som träffat (0)
+        } else if (checkValue == ' ') { // Ruta är tom
+            System.out.println("Debug: Ingen skepp på rutan vid (" + row + ", " + col + ")");
+            myGameBoard.getBoard()[row][col] = 'X'; // Markera miss
+        } else {
+            System.out.println("Debug: Okänd status vid (" + row + ", " + col + "). Värde: " + checkValue);
         }
 
+        // Visa spelbrädet efter uppdatering
+        System.out.println("Debug: Uppdaterat spelbräde:");
         myGameBoard.displayBoard();
 
 
@@ -483,6 +520,7 @@ private void updateMyMap(String message) {
 
     } catch (Exception e) {
         System.out.println("Error: " + e.getMessage());
+        e.printStackTrace(); // Visa stacktrace för att lättare felsöka
     }
 }
 
