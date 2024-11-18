@@ -140,17 +140,17 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
                 if(isEnemy){
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                        cell.setFill(Color.BLUE);
+                        cell.setFill(Color.color(0.0,0.0,1.0,0.5));
                     } else if (gameBoardFX[r][c] == '0') {      //Träff
-                        cell.setFill(Color.RED);
+                        cell.setFill(Color.color(1.0,0.0,0.0,0.5));
                     } else{
                         continue;
                     }
             } else{
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                    cell.setFill(Color.BLUE);
+                    cell.setFill(Color.color(0.0,0.0,1.0,0.5));
                 } else if (gameBoardFX[r][c] == '0') {      //Träff
-                    cell.setFill(Color.RED);
+                    cell.setFill(Color.color(1.0,0.0,0.0,0.5));
                 } else{
                     continue;
                 }

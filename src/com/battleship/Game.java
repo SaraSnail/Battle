@@ -412,22 +412,27 @@ public class Game {
 
         //GB-25-AA
         //Uppdatera GameBoard-metod(coordinates)
+
+        //Flyttar metod till GameView GB-44-AWS
+    /*
         //GB-18-SA
-        updateGameView();//GB-18-SA, behöver inte skicka med row och col
+        updateGameView();//GB-18-SA, behöver inte skicka med row och col*/
 
     }
 
 
-    //GB-25-AA
-    private void updateGameView(){ // denna metod kanske bör ligga i GameBoard
-        Platform.runLater(() ->{
+        // Flyttar metod till GameView GB-44-AWS
+    /*
+        //GB-25-AA
+        private void updateGameView(){ // denna metod kanske bör ligga i GameBoard
+            Platform.runLater(() ->{
 
-            //GB-18-SA
-            //Medskickad loginView så man kan nå samma fönster de andra scenerna har
-            //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard,enemyGameBoard));
-            //Uppdatera GUI/GameView
-        });
-    }
+                //GB-18-SA
+                //Medskickad loginView så man kan nå samma fönster de andra scenerna har
+                //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard,enemyGameBoard));
+                //Uppdatera GUI/GameView
+            });
+        }*/
 
     //GB-25-AA
     private boolean checkIfGameOver(String message){
