@@ -144,11 +144,10 @@ public class Game {
 
     //GB-43-AA
     private void handlePlayersTurn(){
-        System.out.println("I playersTurn");
+        System.out.println("I handlePlayersTurn");
 
-        System.out.println("I handleServesTurn");
         String enemymove = player.handleIncomingMessages();
-        System.out.println("mottaget drag i handleServernsTurn: " + enemymove);
+        System.out.println("mottaget drag i handlePlayersTurn: " + enemymove);
 
         //kolla game over
         gameOver = checkIfGameOver(enemymove);
@@ -242,8 +241,8 @@ public class Game {
 
        System.out.println("inkommen Sträng i makeMove: " + enemyMove);
        char myShotHitOrMiss = setShotOutcome(enemyMove);
-       updateMaps(enemyMove, myGameBoard);
-       selectShot(myShotHitOrMiss);
+       updateMaps(enemyMove, myGameBoard); // + last shot
+       myShotCoordinates = selectShot(myShotHitOrMiss);
        enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
 
 
@@ -260,16 +259,16 @@ public class Game {
    }
 
    //Gb-45-AA
-   private void selectShot(char myShotHitOrMiss){
+   private String selectShot(char myShotHitOrMiss){
        String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
 
 
        if (myShotHitOrMiss == 'h') {
            //GB-43-AA kommenterade ut hitSot
            System.out.println("Föregående skott var h. lagrat i lastShot är: " +lastShot);
-           Shoot.setLastHit(lastShot); //sträng med tex "5b"
+           //Shoot.setLastHit(lastShot); //sträng med tex "5b"
            lastHitShot =  lastShot; //string tex 5b
-           myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+           myShotCoordinates = Shoot.hitShot(enemyGameBoard, lastShot);
            System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
            sunk = false;
            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
@@ -277,7 +276,7 @@ public class Game {
        } else if (myShotHitOrMiss == 'm' && !sunk) {
            System.out.println("Föregående skott var miss men skepp ej sänkt");
            //GB-43-AA kommenterade ut hitSot
-           myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+           myShotCoordinates = Shoot.hitShot(enemyGameBoard, lastHitShot);
            System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
            //myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
@@ -298,6 +297,8 @@ public class Game {
 
        lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
        System.out.println("LastShot (skottet som skickas till motståndaren): " + lastShot);
+
+       return myShotCoordinates;
    }
 
 
