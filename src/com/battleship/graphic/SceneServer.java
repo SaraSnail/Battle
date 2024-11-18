@@ -60,7 +60,6 @@ public class SceneServer {
             //SA
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
-
                 //GB-39-SA
                 //I Platform.runLater visar jag först WaitToConnect fönstret
                 Platform.runLater(()->{
@@ -99,12 +98,36 @@ public class SceneServer {
                     pause.play();
                 });
 
+                //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
+                new Thread (() -> {
+                    try{
+                        CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                        port2.clear();
+                        Game game = new Game(communicationHandler, false, login);
+                        game.createBoards();
+                        //game.startGame();
+
+                        //GB-18-SA
+
+                        try{
+                            Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+                            //GB-37-SA, la till Platform.runLater
+                            Platform.runLater(()->{
+                                window.setScene(view);
+                                //game.startGame();
+                            });
+
+                            game.startGame();
+
                 //WaitToConnect.display();
 
-                //Pausa scene switch tills vi fått kontakt med klienten?
-                //Vill ladda krigsscenen och starta allt
-                //Skriv kod att ladda krigsscenen
-                //Innan connection ha fördörjning
+                        }catch(Exception ex){
+                            ex.printStackTrace();
+                        }
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }).start();
 
 
 

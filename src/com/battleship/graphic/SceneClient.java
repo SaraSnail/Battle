@@ -2,6 +2,7 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -11,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -60,38 +63,55 @@ public class SceneClient {
 
 
             if(login.isInt(port1, port1.getText())){
-                //Denna CommunicationHandler ska ha vilken spelare det är, host och port
-                //GB-34-AA (try-catch - AA skrev catch connection refused)
-                try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
 
-                    host.clear();
-                    port1.clear();
-                    Game game = new Game(communicationHandler, true, login);
-                    game.startGame();
+                //GB-Debug-AA-2.0
+                //skapar tråd för kommunication i bakgrunden.
 
-                    //GB-18-SA
+                new Thread (() -> {
                     try{
-                        Scene view = GameView.gameView(window);
-                        //GB-37-SA, la till Platform.runLater
-                        Platform.runLater(()->{
-                            window.setScene(view);
-                        });
+                        //Denna CommunicationHandler ska ha vilken spelare det är, host och port
+                        //GB-34-AA (try-catch - AA skrev catch connection refused)
+                        try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
+                            host.clear();
+                            port1.clear();
+
+                            Game game = new Game(communicationHandler, true, login);
+                            game.createBoards();
+                            //game.startGame();
 
 
-                    }catch(Exception ex){
-                        ex.printStackTrace();
+                            //GB-18-SA
+                            try{
+                                Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+                                //GB-37-SA, la till Platform.runLater
+                                Platform.runLater(()->{
+                                    window.setScene(view);
+                                    //game.startGame();
+                                });
+
+
+                                game.startGame();
+
+                            }catch(Exception ex){
+                                ex.printStackTrace();
+                            }
+
+                        } catch (ConnectException ex) {
+                            // Om ConnectionRefusedException uppstår, visa en alertbox
+                            System.out.println("Connection refused!");
+                            AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                            host.clear();
+                            port1.clear();
+                        } catch (Exception exep) {
+                            System.out.println("An error occurred: " + exep.getMessage());
+                            exep.printStackTrace();
+                        }
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
+                }).start();
 
-                } catch (ConnectException ex) {
-                    // Om ConnectionRefusedException uppstår, visa en alertbox
-                    System.out.println("Connection refused!");
-                    AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
-                    host.clear();
-                    port1.clear();
-                } catch (Exception exep) {
-                    System.out.println("An error occurred: " + exep.getMessage());
-                    exep.printStackTrace();
-                }
+
             }else if (!login.isInt(port1, port1.getText())){
                 System.out.println("Can't play at that port");
                 //GB-34-AA (AlertBox - meddelandet)

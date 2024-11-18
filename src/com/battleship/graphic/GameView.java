@@ -1,7 +1,6 @@
 package com.battleship.graphic;
 
-import com.battleship.CommunicationHandler;
-import com.battleship.Game;
+
 import com.battleship.GameBoard;
 import com.battleship.Ship;
 
@@ -32,10 +31,12 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     //aws
     //aws hade skrivit detta som en start metod, GB-18-SA, behövde göra om den till en scene istället
 
-    public static Scene gameView (Stage window){
+                                                //GB-42-SA, la till gameboard som inparametrar så vi når rätt spelplaner
+    public static Scene gameView (Stage window, GameBoard myGameBoard, GameBoard enemyGameBoard){
         //aws
-        myGameBoard = new GameBoard(true);
-        enemyGameBoard = new GameBoard(false);
+
+        //myGameBoard = new GameBoard(true);
+        //enemyGameBoard = new GameBoard(false);
 
 
 
@@ -87,11 +88,14 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         /*
         primaryStage.setScene(scene);
         primaryStage.setTitle("BattleShips");
-        stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
+
 
         primaryStage.show();*/
+        stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
-        myGameBoard.displayBoard();
+        //myGameBoard.displayBoard();
+
+
 
         //GB-18-SA
         return scene;
@@ -235,5 +239,38 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
             boardPane.getChildren().add(letterLabel);
         }
     }
+
+
+    //GB-18-SA, kan ta bort om aws gjort något som fungerar
+    /*
+    public static void updateMapFX(int row, int col, GameBoard gameBoard){
+        char[][] boardFX = gameBoard.getBoard();
+        Image fire = new Image("file:recourses/images/fire.png");
+        //Designed by Freepik
+
+        for (int r = 0; r < 10; r++) {
+            for (int c = 0; c < 10; c++) {
+                Rectangle cell = new Rectangle(50, 50);
+                cell.setX(c * 50);
+                cell.setY(r * 50);
+
+
+                try {
+                    if (boardFX[row][col] == 'X') {//A miss
+                        //cell.setFill(new ImagePattern(fire));//Kanske fungerar?
+                        cell.setFill(Color.BLUE);
+                    } else if (boardFX[row][col] == '0') {//A hit
+                        cell.setFill(Color.RED);
+                    } else {
+                        System.out.println("No X or 0");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
+                //GB-SA-18, har ingen borderPane eller liknande
+            }
+        }
+    }*/
 
 }
