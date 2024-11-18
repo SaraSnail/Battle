@@ -5,6 +5,7 @@ import com.battleship.Game;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -63,6 +64,8 @@ public class SceneClient {
 
 
             if(login.isInt(port1, port1.getText())){
+                //GB-46-SA
+                back1.setOnAction(Event::consume);
 
                 //GB-Debug-AA-2.0
                 //skapar tråd för kommunication i bakgrunden.
