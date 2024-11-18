@@ -449,6 +449,7 @@ public class Game {
 
         enemyGameBoard.displayBoard();
 
+
     }
 
 
@@ -462,7 +463,6 @@ public class Game {
             //Uppdatera GUI/GameView
             //GameView.updateMapFX(row, col, gameBoard);
         });
-        System.out.println("After Platform.runLater");
     }
 
     //GB-25-AA

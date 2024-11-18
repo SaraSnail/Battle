@@ -240,7 +240,9 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         }
     }
 
-    //GB-18-SA
+
+    //GB-18-SA, kan ta bort om aws gjort något som fungerar
+    /*
     public static void updateMapFX(int row, int col, GameBoard gameBoard){
         char[][] boardFX = gameBoard.getBoard();
         Image fire = new Image("file:recourses/images/fire.png");
@@ -266,8 +268,9 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
                     e.printStackTrace();
                     System.out.println(e.getMessage());
                 }
+                //GB-SA-18, har ingen borderPane eller liknande
             }
         }
-    }
+    }*/
 
 }
