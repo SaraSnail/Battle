@@ -243,7 +243,7 @@ public class Game {
         System.out.println("inkommen Sträng i makeMove: " + enemyMove);
         char myShotHitOrMiss = setShotOutcome(enemyMove);
 
-        updateMyMap(enemyMove); // + last shot
+        updateMyMap(enemyMove);
 
         myShotCoordinates = selectShot(myShotHitOrMiss);
 
@@ -306,8 +306,8 @@ public class Game {
             System.out.println("Kordinater från randomShot: " + myShotCoordinates);
         }
 
-        lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
-        System.out.println("LastShot (skottet som skickas till motståndaren): " + lastShot);
+        //lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+        //System.out.println("LastShot (skottet som skickas till motståndaren): " + lastShot);
 
         return myShotCoordinates;
    }
