@@ -40,13 +40,13 @@ public class Shoot {
 
             int randomX = random.nextInt(10);
             int randomY = random.nextInt(10);
-            char randomCoordinate = enemyBoard[randomX][randomY];
+            //char randomCoordinate = enemyBoard[randomX][randomY];
 
 
 
 
 
-            if(randomCoordinate==' ') {
+            //if(randomCoordinate==' ') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
@@ -58,7 +58,7 @@ public class Shoot {
                     return result;
                 }
 
-            }
+            //}
         }
         return "No valid shot";
     }
@@ -96,10 +96,10 @@ public class Shoot {
             }
 
 
-            char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
+            //char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
 
-            if (randomSecondShotCoordinate == ' ') {
+            /*if (randomSecondShotCoordinate == ' ') {*/
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX );
                 String result = numberCoordinate + letterCoordinate;
@@ -109,7 +109,7 @@ public class Shoot {
                     randomShotTaken = true;
                     return result;
                 }
-            }
+            //}
 
             attempts++;
         }
