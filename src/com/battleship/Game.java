@@ -29,9 +29,10 @@ public class Game {
     private LoginView loginView;
 
     //GB-26-SA
-    private char valueAtCoordinates;
-    private int row;
-    private int col;
+    //private char valueAtCoordinates;
+    //private int row;
+    //private int col;
+    private String lastMove;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient, LoginView loginView) {
@@ -76,8 +77,9 @@ public class Game {
     }
 
 
-    //GB-13-AA //GB-25-AA //GB-30-AA //GB-43-AA
+    //GB-13-AA //GB-25-AA //GB-30-AA
     public void startGame() {
+        //createBoards();
 
         if (!isClient){
             waitForReady();
@@ -227,7 +229,8 @@ public class Game {
         System.out.println("Sträng till motståndaren: " + myMove);
 
         player.getWriter().println(myMove);
-        updateMaps(myMove,enemyGameBoard);
+        lastShot = myShotCoordinates;
+        //updateMaps(myMove,enemyGameBoard);
     }
 
     //GB-19-AA
@@ -257,7 +260,7 @@ public class Game {
 
 
            char myShotHitOrMiss = setShotOutcome(enemyMove);
-           updateMaps(enemyMove, myGameBoard);
+           updateMyMap(enemyMove);
 
 
            if (myShotHitOrMiss == 'h') {
@@ -280,11 +283,12 @@ public class Game {
                myShotCoordinates = Shoot.randomShot(enemyGameBoard);
            }
 
-       updateMaps(enemyMove, myGameBoard);
+       //updateMaps(enemyMove, myGameBoard);
 
-           lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+
 
            enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
+
 
 
 
@@ -294,11 +298,16 @@ public class Game {
                System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
                player.getWriter().println(enemyHitOrMiss.toLowerCase());
            } else {
+               lastMove = myShotHitOrMiss +" "+myMove+ lastShot;
+               updateEnemyMap(lastMove);
+
                myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                System.out.println("Sträng till motståndaren i makeMove: " + myMove);
                player.getWriter().println(myMove);
-               updateMaps(myShotCoordinates, enemyGameBoard);
+
            }
+
+       lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
        //}
    }
 
@@ -319,7 +328,7 @@ public class Game {
     private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //denna metod bör kanske i BoardGame
         //Tillfällig sträng tills metoden är klar.
         //Läser enemyMove för att få rad och kolumnindex på brädet
-        Coordinates shotCoordinates = Coordinates.getValueAtCoordinates(enemyMove, myGameBoard.getBoard());
+        Coordinates shotCoordinates = Coordinates.getValueAtCoordinates(enemyMove);
         int row = shotCoordinates.getRow();
         int col = shotCoordinates.getCol();
         char[][] myBoard = myGameBoard.getBoard();
@@ -362,8 +371,8 @@ public class Game {
         return "m"; // miss
 
     }
-    //GB-26-SA, ändrar för test till public
-    public void updateMaps(String message, GameBoard gameBoard){
+    //GB-26-SA
+    private void updateMyMap(String message){
 
         //Får in typ "i shot 4b" i message
 
@@ -375,46 +384,29 @@ public class Game {
 
         try{
             //Skickar in tex "4b" och spelplanen
-            //Har en klass som i dens metod som tar koordinaterna från meddelandet och får fram till row och column som går att få ut vart man är eller värdet på koordinaten
-            Coordinates coords = getValueAtCoordinates(message, gameBoard.getBoard());
-            //Coordinates constructor ska innehålla row och col, delar message och får tillbaka row och column
+            //Har en klass som i dens metod som tar koordinaterna från meddelandet och får fram till row och column i siffror
+            //Skickar in gameBoard får att så storleken på spelplanen så skottet inte är utanför
+            Coordinates coords = getValueAtCoordinates(message);
+            //Får tillbaka ett Coordinates objekt där jag kan hämta ut dens row och col
 
             //Sätter in row och column från klassen i variablerna row och column
             int row = coords.getRow();
-            System.out.println("row: " + row);
             int col = coords.getCol();
-            System.out.println("col: " + col);
 
-            //Samlar värdet på koordinaten på spelplanen
-            char valueAtCoordinates = gameBoard.getBoard()[row][col];
-            System.out.println("valueAtCoordinates: " + valueAtCoordinates);
-            System.out.println("gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
-            //System.out.println("Value at ["+coordinates+"]: ["+valueAtCoordinates+"]");
+            System.out.println("Value at: "+message+" = [" + myGameBoard.getBoard()[row][col]+"]");
 
             //Kollar om värdet var ett S eller blankt och byter sen ut det till antigen 0 eller X
-            //Kan ta bort sout senare, finns där för att se att allting fungerar
-            System.out.println("if-sats");
-            if(gameBoard.getBoard()[row][col] == 'S'){
+            if(myGameBoard.getBoard()[row][col] == 'S'){
                 System.out.println("A ship");
-                gameBoard.getBoard()[row][col] = '0';
-                System.out.println("Träff gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
+                myGameBoard.getBoard()[row][col] = '0';
 
-            } else if (gameBoard.getBoard()[row][col] == ' ') {
+            } else if (myGameBoard.getBoard()[row][col] == ' ') {
                 System.out.println("No ship");
-                gameBoard.getBoard()[row][col] = 'X';
-                System.out.println("Miss gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
+                myGameBoard.getBoard()[row][col] = 'X';
 
-            } else if (gameBoard.getBoard()[row][col] == '0') {
-                System.out.println("A ship, 0 else-if");
-                gameBoard.getBoard()[row][col] = '0';
-
-            } else if (gameBoard.getBoard()[row][col] == 'X') {
-                System.out.println("A ship, X else-if");
-                gameBoard.getBoard()[row][col] = 'X';
             }
-            System.out.println("Efter if-sats valueAtCoordinates: "+valueAtCoordinates);
-            System.out.println("gameBoard.getBoard()[row][col] value: " + gameBoard.getBoard()[row][col]);
-            gameBoard.displayBoard();
+
+            myGameBoard.displayBoard();
 
 
             //GB-25-AA
@@ -429,6 +421,35 @@ public class Game {
 
 
     }
+    //GB-18-SA.part2
+    private void updateEnemyMap(String message){
+        //Får in m/h/s eller null
+        System.out.println("I shot last at: " + message);
+        System.out.println("It was a: " + message.charAt(0));
+        if(message.contains("null")){
+            return;
+        }
+        //Samma som i updateMyMap
+        Coordinates coords = getValueAtCoordinates(message);
+        int row = coords.getRow();
+        int col = coords.getCol();
+
+        //Gör inget om det är i, första skottet
+        if(message.charAt(0) == 'i'){
+
+        }else if(message.charAt(0) == 'h'){
+            enemyGameBoard.getBoard()[row][col] = '0';
+
+        }else if (message.charAt(0) == 'm'){
+            enemyGameBoard.getBoard()[row][col] = 'X';
+
+        } else if (message.charAt(0) == 's') {
+            enemyGameBoard.getBoard()[row][col] = '0';
+        }
+
+        enemyGameBoard.displayBoard();
+
+    }
 
 
     //GB-25-AA
@@ -439,7 +460,7 @@ public class Game {
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
             //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard,enemyGameBoard));
             //Uppdatera GUI/GameView
-            GameView.updateMapFX(row, col, gameBoard);
+            //GameView.updateMapFX(row, col, gameBoard);
         });
         System.out.println("After Platform.runLater");
     }
@@ -477,7 +498,7 @@ public class Game {
             //GB-33-SA
             if (message.equalsIgnoreCase("game over")) {
 
-                updateMaps(lastShot, enemyGameBoard);//Uppdaterar GUI också
+                updateEnemyMap(lastMove);//Uppdaterar GUI också
                 // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
                 //lastShot fixa
 
