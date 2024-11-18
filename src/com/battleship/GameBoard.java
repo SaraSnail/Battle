@@ -145,4 +145,19 @@ public class GameBoard {
     public List<Ship> getShips() {
         return ships;
     }
+    //D.E
+    public boolean isBoardEmpty() {
+        // Iterera genom alla rutor på brädet.
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                // Kontrollera om det finns träffar ('X') eller missar ('O') på brädet.
+                if (board[i][j] == 'X' || board[i][j] == 'O') {
+                    return false; // Brädet är inte tomt.
+                }
+            }
+        }
+        return true; // Brädet är tomt om inga träffar eller missar hittades.
+    }
+
 }
+
