@@ -62,39 +62,46 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    public static  String hitShot(GameBoard enemyGameBoard, String lastHitShot){
+    public static String hitShot(GameBoard enemyGameBoard, String lastHitShot) {
 
         char[][] enemyBoard = enemyGameBoard.getBoard();
+        boolean randomShotTaken = false;
 
+        int attempts = 0;
+        int maxAttempts = 20;
 
-        boolean randomShotTaken= false;
+        while (!randomShotTaken && attempts < maxAttempts) {
 
-        while(!randomShotTaken) {
-
-            int randomSpace = random.nextInt(4);
 
             int[] fireFieldX = {-1, 1, 0, 0};
             int[] fireFieldY = {0, 0, -1, 1};
 
+
             String xString = lastHitShot.substring(0, lastHitShot.length() - 1);
             String yString = lastHitShot.substring(lastHitShot.length() - 1);
 
-            lastShotX = Integer.parseInt(xString);
-            lastShotY = yString.charAt(0)-'a';
+            lastShotX = Integer.parseInt(xString) - 1;
+            lastShotY = yString.charAt(0) - 'a';
+
+
+            int randomSpace = random.nextInt(4);
 
             int randomX = lastShotX + fireFieldX[randomSpace];
             int randomY = lastShotY + fireFieldY[randomSpace];
 
+
             if (randomX < 0 || randomX >= 10 || randomY < 0 || randomY >= 10) {
+                attempts++;
                 continue;
             }
 
+
             char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
-            if (randomSecondShotCoordinate == ' ') {
 
+            if (randomSecondShotCoordinate == ' ') {
                 String letterCoordinate = Character.toString(yAxis[randomY]);
-                String numberCoordinate = Integer.toString(randomX);
+                String numberCoordinate = Integer.toString(randomX );
                 String result = numberCoordinate + letterCoordinate;
 
                 if (!shotsFired.contains(result)) {
@@ -103,10 +110,17 @@ public class Shoot {
                     return result;
                 }
             }
+
+            attempts++;
         }
+
+
+        if (!randomShotTaken) {
+            return randomShot(enemyGameBoard);
+        }
+
         return "No valid shot";
     }
 
-    public Shoot() {
-    }
+
 }
