@@ -28,6 +28,8 @@ public class SceneServer {
     private static Button submit2;
     private static Button back2;
 
+    private static Game game;
+
 
     //GB-15-SA
     public static Scene getScene(Stage window) {
@@ -61,6 +63,7 @@ public class SceneServer {
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
                 //GB-39-SA
+                /*
                 //I Platform.runLater visar jag först WaitToConnect fönstret
                 Platform.runLater(()->{
                     WaitToConnect.display();
@@ -71,7 +74,7 @@ public class SceneServer {
                     pause.setOnFinished(event -> {
 
                         //Scene för spelplanen som ska vara i samma Stage som LoginView
-                        Scene view = GameView.gameView(window);
+
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
                             //Platform.runLater i pause för att uppdatera till spelplanen efter den visat WaitToConnect
@@ -84,7 +87,7 @@ public class SceneServer {
                             Game game = new Game(communicationHandler, false, login);
                             game.startGame();
 
-
+                            Scene view = GameView.gameView(window);
                             //Byter scene till spelplanen
                             window.setScene(view);
                             //GB-39-SA
@@ -97,36 +100,66 @@ public class SceneServer {
                     //Startar förseningen mellan WaitToConnect.display och CommunicationHandler
                     pause.play();
                 });
+                */
+
+
 
                 //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
                 new Thread (() -> {
-                    try{
-                        CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                        port2.clear();
-                        Game game = new Game(communicationHandler, false, login);
-                        game.createBoards();
-                        //game.startGame();
+                    Platform.runLater(() -> {
+                        WaitToConnect.display();
+                        System.out.println("Displayed WaitToConnect");
 
-                        //GB-18-SA
+                        //Skapar en "PauseTransition" med försening på 2 sekunder
+                        PauseTransition pause = new PauseTransition();
+                        System.out.println("PauseTransition created");
+                        //I pause skapas view Scenen
 
-                        try{
-                            Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
-                            //GB-37-SA, la till Platform.runLater
-                            Platform.runLater(()->{
-                                window.setScene(view);
-                                //game.startGame();
-                            });
+                        //Krashar efter den bytt scene
+                        pause.setOnFinished(event -> {
+                            System.out.println("Start of pause.setOnFinished");
 
-                            game.startGame();
 
-                //WaitToConnect.display();
+                            System.out.println("Before try for CommunicationHandler");
+                                try {
+                                    CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                                    port2.clear();
+                                    game = new Game(communicationHandler, false, login);
+                                    game.createBoards();
+                                    //game.startGame();
 
-                        }catch(Exception ex){
-                            ex.printStackTrace();
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
+                                    //GB-18-SA
+
+                                    try {
+                                        Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+                                        //GB-37-SA, la till Platform.runLater
+
+                                        Platform.runLater(()->{
+                                            window.setScene(view);
+                                            //game.startGame();
+                                            WaitToConnect.close();
+                                        });
+
+
+
+
+
+                                        //WaitToConnect.display();
+
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+
+
+                        });
+                        pause.play();
+
+                        game.startGame();
+                    });
+
                 }).start();
 
 
