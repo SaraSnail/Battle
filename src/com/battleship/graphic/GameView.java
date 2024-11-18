@@ -28,16 +28,11 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     //GB-14-aws
    /* @Override
     public void start(Stage primaryStage) throws Exception {*/
-    //aws
     //aws hade skrivit detta som en start metod, GB-18-SA, behövde göra om den till en scene istället
 
                                                 //GB-42-SA, la till gameboard som inparametrar så vi når rätt spelplaner
     public static Scene gameView (Stage window, GameBoard myGameBoard, GameBoard enemyGameBoard){
-        //aws
-
-        //myGameBoard = new GameBoard(true);
-        //enemyGameBoard = new GameBoard(false);
-
+        //GB-44-AWS
         myGame = new AnchorPane();        // Min Spelplan
         enemyGame = new AnchorPane();    // Motståndare Spelplan
 
@@ -80,6 +75,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
         //GB-18-SA, gjorde att den "skapas" utanför metoden
         scene = new Scene(stack, 1450, 700);
+
         //GB-18-SA, kommenterade ut detta
         /*
         primaryStage.setScene(scene);
@@ -143,17 +139,17 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
                 if(isEnemy){
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                        cell.setFill(Color.color(0.0,0.0,1.0,0.5));
+                        cell.setFill(Color.color(0.0,1.0,1.0,0.5));         //Färgerna kommer att ändras/bytas till bilder.
                     } else if (gameBoardFX[r][c] == '0') {      //Träff
-                        cell.setFill(Color.color(1.0,0.0,0.0,0.5));
+                        cell.setFill(Color.color(0.8,0.6,0.6,0.5));         //Färgerna kommer att ändras/bytas till bilder.
                     } else{
                         continue;
                     }
             } else{
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                    cell.setFill(Color.color(0.0,0.0,1.0,0.5));
+                    cell.setFill(Color.color(0.0,0.0,1.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
                 } else if (gameBoardFX[r][c] == '0') {      //Träff
-                    cell.setFill(Color.color(1.0,0.0,0.0,0.5));
+                    cell.setFill(Color.color(1.0,0.0,0.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
                 } else{
                     continue;
                 }
@@ -228,7 +224,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
             boardPane.getChildren().add(letterLabel);
         }
     }
-
+    //GB-44-AWS
     public static void updateGameView(GameBoard myGameBoard, GameBoard enemyGameBoard,AnchorPane myGame, AnchorPane enemyGame ){
         myGame.getChildren().clear();
         enemyGame.getChildren().clear();
