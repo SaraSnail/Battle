@@ -1,12 +1,15 @@
 package com.battleship;
 
 import com.battleship.graphic.AlertBox;
+import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
 
 import java.util.Arrays;
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
+import static com.battleship.graphic.GameView.enemyGame;
+import static com.battleship.graphic.GameView.myGame;
 
 public class Game {
 
@@ -109,6 +112,10 @@ public class Game {
                 System.out.println("Serverns drag - while-loopen");
                 handlePlayersTurn();
             }
+            //GB-44-AWS
+            Platform.runLater(() -> {
+                GameView.updateGameView(myGameBoard,enemyGameBoard,myGame,enemyGame);
+            });
             waitOneSec();
             counter++;
         }
@@ -338,18 +345,18 @@ public class Game {
         char[][] myBoard = myGameBoard.getBoard();
 
         /*
-        if (myBoard[row][col] == ' ') { // Om det är tomt är det första skottet. returnerar "i"
+        if (myBoard[row][col] == ' ') { // Om det är tomt är det första skottet. Returnerar "i"
             return "i";
 
         }*/
         // spara värde i träffad ruta för att se om den är en del av ett skepp
         char outcome = myBoard[row][col];
         System.out.println("I getShoutOutCome: outcome, på " + enemyMove.substring(enemyMove.length()-2) + "är: " + outcome);
-        // uppdatera brädet vid träffens position ,x för träff eller 0 för miss
+        // uppdatera brädet vid träffens position, x för träff eller 0 för miss
 
         //myBoard[row][col] = outcome == 'S' ? 'X' : '0';//debug-SA tog bort denna, den ändra värdet på koordinaten
 
-        // kollar om träffen var en träff på ett skepp. s betyder träff på skepp
+        // Kollar om träffen var en träff på ett skepp. s betyder träff på skepp
 
         if (outcome == '0') {
             System.out.println(" i getShotOutCome. outcome == 'S'");
@@ -456,21 +463,39 @@ public class Game {
 
         enemyGameBoard.displayBoard();
 
+        //GB-25-AA
+        //Uppdatera GameBoard-metod(coordinates)
+
+        //Flyttar metod till GameView GB-44-AWS
+    /*
+        //GB-18-SA
+        updateGameView();//GB-18-SA, behöver inte skicka med row och col*/
 
     }
 
 
+        // Flyttar metod till GameView GB-44-AWS
+    /*
+        //GB-25-AA
+        private void updateGameView(){ // denna metod kanske bör ligga i GameBoard
+            Platform.runLater(() ->{
     //GB-25-AA
     private void updateGameView(int row, int col, GameBoard gameBoard){ // denna metod kanske bör ligga i GameBoard
         Platform.runLater(() ->{
 
+                //GB-18-SA
+                //Medskickad loginView så man kan nå samma fönster de andra scenerna har
+                //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard,enemyGameBoard));
+                //Uppdatera GUI/GameView
+            });
+        }*/
             //GB-18-SA
             //Medskickad loginView så man kan nå samma fönster de andra scenerna har
             //loginView.window.setScene(GameView.gameView(loginView.window, myGameBoard,enemyGameBoard));
             //Uppdatera GUI/GameView
             //GameView.updateMapFX(row, col, gameBoard);
-        });
-    }
+   /*     });
+    }*/
 
     //GB-25-AA
     private boolean checkIfGameOver(String message){
