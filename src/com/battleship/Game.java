@@ -4,6 +4,8 @@ import com.battleship.graphic.AlertBox;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
 
+import java.util.Arrays;
+
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
 public class Game {
@@ -280,7 +282,7 @@ public class Game {
             //Shoot.setLastHit(lastShot); //sträng med tex "5b"
             lastHitShot = lastShot; //string tex 5b
             myShotCoordinates = Shoot.hitShot(enemyGameBoard, lastShot);
-            System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
+            System.out.println("Kordinater från hitShot: " + myShotCoordinates);
             sunk = false;
             myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
@@ -288,7 +290,7 @@ public class Game {
             System.out.println("Föregående skott var miss men skepp ej sänkt");
             //GB-43-AA kommenterade ut hitSot
             myShotCoordinates = Shoot.hitShot(enemyGameBoard, lastHitShot);
-            System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
+            System.out.println("Kordinater från hitShot: " + myShotCoordinates);
             //myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
         } else if (myShotHitOrMiss == 's') {
@@ -327,6 +329,7 @@ public class Game {
     // GB-lapp ej funnen-D.E
 
     private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //denna metod bör kanske i BoardGame
+        System.out.println("Inne i getShotOutcome");
         //Tillfällig sträng tills metoden är klar.
         //Läser enemyMove för att få rad och kolumnindex på brädet
         Coordinates shotCoordinates = Coordinates.getValueAtCoordinates(enemyMove);
@@ -341,16 +344,19 @@ public class Game {
         }*/
         // spara värde i träffad ruta för att se om den är en del av ett skepp
         char outcome = myBoard[row][col];
+        System.out.println("I getShoutOutCome: outcome, på " + enemyMove.substring(enemyMove.length()-2) + "är: " + outcome);
         // uppdatera brädet vid träffens position ,x för träff eller 0 för miss
 
         //myBoard[row][col] = outcome == 'S' ? 'X' : '0';//debug-SA tog bort denna, den ändra värdet på koordinaten
 
         // kollar om träffen var en träff på ett skepp. s betyder träff på skepp
 
-        if (outcome == 'S') {
+        if (outcome == '0') {
+            System.out.println(" i getShotOutCome. outcome == 'S'");
             for (Ship ship : myGameBoard.getShips()) { //Loopa genom varje skepp,se om något av dom innehåller koordinaterna
-
+                System.out.println("Ship coordinates: " + Arrays.deepToString(ship.getCoordinates().toArray()));
                 if (ship.getCoordinates().stream().anyMatch(coord -> coord[0] == row && coord[1] == col)) {
+                    System.out.println("Hit ship at (" + row + ", " + col + ")");
                     ship.setNumberOfHits(ship.getNumberOfHits() + 1); // Använder stream API för att kolla
                     // om skeppets koordinater innehåller det träffade området,
                     // Träff
