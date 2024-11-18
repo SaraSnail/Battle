@@ -267,13 +267,7 @@ public class Game {
         //enemyMove = player.handleIncomingMessages();
         System.out.println("inkommen Sträng i makeMove: " + enemyMove);
 
-
         char myShotHitOrMiss = setShotOutcome(enemyMove);
-        updateMyMap(enemyMove);
-
-        System.out.println("inkommen Sträng i makeMove: " + enemyMove);
-        char myShotHitOrMiss = setShotOutcome(enemyMove);
-
         updateMyMap(enemyMove);
 
         myShotCoordinates = selectShot(myShotHitOrMiss);
