@@ -242,8 +242,11 @@ public class Game {
 
         System.out.println("inkommen Sträng i makeMove: " + enemyMove);
         char myShotHitOrMiss = setShotOutcome(enemyMove);
-        updateMaps(enemyMove, myGameBoard); // + last shot
+
+        updateMyMap(enemyMove); // + last shot
+
         myShotCoordinates = selectShot(myShotHitOrMiss);
+
         //updateMaps(enemyMove, myGameBoard);
         enemyHitOrMiss = getShotOutcome(enemyMove, myGameBoard);
 
@@ -253,11 +256,17 @@ public class Game {
             System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
             player.getWriter().println(enemyHitOrMiss.toLowerCase());
         } else {
+            lastMove = myShotHitOrMiss +" "+myMove+ lastShot;
+            updateEnemyMap(lastMove);
+
             myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren i makeMove: " + myMove);
             player.getWriter().println(myMove);
-            updateMaps(myShotCoordinates, enemyGameBoard);
+
         }
+
+        lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+
     }
 
     //Gb-45-AA
@@ -301,28 +310,6 @@ public class Game {
         System.out.println("LastShot (skottet som skickas till motståndaren): " + lastShot);
 
         return myShotCoordinates;
-
-
-
-/*
-           ska flyttas upp!
-           if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
-               iLose = true;    //Ändra till iLoose
-               System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
-               player.getWriter().println(enemyHitOrMiss.toLowerCase());
-           } else {
-               lastMove = myShotHitOrMiss +" "+myMove+ lastShot;
-               updateEnemyMap(lastMove);
-
-               myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
-               System.out.println("Sträng till motståndaren i makeMove: " + myMove);
-               player.getWriter().println(myMove);
-
-           }
-
-       lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
-       */
-
    }
 
 
@@ -342,7 +329,7 @@ public class Game {
     private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //denna metod bör kanske i BoardGame
         //Tillfällig sträng tills metoden är klar.
         //Läser enemyMove för att få rad och kolumnindex på brädet
-        Coordinates shotCoordinates = Coordinates.getValueAtCoordinates(enemyMove, myGameBoard.getBoard());
+        Coordinates shotCoordinates = Coordinates.getValueAtCoordinates(enemyMove);
         int row = shotCoordinates.getRow();
         int col = shotCoordinates.getCol();
         char[][] myBoard = myGameBoard.getBoard();
