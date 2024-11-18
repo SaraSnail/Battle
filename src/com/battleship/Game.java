@@ -16,7 +16,7 @@ public class Game {
     private boolean iLose = false;
     private String lastShot;
     private String lastHitShot;
-    private boolean sunk;
+    private boolean sunk = true;
 
     //GB-43-AA
     private boolean gameOver;
@@ -223,6 +223,7 @@ public class Game {
         String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
         myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+        lastShot = myShotCoordinates;
         myMove = "i " + myMove + myShotCoordinates;
         System.out.println("Sträng till motståndaren: " + myMove);
 
@@ -267,6 +268,7 @@ public class Game {
            //GB-43-AA kommenterade ut hitSot
            System.out.println("Föregående skott var h. lagrat i lastShot är: " +lastShot);
            Shoot.setLastHit(lastShot); //sträng med tex "5b"
+           lastHitShot =  lastShot; //string tex 5b
            myShotCoordinates = Shoot.hitShot(enemyGameBoard);
            System.out.println("Kordinater från hitShot: " + myShotHitOrMiss);
            sunk = false;
@@ -284,6 +286,10 @@ public class Game {
            sunk = true;
            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
            System.out.println("Kordinater från randomShot: " + myShotCoordinates);
+     /*  } else if (myShotHitOrMiss == 'm' && lastHitShot == null ){
+           System.out.println("Föregående skott var miss och senaste träff var 'null'");
+           myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+           System.out.println("Kordinater från randomShot: " + myShotCoordinates);*/
        } else {
            System.out.println("Föregående skott var miss");
            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
