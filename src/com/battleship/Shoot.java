@@ -17,7 +17,7 @@ public class Shoot {
 
     static int lastShotX;
     static int lastShotY;
-    static String lastHit;
+
 
 
     static char[] yAxis= {'a','b','c','d','e','f','g','h','i','j'};
@@ -46,7 +46,7 @@ public class Shoot {
 
 
 
-            if(randomCoordinate==' ' || randomCoordinate=='S') {
+            if(randomCoordinate==' ') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
@@ -62,9 +62,10 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    public static  String hitShot(GameBoard enemyGameBoard){
+    public static  String hitShot(GameBoard enemyGameBoard, String lastHitShot){
 
         char[][] enemyBoard = enemyGameBoard.getBoard();
+
 
         boolean randomShotTaken= false;
 
@@ -75,8 +76,8 @@ public class Shoot {
             int[] fireFieldX = {-1, 1, 0, 0};
             int[] fireFieldY = {0, 0, -1, 1};
 
-            String xString = lastHit.substring(0, lastHit.length() - 1);
-            String yString = lastHit.substring(lastHit.length() - 1);
+            String xString = lastHitShot.substring(0, lastHitShot.length() - 1);
+            String yString = lastHitShot.substring(lastHitShot.length() - 1);
 
             lastShotX = Integer.parseInt(xString);
             lastShotY = yString.charAt(0)-'a';
@@ -90,7 +91,7 @@ public class Shoot {
 
             char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
-            if (randomSecondShotCoordinate == ' ' || randomSecondShotCoordinate == 'S') {
+            if (randomSecondShotCoordinate == ' ') {
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
@@ -107,13 +108,5 @@ public class Shoot {
     }
 
     public Shoot() {
-    }
-
-    public static String getLastHit() {
-        return lastHit;
-    }
-
-    public static void setLastHit(String lastHit) {
-        Shoot.lastHit = lastHit;
     }
 }
