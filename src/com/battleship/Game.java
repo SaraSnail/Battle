@@ -1,10 +1,8 @@
 package com.battleship;
 
 import com.battleship.graphic.AlertBox;
-import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
-import java.io.IOException;
 
 import static com.battleship.Coordinates.getValueAtCoordinates;
 
@@ -12,7 +10,7 @@ public class Game {
 
     //GB-23-AA //GB-25-AA //GB-25-AA
     private CommunicationHandler player;
-    private boolean isClientTurn;
+    private boolean isClient;
     private GameBoard myGameBoard;
     private GameBoard enemyGameBoard;
     private boolean iLose = false;
@@ -20,23 +18,35 @@ public class Game {
     private String lastHitShot;
     private boolean sunk;
 
+    //GB-43-AA
+    private boolean gameOver;
+    private boolean firstMove;
+
+
     //private boolean iLose; - använt för testning
 
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
 
     //GB-26-SA
-    //private char valueAtCoordinates;
-    //private int row;
-    //private int col;
+    private char valueAtCoordinates;
+    private int row;
+    private int col;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
     public Game(CommunicationHandler player, boolean isClient, LoginView loginView) {
         this.player = player;
-        this.isClientTurn = isClient;
+        this.isClient = isClient;
 
         //GB-18-SA
         this.loginView = loginView;
+
+        //GB-43-AA
+        if (isClient){
+            firstMove = true;
+        } else {
+            firstMove = false;
+        }
     }
 
     //GB-42-SA, la att boards skapas separat från startGame
@@ -66,53 +76,104 @@ public class Game {
     }
 
 
-    //GB-13-AA //GB-25-AA //GB-30-AA
+    //GB-13-AA //GB-25-AA //GB-30-AA //GB-43-AA
     public void startGame() {
-        //createBoards();
 
-        if (!isClientTurn){
-
+        if (!isClient){
             waitForReady();
-            waitOneSec();
-            //new Thread(this::gameLoop).start();
-            gameLoop();
-
         } else {
             sendReady();
+        }
+
+        System.out.println("Game started!");
+
+
+        int counter = 1;
+
+        //Denna loop körs till game-over.
+        while (!gameOver){
+            System.out.println("I while-game-loopen. isClientsTurn: " + isClient + ". Varv: " + counter);
+            if (isClient){
+                System.out.println("klientens drag - while-loopen");
+                if (firstMove){
+                    handleClientsTurn(true);
+                    firstMove = false;
+                } else {
+                    handleClientsTurn(false);
+                }
+            } else {
+                System.out.println("Serverns drag - while-loopen");
+                handlePlayersTurn();
+            }
             waitOneSec();
-            //new Thread(this::gameLoop).start();
-            gameLoop();
+            counter ++;
         }
 
 
 
-/*        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
+
+        //createBoards();
+
+       /* if (!isClientTurn){
+            waitForReady();
+        } else {
+            sendReady();
+        }
+
+        waitOneSec();
+        gameLoop();
+
+        if (!isClientTurn) { // den här delen kanske kan tas bort sedan
             System.out.println("Waiting for client to connect and make it's fist move");
         }*/
 
+        //new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet (AA).
+    }
 
-        //new Thread(this::gameLoop).start(); //startar spel-loopen asynkront - tror detta behövs för att inte stoppa upp flödet.
+    //GB-43-AA
+    private void handleClientsTurn(boolean firstMove){
+        System.out.println("Clients turn");
+        if (firstMove){
+            System.out.println("I first move");
+            firstMove(player);
+
+        } else {
+        handlePlayersTurn();
+        }
+    }
+
+    //GB-43-AA
+    private void handlePlayersTurn(){
+        System.out.println("I playersTurn");
+
+        System.out.println("I handleServesTurn");
+        String enemymove = player.handleIncomingMessages();
+        System.out.println("mottaget drag i handleServernsTurn: " + enemymove);
+
+        //kolla game over
+        gameOver = checkIfGameOver(enemymove);
+        System.out.println("game over: " + gameOver);
+
+        //skicka drag
+        makeMove(player, false, enemymove);
+
     }
 
     //GB-25-AA //GB-35-AA
-    private void gameLoop(){
+    /*private void gameLoop(){
         boolean gameOver = false;
         boolean firstMove = false;
         String enemymove;
 
-        System.out.println("------------------");
-        System.out.println("My gameBoard");
-        myGameBoard.displayBoard();
-        System.out.println("EnemyBoard");
-        enemyGameBoard.displayBoard();
-        System.out.println("------------------");
-
-        if (isClientTurn){
+        if (isClient){
             firstMove = true;
         }
 
+        int counter = 1;
         while (!gameOver) {
-            if (isClientTurn) {
+
+            System.out.println("Whale-loopen startar. isClientsTurn: " + isClient + ". varv: " + counter);
+            if (isClient) {
                 if (firstMove){
                     firstMove(player);
                     firstMove = false;
@@ -121,7 +182,7 @@ public class Game {
                     enemymove = player.handleIncomingMessages();
                     gameOver = checkIfGameOver(enemymove);
                     makeMove(player, false, enemymove);
-                    //isClientTurn = false;
+                    isClient = false;
                     if (gameOver){
                         break;
                     }
@@ -131,7 +192,7 @@ public class Game {
                 enemymove = player.handleIncomingMessages();
                 gameOver = checkIfGameOver(enemymove);
                 makeMove(player, false, enemymove);
-                //isClientTurn = true;
+                isClient = true;
                 if (gameOver){
                     break;
                 }
@@ -140,9 +201,10 @@ public class Game {
             enemymove = player.handleIncomingMessages();
             gameOver = checkIfGameOver(enemymove); //GB-19-AA ifall innevarande spelare skickar game over. Spelare vinner.
             waitOneSec();
+            counter ++;
         }
         System.out.println("Game over!");
-    }
+    }*/
 
     //GB-31-AA
     private void waitOneSec(){
@@ -153,11 +215,13 @@ public class Game {
         }
     }
 
+    //GB-43-AA
     private void firstMove(CommunicationHandler player){
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
         String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
         String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
+
         myShotCoordinates = Shoot.randomShot(enemyGameBoard);
         myMove = "i " + myMove + myShotCoordinates;
         System.out.println("Sträng till motståndaren: " + myMove);
@@ -193,16 +257,21 @@ public class Game {
 
 
            char myShotHitOrMiss = setShotOutcome(enemyMove);
+           updateMaps(enemyMove, myGameBoard);
 
 
            if (myShotHitOrMiss == 'h') {
+               //GB-43-AA kommenterade ut hitSot
+               /*Shoot.setLastHit(lastShot); //sträng med tex "5b"
                myShotCoordinates = Shoot.hitShot(enemyGameBoard);
-               Shoot.setLastHit(lastShot); //sträng med tex "5b"
                lastHitShot = myShotCoordinates;
-               sunk = false;
+               sunk = false;*/
+               myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
            } else if (myShotHitOrMiss == 'm' && !sunk) {
-               myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+               //GB-43-AA kommenterade ut hitSot
+               //myShotCoordinates = Shoot.hitShot(enemyGameBoard);
+               myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
            } else if (myShotHitOrMiss == 's') {
                sunk = true;
@@ -435,12 +504,12 @@ public class Game {
         this.player = player;
     }
 
-    public boolean isClientTurn() {
-        return isClientTurn;
+    public boolean isClient() {
+        return isClient;
     }
 
-    public void setClientTurn(boolean clientTurn) {
-        isClientTurn = clientTurn;
+    public void setClient(boolean client) {
+        isClient = client;
     }
 
     public GameBoard getMyGameBoard() {
