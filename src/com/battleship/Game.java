@@ -468,7 +468,7 @@ private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //Denna
 
     else if (outcome == 'X') { // Miss
         // Om inget skepp träffades, returnera "miss"
-    System.out.println("DEBUG outcome getshot: Miss. Ingen träff. 'm'");
+    System.out.println("DEBUG outcome getshot: miss : (\" + row + \", \" + col + \")");
     return "m";
 }
 
