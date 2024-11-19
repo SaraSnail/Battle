@@ -6,6 +6,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -62,6 +63,8 @@ public class SceneServer {
             //SA
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
+                //GB-46-SA
+                back2.setOnAction(Event::consume);
                 //GB-39-SA
                 /*
                 //I Platform.runLater visar jag först WaitToConnect fönstret
