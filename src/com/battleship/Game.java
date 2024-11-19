@@ -35,6 +35,7 @@ public class Game {
     //private char valueAtCoordinates;
     //private int row;
     //private int col;
+    //SA
     private String lastMove;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
@@ -299,15 +300,18 @@ public class Game {
             System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
             player.getWriter().println(enemyHitOrMiss.toLowerCase());
         } else {
+            //SA
             lastMove = myShotHitOrMiss + " " + myMove + lastShot;
             updateEnemyMap(lastMove);
 
+            //AA
             myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren i makeMove: " + myMove);
             player.getWriter().println(myMove);
 
         }
 
+        //SA, flytta den till efter så den inte använder den nya koordinaten för updateMyMap
         lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
         //}
     }
