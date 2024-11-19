@@ -110,11 +110,11 @@ public class Game {
                 System.out.println("Serverns drag - while-loopen");
                 handlePlayersTurn();
             }
-            //GB-44-AWS
+           /* //GB-44-AWS
             Platform.runLater(() -> {
                 GameView.updateGameView(myGameBoard,enemyGameBoard,myGame,enemyGame);
             });
-            waitOneSec();
+            waitOneSec();*/
             counter ++;
         }
 
@@ -218,7 +218,9 @@ public class Game {
     //GB-31-AA
     private void waitOneSec(){
         try {
-            Thread.sleep(1000); //vänta 1 sek
+            // Testar ändra från 1 sek till 0.5 sek delay.
+            /*Thread.sleep(1000); //vänta 1 sek*/
+            Thread.sleep(500); //Vänta 0.5 sek / AWS
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -268,6 +270,10 @@ public class Game {
 
            char myShotHitOrMiss = setShotOutcome(enemyMove);
            updateMyMap(enemyMove);
+           waitOneSec();
+         Platform.runLater(() -> {
+           GameView.updateMyGameView(myGameBoard, myGame);
+       });
 
 
            if (myShotHitOrMiss == 'h') {
@@ -307,6 +313,10 @@ public class Game {
            } else {
                lastMove = myShotHitOrMiss +" "+myMove+ lastShot;
                updateEnemyMap(lastMove);
+               waitOneSec();
+               Platform.runLater(() -> {
+                   GameView.updateEnemyGameView(enemyGameBoard, enemyGame);
+               });
 
                myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
                System.out.println("Sträng till motståndaren i makeMove: " + myMove);
@@ -316,6 +326,7 @@ public class Game {
 
        lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
        //}
+
    }
 
 
@@ -416,6 +427,7 @@ public class Game {
             myGameBoard.displayBoard();
 
 
+
             //GB-25-AA
             //Uppdatera GameBoard-metod(coordinates)
             //GB-18-SA
@@ -455,6 +467,7 @@ public class Game {
         }
 
         enemyGameBoard.displayBoard();
+
 
         //GB-25-AA
         //Uppdatera GameBoard-metod(coordinates)
