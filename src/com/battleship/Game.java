@@ -119,7 +119,14 @@ public class Game {
             waitOneSec();
             counter++;
         }
-
+        //GB-45-AA
+        System.out.println("Game Over! (game-loopen avslutad.");
+        try {
+            player.close();
+            System.out.println("Socket closed");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
 
 
@@ -163,10 +170,12 @@ public class Game {
         //kolla game over
         gameOver = checkIfGameOver(enemymove);
         System.out.println("game over: " + gameOver);
-
-        //skicka drag
-        makeMove(player, false, enemymove);
-
+        if (gameOver){
+            return;
+        } else {
+            //skicka drag
+            makeMove(player, false, enemymove);
+        }
     }
 
     //GB-25-AA //GB-35-AA
@@ -237,7 +246,8 @@ public class Game {
         myMove = "i " + myMove + myShotCoordinates;
         System.out.println("Sträng till motståndaren: " + myMove);
 
-        player.getWriter().println(myMove);
+        //player.getWriter().println(myMove);
+        player.handleSendingMessages(myMove);
         lastShot = myShotCoordinates;
         //updateMaps(myMove,enemyGameBoard);
     }
@@ -278,15 +288,18 @@ public class Game {
 
         if (enemyHitOrMiss.equalsIgnoreCase("Game Over")) {
             iLose = true;    //Ändra till iLoose
-            System.out.println("Sträng till motståndaren vid GAME OVER: " + myMove);
-            player.getWriter().println(enemyHitOrMiss.toLowerCase());
+            System.out.println("Sträng till motståndaren vid GAME OVER(if - i makeMove): " + enemyHitOrMiss);
+            //player.getWriter().println(enemyHitOrMiss.toLowerCase());
+            player.handleSendingMessages(enemyHitOrMiss);
+            gameOver = checkIfGameOver(enemyHitOrMiss);
         } else {
             lastMove = myShotHitOrMiss +" "+myMove+ lastShot;
             updateEnemyMap(lastMove);
 
             myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren i makeMove: " + myMove);
-            player.getWriter().println(myMove);
+            //player.getWriter().println(myMove);
+            player.handleSendingMessages(myMove);
 
         }
 
@@ -307,7 +320,7 @@ public class Game {
             myShotCoordinates = Shoot.hitShot(enemyGameBoard, lastShot);
             System.out.println("Kordinater från hitShot: " + myShotCoordinates);
             sunk = false;
-            myShotCoordinates = Shoot.randomShot(enemyGameBoard);
+            //myShotCoordinates = Shoot.randomShot(enemyGameBoard);
 
         } else if (myShotHitOrMiss == 'm' && !sunk) {
             System.out.println("Föregående skott var miss men skepp ej sänkt");
