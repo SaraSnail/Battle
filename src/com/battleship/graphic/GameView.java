@@ -258,20 +258,25 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         }
     }
     //GB-44-AWS
-    public static void updateGameView(GameBoard myGameBoard, GameBoard enemyGameBoard,AnchorPane myGame, AnchorPane enemyGame ){
+    public static void updateMyGameView(GameBoard myGameBoard, AnchorPane myGame){
         myGame.getChildren().clear();
-        enemyGame.getChildren().clear();
 
         topNumberLabel(myGame);
         sideCharLabel(myGame);
 
+        battleGroundFX(myGame, myGameBoard,false);
+        gameBoardGrid(myGame, myGameBoard,false);
+
+    }
+
+    public static void updateEnemyGameView(GameBoard enemyGameBoard, AnchorPane enemyGame ){
+        enemyGame.getChildren().clear();
+
         topNumberLabel(enemyGame);
         sideCharLabel(enemyGame);
 
-        battleGroundFX(myGame, myGameBoard,false);
         battleGroundFX(enemyGame, enemyGameBoard,true);
 
-        gameBoardGrid(myGame, myGameBoard,false);
         gameBoardGrid(enemyGame,enemyGameBoard,true);
     }
 
