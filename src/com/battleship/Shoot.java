@@ -75,19 +75,24 @@ public class Shoot {
 
             int[] fireFieldX = {-1, 1, 0, 0};
             int[] fireFieldY = {0, 0, -1, 1};
+            System.out.println(lastHitShot);
 
 
-            String xString = lastHitShot.substring(0, lastHitShot.length() - 1);
-            String yString = lastHitShot.substring(lastHitShot.length() - 1);
+            String xString = lastHitShot.substring(0, lastHitShot.length() -1);
+            String yString = lastHitShot.substring(lastHitShot.length() - 1);//Works fine
 
-            lastShotX = Integer.parseInt(xString) - 1;
+
+
+            lastShotX = Integer.parseInt(xString) - 1;//works fine
             lastShotY = yString.charAt(0) - 'a';
+
 
 
             int randomSpace = random.nextInt(4);
 
-            int randomX = lastShotX + fireFieldX[randomSpace];
+            int randomX = lastShotX + fireFieldX[randomSpace]+1;// works fine
             int randomY = lastShotY + fireFieldY[randomSpace];
+
 
 
             if (randomX < 0 || randomX >= 10 || randomY < 0 || randomY >= 10) {
@@ -95,13 +100,12 @@ public class Shoot {
                 continue;
             }
 
-
             //char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
 
             /*if (randomSecondShotCoordinate == ' ') {*/
                 String letterCoordinate = Character.toString(yAxis[randomY]);
-                String numberCoordinate = Integer.toString(randomX );
+                String numberCoordinate = Integer.toString(randomX);
                 String result = numberCoordinate + letterCoordinate;
 
                 if (!shotsFired.contains(result)) {
