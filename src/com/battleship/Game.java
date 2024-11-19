@@ -5,8 +5,6 @@ import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
 
-import java.util.Arrays;
-
 import static com.battleship.Coordinates.getValueAtCoordinates;
 import static com.battleship.graphic.GameView.enemyGame;
 import static com.battleship.graphic.GameView.myGame;
@@ -27,6 +25,8 @@ public class Game {
     private boolean gameOver;
     private boolean firstMove;
 
+    //GB-47-AA
+    private int delay;
 
     //private boolean iLose; - använt för testning
 
@@ -225,12 +225,13 @@ public class Game {
         System.out.println("Game over!");
     }*/
 
-    //GB-31-AA
-    private void waitOneSec() {
+    //GB-31-AA //GB-47-AA
+    private void delayInSec() {
+        int millisecond = delay * 1000;
         try {
             // Testar ändra från 1 sek till 0.5 sek delay.
             /*Thread.sleep(1000); //vänta 1 sek*/
-            Thread.sleep(500); //Vänta 0.5 sek / AWS
+            Thread.sleep(millisecond); //Vänta 0.5 sek / AWS
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -281,7 +282,7 @@ public class Game {
 
         char myShotHitOrMiss = setShotOutcome(enemyMove);
         updateMyMap(enemyMove);
-        waitOneSec();
+        delayInSec();
         Platform.runLater(() -> {
             GameView.updateMyGameView(myGameBoard, myGame);
         });
@@ -303,7 +304,7 @@ public class Game {
             lastMove = myShotHitOrMiss + " " + myMove + lastShot;
             updateEnemyMap(lastMove);
             //AA
-            waitOneSec();
+            delayInSec();
             Platform.runLater(() -> {
                 GameView.updateEnemyGameView(enemyGameBoard, enemyGame);
             });
@@ -681,4 +682,11 @@ public class Game {
             this.enemyGameBoard = enemyGameBoard;
         }
 
+    public int getDelay() {
+        return delay;
     }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+}
