@@ -354,16 +354,18 @@ public class Game {
         System.out.println("Debug: Extraherat resultatkod: " + resultCode);
         return resultCode;*/
 
-        // Hämta utfallet från getShotOutcome
-        String outcome = getShotOutcome(enemyMove);
+
+        System.out.println("DEBUG: getShotOutcome får meddelande(enemyMove): " + enemyMove);
+        char resultCode = enemyMove.charAt(0);
 
         // Kontrollera att utfallet är giltigt
-        if (!outcome.equals("m") && !outcome.equals("h") && !outcome.equals("s") && !outcome.equals("game over")) {
-            throw new IllegalArgumentException("Ogiltigt utfall från getShotOutcome: " + outcome);
+        if (resultCode != 'i' && resultCode != 'h' && resultCode != 'm' && resultCode != 's') {
+            System.out.println("Debug: ogiltig resultCode upptäcktes: " + resultCode + "i string från enenymove" + enemyMove);
+            throw new IllegalArgumentException("Ogiltig input enemymove: " + resultCode);
         }
 
         System.out.println("DEBUG: setShotOutcome returnerar resultatkod: " + outcome);
-        return outcome.charAt(0); // Returnera första tecknet för koden (m, h, s eller 'g' för game over)
+        return resultCode.charAt(0); // Returnera första tecknet för koden (m, h, s eller 'g' för game over)
     }
 
 
