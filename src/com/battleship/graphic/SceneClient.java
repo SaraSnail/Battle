@@ -67,10 +67,10 @@ public class SceneClient {
                 //GB-46-SA
                 back1.setOnAction(Event::consume);
 
+                //SA, gav Thread ett namn
                 //GB-Debug-AA-2.0
                 //skapar tråd för kommunication i bakgrunden.
-
-                new Thread (() -> {
+                Thread threadClient = new Thread (() -> {
                     try{
                         //Denna CommunicationHandler ska ha vilken spelare det är, host och port
                         //GB-34-AA (try-catch - AA skrev catch connection refused)
@@ -112,7 +112,9 @@ public class SceneClient {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                }).start();
+                });
+                threadClient.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+                threadClient.start();
 
 
             }else if (!login.isInt(port1, port1.getText())){

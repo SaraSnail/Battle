@@ -37,6 +37,7 @@ public class Game {
     //private char valueAtCoordinates;
     //private int row;
     //private int col;
+    //SA
     private String lastMove;
 
     //GB-13-AA //GB-23-AA //GB-25-AA
@@ -243,7 +244,6 @@ public class Game {
         String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
         myShotCoordinates = Shoot.randomShot(enemyGameBoard);
-        lastShot = myShotCoordinates;
         myMove = "i " + myMove + myShotCoordinates;
         System.out.println("Sträng till motståndaren: " + myMove);
 
@@ -299,20 +299,25 @@ public class Game {
             player.handleSendingMessages(enemyHitOrMiss);
             gameOver = checkIfGameOver(enemyHitOrMiss);
         } else {
+            //SA
             lastMove = myShotHitOrMiss + " " + myMove + lastShot;
             updateEnemyMap(lastMove);
+            //AA
             waitOneSec();
             Platform.runLater(() -> {
                 GameView.updateEnemyGameView(enemyGameBoard, enemyGame);
             });
 
+            //AA
             myMove = enemyHitOrMiss + " " + myMove + myShotCoordinates;
             System.out.println("Sträng till motståndaren i makeMove: " + myMove);
             //player.getWriter().println(myMove);
             player.handleSendingMessages(myMove);
 
-            }
-            lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
+        }
+
+        //SA, flytta den till efter så den inte använder den nya koordinaten för updateMyMap
+        lastShot = myShotCoordinates; //sparar skottet i global Sträng som kan användas av andra metoder i Game.
     }
 
         //Gb-45-AA
