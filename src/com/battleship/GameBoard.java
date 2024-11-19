@@ -147,16 +147,21 @@ public class GameBoard {
     }
     //D.E
     public boolean isBoardEmpty() {
-        // Iterera genom alla rutor på brädet.
+        // Hämta brädet via klassen
+        char[][] board = getBoard();
+        System.out.println("DEBUG kontroll av brädet. Spel börjar.(isBoardEmpty metoden)");
+        // Iterera genom alla rutor på brädet
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                // Kontrollera om det finns träffar ('X') eller missar ('O') på brädet.
-                if (board[i][j] == 'X' || board[i][j] == 'O') {
-                    return false; // Brädet är inte tomt.
+                // Kontrollera om det finns träffar ('X') eller missar ('0') på brädet
+                if (board[i][j] == 'X' || board[i][j] == '0') {
+                    System.out.println("DEBUG: Brädet är inte tomt (isBoardEmpty)");
+                    return false; // Brädet är inte tomt
                 }
             }
         }
-        return true; // Brädet är tomt om inga träffar eller missar hittades.
+        System.out.println("DEBUG: Inga träffar eller missar hittades brädet är tomt.(isBoardEmpty)");
+        return true; // Brädet är tomt om inga träffar eller missar hittades
     }
 
 }
