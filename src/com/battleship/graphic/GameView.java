@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -131,25 +132,57 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
             }
         }
 
+        //GB-18-SA.part3
+        Image fire = new Image("file:recourses/images/fire.png");
+        //Icon by Freepik
+        // https://www.freepik.com/icon/bonfire_4646371#fromView=keyword&page=3&position=67&uuid=d9fe8eef-aa10-481f-9a66-a65a1043582a
+        ImagePattern fireImage = new ImagePattern(fire);
+        //Gör om till ImagePattern så jag kan sätta den på en rektangel
+
+        Image water = new Image("file:recourses/images/water.png");
+        //Icon by Freepik
+        // https://www.freepik.com/icon/splash_1027308
+        ImagePattern waterImage = new ImagePattern(water);
+
+
+        //aws
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
                 Rectangle cell = new Rectangle(50, 50);
                 cell.setX(c * 50);
                 cell.setY(r * 50);
 
+
+
                 if(isEnemy){
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                        cell.setFill(Color.color(0.0,1.0,1.0,0.5));         //Färgerna kommer att ändras/bytas till bilder.
+                        //GB-18-SA.part3
+                        cell.setFill(waterImage);//Miss, bild av vatten på den rektangeln
+
+                        //aws
+                        //cell.setFill(Color.color(0.0,1.0,1.0,0.5));         //Färgerna kommer att ändras/bytas till bilder.
                     } else if (gameBoardFX[r][c] == '0') {      //Träff
-                        cell.setFill(Color.color(0.8,0.6,0.6,0.5));         //Färgerna kommer att ändras/bytas till bilder.
+                        //GB-18-SA.part3
+                        cell.setFill(fireImage);//Träff, bild av eld på den rektangeln
+
+                        //aws
+                        //cell.setFill(Color.color(0.8,0.6,0.6,0.5));         //Färgerna kommer att ändras/bytas till bilder.
                     } else{
                         continue;
                     }
             } else{
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                    cell.setFill(Color.color(0.0,0.0,1.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
+                        //GB-18-SA.part3
+                        cell.setFill(waterImage);//Miss, bild av vatten på den rektangeln
+
+                        //aws
+                    //cell.setFill(Color.color(0.0,0.0,1.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
                 } else if (gameBoardFX[r][c] == '0') {      //Träff
-                    cell.setFill(Color.color(1.0,0.0,0.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
+                        //GB-18-SA.part3
+                        cell.setFill(fireImage);//Träff, bild av eld på den rektangeln
+
+                        //aws
+                        //cell.setFill(Color.color(1.0,0.0,0.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
                 } else{
                     continue;
                 }

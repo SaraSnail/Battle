@@ -80,9 +80,11 @@ public class SceneServer {
 
                         //GB-37-SA, la till Platform.runLater
                         Platform.runLater(()->{
+                    */
                             //Platform.runLater i pause för att uppdatera till spelplanen efter den visat WaitToConnect
 
-
+                //SA, gav Thread ett namn
+/*
                             //Skapar först CommunicationHandler som väntar på kontakt med Client
                             //GB-18-SA
                             CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
@@ -104,9 +106,9 @@ public class SceneServer {
                     pause.play();
                 });
                 */
-                /*
+    //SA, gav Thread ett namn
                 //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
-                new Thread (() -> {
+                Thread threadServer = new Thread (() -> {
                     try{
                         CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                         port2.clear();
@@ -133,8 +135,11 @@ public class SceneServer {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                }).start();
-                */
+                });
+                threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+                threadServer.start();
+
+
 
 
                 //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..

@@ -23,6 +23,7 @@ public class LoginView extends Application{
 
     public Image startBackground = new Image("file:recourses/images/ship.jpg");
     //Credit "Dorian Mongel" på unsplash
+    // https://unsplash.com/photos/white-and-black-ship-5Rgr_zI7pBw
 
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
@@ -69,9 +70,7 @@ public class LoginView extends Application{
         clientButton.setOnAction(e->{
             System.out.println("Player 1");
             //Lägg in att användaren får skriva in localhost och port
-            //Skicka vidare vilken player det är
             //New Scene
-            whichPlayer(1);
             //GB-37-SA, la till Platform.runLater
             Platform.runLater(()->{
                 window.setScene(sceneClient);
@@ -82,8 +81,6 @@ public class LoginView extends Application{
 
         serverButton.setOnAction(e->{
             System.out.println("Player 2");
-            //Lägg in att användaren får skriva in port
-            whichPlayer(2);
             //GB-37-SA, la till Platform.runLater
             Platform.runLater(()->{
                 window.setScene(sceneServer);
