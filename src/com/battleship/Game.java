@@ -337,7 +337,7 @@ public class Game {
 
         return resultCode;*/
         //System.out.println("Debug: från enemyMove" + enemyMove);
-        if (enemyMove == null || enemyMove.isEmpty()) {
+        /*if (enemyMove == null || enemyMove.isEmpty()) {
             throw new IllegalArgumentException("Ogiltig input: Strängen är null eller tom");
         }
         System.out.println("Debug: setShotOutcome fick input: " + enemyMove);
@@ -353,7 +353,18 @@ public class Game {
 
         System.out.println("Debug: Giltlig input. Returnerar resultCode = " + resultCode);
         System.out.println("Debug: Extraherat resultatkod: " + resultCode);
-        return resultCode;
+        return resultCode;*/
+
+        // Hämta utfallet från getShotOutcome
+        String outcome = getShotOutcome(enemyMove);
+
+        // Kontrollera att utfallet är giltigt
+        if (!outcome.equals("m") && !outcome.equals("h") && !outcome.equals("s") && !outcome.equals("game over")) {
+            throw new IllegalArgumentException("Ogiltigt utfall från getShotOutcome: " + outcome);
+        }
+
+        System.out.println("DEBUG: setShotOutcome returnerar resultatkod: " + outcome);
+        return outcome.charAt(0); // Returnera första tecknet för koden (m, h, s eller 'g' för game over)
     }
 
 
@@ -402,6 +413,8 @@ private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //Denna
         }
         return "m"; // miss
         */
+
+    System.out.println("DEBUG: getShotOutcome får meddelande(enemyMove): " + enemyMove);
     // Kontrollera om brädet är tomt (första skottet)
     if (myGameBoard.isBoardEmpty()) {
         System.out.println("DEBUG: Brädet är tomt. Första skottet. returnerar 'i'");
@@ -418,42 +431,44 @@ private String getShotOutcome(String enemyMove, GameBoard myGameBoard) { //Denna
 
     // Hämta värdet på den träffade rutan
     char outcome = myGameBoard.getBoard()[row][col];
-    System.out.println("DEBUG: koordinater  (" + row + ", " + col + "), har värde:" + outcome);
+    System.out.println("DEBUG: koordinater (outcome getshotoutcome)  (" + row + ", " + col + "), har värde:" + outcome);
 
 
     // Kolla om rutan innehåller ett skepp
     if (outcome == '0') {
-        System.out.println("DEBUg: Träff på skepp");
+        System.out.println("DEBUg outcome getshotoutcome :Träff på skepp");
+        System.out.println("DEBUG outcome getshotoutcome: Träff på skepp vid (" + row + ", " + col + ")");
         for (Ship ship : myGameBoard.getShips()) {
 
             // Kontrollera om träffen är en del av detta skepp
             if (ship.getCoordinates().stream().anyMatch(coord -> coord[0] == row && coord[1] == col)) {
 
                 ship.setNumberOfHits(ship.getNumberOfHits() + 1);
-                System.out.println("DEBUG: skeppet " + ship.getKind() + "träffades. Uppdaterade träffar: " + ship.getNumberOfHits());
+                System.out.println("DEBUG outcome getshot skeppet  " + ship.getKind() + "träffades. Uppdaterade träffar: " + ship.getNumberOfHits());
 
                 // Kolla om skeppet är sänkt
                 if (ship.getNumberOfHits() == ship.getSize()) {
                     ship.setSunk(true);
-                    System.out.println("DEBUG: Skepp sänkt: " + ship.getKind());
+                    System.out.println("DEBUG: outcome getshot : Skepp sänkt: " + ship.getKind());
 
                     // Kontrollera om alla skepp är sänkta (spel över)
                     if (myGameBoard.getShips().stream().allMatch(Ship::isSunk)) {
-                        System.out.println("DEBUG: Alla skepp sänkta.Alla skepp är sänkta.");
+                        System.out.println("DEBUG outcome getshot . Alla skepp sänkta.game over.");
                         return "game over";
                     }
-                    System.out.println("Debug: Returnerar 's' (träff och skepp sänkt).");
+                    System.out.println("Debug outcom getshotoutcome: Returnerar 's' (träff och skepp sänkt).");
                     return "s"; // Endast detta skepp är sänkt
 
                 }
-                System.out.println("Debug: Returnerar 'h' (träff).");
+                System.out.println("Debug outcome getshot: Returnerar 'h' (träff).");
                 return "h"; // Träff på skeppet men inte sänkt
             }
         }
     }
 
-    // Om inget skepp träffades, returnera "miss"
-    System.out.println("DEBUG: Miss. Ingen träff. 'm'");
+    else if (outcome == 'X') { // Miss
+        // Om inget skepp träffades, returnera "miss"
+    System.out.println("DEBUG outcome getshot: Miss. Ingen träff. 'm'");
     return "m";
 }
 
