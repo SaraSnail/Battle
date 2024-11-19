@@ -26,8 +26,8 @@ public class SceneClient {
     private static Text player1Label;
 
     //GB-47-AA
-    private static ComboBox<Integer> delay;
-    private static int delaySec;
+    private static ComboBox<Double> delay;
+    private static double delaySec;
 
 
     //GB-15-SA
@@ -45,8 +45,8 @@ public class SceneClient {
 
         //GB-47-AA
         delay = new ComboBox<>();
-        delay.setPromptText("Delay in seconds");
-        delay.getItems().addAll(0,1,2,3,4,5);
+        delay.setPromptText("Set delay between shots in sec");
+        delay.getItems().addAll( 0.0,0.5, 1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0);
         delay.setOnAction(event -> {
             delaySec = delay.getSelectionModel().getSelectedItem();
         });

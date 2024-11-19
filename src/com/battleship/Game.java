@@ -26,7 +26,7 @@ public class Game {
     private boolean firstMove;
 
     //GB-47-AA
-    private int delay;
+    private double delay;
 
     //private boolean iLose; - använt för testning
 
@@ -227,11 +227,12 @@ public class Game {
 
     //GB-31-AA //GB-47-AA
     private void delayInSec() {
-        int millisecond = delay * 1000;
+        double millisecond = delay * 1000;
+        long milisec = (long) millisecond;
         try {
             // Testar ändra från 1 sek till 0.5 sek delay.
             /*Thread.sleep(1000); //vänta 1 sek*/
-            Thread.sleep(millisecond); //Vänta 0.5 sek / AWS
+            Thread.sleep(milisec); //Vänta 0.5 sek / AWS
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -682,11 +683,11 @@ public class Game {
             this.enemyGameBoard = enemyGameBoard;
         }
 
-    public int getDelay() {
+    public double getDelay() {
         return delay;
     }
 
-    public void setDelay(int delay) {
+    public void setDelay(double delay) {
         this.delay = delay;
     }
 }
