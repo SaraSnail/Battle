@@ -82,8 +82,6 @@ public class SceneServer {
                         Platform.runLater(()->{
                     */
                             //Platform.runLater i pause för att uppdatera till spelplanen efter den visat WaitToConnect
-
-                //SA, gav Thread ett namn
 /*
                             //Skapar först CommunicationHandler som väntar på kontakt med Client
                             //GB-18-SA
@@ -106,84 +104,38 @@ public class SceneServer {
                     pause.play();
                 });
                 */
-    //SA, gav Thread ett namn
+
+                //SA, gav Thread ett namn
                 //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
                 Thread threadServer = new Thread (() -> {
-                    try{
-                        CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                        port2.clear();
-                        Game game = new Game(communicationHandler, false, login);
-                        game.createBoards();
-                        //game.startGame();
-
-                        //GB-18-SA
-
-                        try{
-                            Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
-                            //GB-37-SA, la till Platform.runLater
-                            Platform.runLater(()->{
-                                window.setScene(view);
-                                //game.startGame();
-                            });
-
-                            game.startGame();
-
-
-                        }catch(Exception ex){
-                            ex.printStackTrace();
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                });
-                threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-                threadServer.start();
-
-
-
-
-                //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
-                new Thread (() -> {
-                    Platform.runLater(() -> {
+                    //GB-39-SA
+                    Platform.runLater(()-> {
                         WaitToConnect.display();
-                        System.out.println("Displayed WaitToConnect");
-
-                        //Skapar en "PauseTransition" med försening på 2 sekunder
                         PauseTransition pause = new PauseTransition();
-                        System.out.println("PauseTransition created");
-                        //I pause skapas view Scenen
+                        pause.setOnFinished(p-> {
 
-                        //Krashar efter den bytt scene
-                        pause.setOnFinished(event -> {
-                            System.out.println("Start of pause.setOnFinished");
+                            Platform.runLater(()-> {
 
-
-                            Platform.runLater(() -> {
-
-
-                            System.out.println("Before try for CommunicationHandler");
+                                //AA
                                 try {
                                     CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                                     port2.clear();
                                     Game game = new Game(communicationHandler, false, login);
-                                    game.createBoards();
+                                    game.createBoards();//SA
                                     //game.startGame();
 
                                     //GB-18-SA
-
                                     try {
                                         Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
                                         //GB-37-SA, la till Platform.runLater
-
 
                                             window.setScene(view);
                                             //game.startGame();
                                             WaitToConnect.close();
 
+
                                         game.startGame();
 
-
-                                        //WaitToConnect.display();
 
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -191,23 +143,13 @@ public class SceneServer {
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
-
                             });
                         });
-                        pause.play();
-/*
-                        try{
-                            game.startGame();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }*/
-
-                        //game.startGame();
+                        pause.play();////GB-39-SA
                     });
-
-                }).start();
-
-
+                });
+                threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+                threadServer.start();
 
 
 
