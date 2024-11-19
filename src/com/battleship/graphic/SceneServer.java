@@ -137,7 +137,6 @@ public class SceneServer {
                 */
 
 
-
                 //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
                 new Thread (() -> {
                     Platform.runLater(() -> {
