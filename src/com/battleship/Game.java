@@ -364,8 +364,8 @@ public class Game {
             throw new IllegalArgumentException("Ogiltig input enemymove: " + resultCode);
         }
 
-        System.out.println("DEBUG: setShotOutcome returnerar resultatkod: " + outcome);
-        return resultCode.charAt(0); // Returnera första tecknet för koden (m, h, s eller 'g' för game over)
+        System.out.println("DEBUG: setShotOutcome returnerar resultatkod: " + resultCode);
+        return resultCode; // Returnera första tecknet för koden (m, h, s eller 'g' för game over)
     }
 
 
