@@ -107,49 +107,17 @@ public class SceneServer {
 
                 //SA, gav Thread ett namn
                 //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
-                Thread threadServer = new Thread (() -> {
-                    //GB-39-SA
-                    Platform.runLater(()-> {
-                        WaitToConnect.display();
-                        PauseTransition pause = new PauseTransition();
-                        pause.setOnFinished(p-> {
-
-                            Platform.runLater(()-> {
-
-                                //AA
-                                try {
-                                    CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                                    port2.clear();
-                                    Game game = new Game(communicationHandler, false, login);
-                                    game.createBoards();//SA
-                                    //game.startGame();
-
-                                    //GB-18-SA
-                                    try {
-                                        Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
-                                        //GB-37-SA, la till Platform.runLater
-
-                                            window.setScene(view);
-                                            //game.startGame();
-                                            WaitToConnect.close();
-
-
-                                        game.startGame();
-
-
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
-                                    }
-                                } catch (Exception e1) {
-                                    e1.printStackTrace();
-                                }
-                            });
+                Platform.runLater(WaitToConnect::display);
+                startThread(window, login);
+                /*
+                PauseTransition pause = new PauseTransition();
+                pause.setOnFinished(
+                        event->{
+                            startThread(window, login);
                         });
-                        pause.play();////GB-39-SA
-                    });
-                });
-                threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-                threadServer.start();
+                pause.play();////GB-39-SA*/
+
+
 
 
 
@@ -206,6 +174,48 @@ public class SceneServer {
 
         return scene;
     }
+
+    private static void startThread(Stage window, LoginView login) {
+        Thread threadServer = new Thread (() -> {
+            //GB-39-SA
+
+            //AA
+            try {
+                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                port2.clear();
+                Game game = new Game(communicationHandler, false, login);
+                game.createBoards();//SA
+                //game.startGame();
+
+                //GB-18-SA
+                try {
+                    Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+                    //GB-37-SA, la till Platform.runLater
+
+                    Platform.runLater(()-> window.setScene(view));
+                    //game.startGame();
+                    Platform.runLater(WaitToConnect::close);
+
+
+
+                    game.startGame();
+
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+
+
+
+        });
+
+        threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+        threadServer.start();
+    }
+
     //GB-15-SA
     //Om man vill gå tillbaka
     //GB-18-SA, bytte från goBack till goTo
