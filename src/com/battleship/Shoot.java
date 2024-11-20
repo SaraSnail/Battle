@@ -40,13 +40,13 @@ public class Shoot {
 
             int randomX = random.nextInt(10);
             int randomY = random.nextInt(10);
-            //char randomCoordinate = enemyBoard[randomX][randomY];
 
 
 
 
 
-            //if(randomCoordinate==' ') {
+
+
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
@@ -68,29 +68,39 @@ public class Shoot {
         boolean randomShotTaken = false;
 
         int attempts = 0;
-        int maxAttempts = 20;
+        int maxAttempts = 50;
 
         while (!randomShotTaken && attempts < maxAttempts) {
 
 
             int[] fireFieldX = {-1, 1, 0, 0};
             int[] fireFieldY = {0, 0, -1, 1};
-            System.out.println(lastHitShot);
+
+
+
 
 
             String xString = lastHitShot.substring(0, lastHitShot.length() -1);
-            String yString = lastHitShot.substring(lastHitShot.length() - 1);//Works fine
+            String yString = lastHitShot.substring(lastHitShot.length() - 1);
 
 
 
-            lastShotX = Integer.parseInt(xString) - 1;//works fine
+            lastShotX = Integer.parseInt(xString) - 1;
             lastShotY = yString.charAt(0) - 'a';
 
+            if (lastShotX - 1 >= 0 && lastShotY - 1 >= 0)
+                shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY - 1 + 'a'));
+            if (lastShotX + 1 <= 9 && lastShotY - 1 >= 0)
+                shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY - 1 + 'a')); // Top-right
+            if (lastShotX - 1 >= 0 && lastShotY + 1 <= 9)
+                shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY + 1 + 'a')); // Bottom-left
+            if (lastShotX + 1 <= 9 && lastShotY + 1 <= 9)
+                shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY + 1 + 'a')); // Bottom-right
 
 
             int randomSpace = random.nextInt(4);
 
-            int randomX = lastShotX + fireFieldX[randomSpace]+1;// works fine
+            int randomX = lastShotX + fireFieldX[randomSpace]+1;
             int randomY = lastShotY + fireFieldY[randomSpace];
 
 
@@ -100,10 +110,10 @@ public class Shoot {
                 continue;
             }
 
-            //char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
 
 
-            /*if (randomSecondShotCoordinate == ' ') {*/
+
+
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
                 String result = numberCoordinate + letterCoordinate;
@@ -113,7 +123,7 @@ public class Shoot {
                     randomShotTaken = true;
                     return result;
                 }
-            //}
+
 
             attempts++;
         }
@@ -124,6 +134,24 @@ public class Shoot {
         }
 
         return "No valid shot";
+    }
+    public void String (String lastHitShot){
+
+        String xString = lastHitShot.substring(0, lastHitShot.length() -1);
+        String yString = lastHitShot.substring(lastHitShot.length() - 1);
+
+        lastShotX = Integer.parseInt(xString) - 1;
+        lastShotY = yString.charAt(0) - 'a';
+
+        if (lastShotX - 1 >= 0 && lastShotY - 1 >= 0)
+            shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY - 1 + 'a'));
+        if (lastShotX + 1 <= 9 && lastShotY - 1 >= 0)
+            shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY - 1 + 'a'));
+        if (lastShotX - 1 >= 0 && lastShotY + 1 <= 9)
+            shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY + 1 + 'a'));
+        if (lastShotX + 1 <= 9 && lastShotY + 1 <= 9)
+            shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY + 1 + 'a'));
+
     }
 
 
