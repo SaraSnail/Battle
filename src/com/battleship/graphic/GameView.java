@@ -3,12 +3,19 @@ package com.battleship.graphic;
 import com.battleship.GameBoard;
 import com.battleship.Ship;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -140,6 +147,8 @@ public class GameView {
                 cell.setX(c * 50);
                 cell.setY(r * 50);
 
+
+
                 if(isEnemy){
                     if (gameBoardFX[r][c] == 'X') {      //Miss
                         //GB-18-SA.part3. Ändrade till bild istället för halvgenomskinlig färg som aws gjort
@@ -260,6 +269,41 @@ public class GameView {
 
         gameBoardGrid(enemyGame,enemyGameBoard,true);
     }
+
+    //GB-50-AA
+    public static void showGameOverOverlay(String gameOverMessage) {
+        // Skapa overlay med meddelandet och knappen
+        Text gameOverText = new Text(gameOverMessage);
+        gameOverText.setTextAlignment(TextAlignment.CENTER);
+        gameOverText.getStyleClass().add("titel-small");
+
+        Button closeButton = new Button("Exit game");
+        closeButton.getStyleClass().add("button-standard");
+        closeButton.setOnAction(e -> Platform.exit()); // Stänger fönstret när knappen klickas
+
+
+
+
+        AnchorPane overlay = new AnchorPane();
+        overlay.setPrefSize(1450,700);
+
+        VBox overlayContent = new VBox(10, gameOverText, closeButton);
+        overlayContent.setAlignment(Pos.CENTER);
+        overlayContent.setPrefSize(200,150);
+        overlayContent.setLayoutX((double) 1450 /2.5);
+        overlayContent.setLayoutY((double) 700 /2.5);
+        overlayContent.getStyleClass().add("background-blue");
+        overlayContent.setStyle("-fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;");
+
+        overlay.getChildren().add(overlayContent);
+
+
+        AnchorPane rootLayout = (AnchorPane) scene.getRoot(); // Hämta root som AnchorPane
+        rootLayout.getChildren().add(overlay);
+        overlay.getStylesheets().add("com/battleship/graphic/BattleShip.css");
+
+    }
+
 
 }
 

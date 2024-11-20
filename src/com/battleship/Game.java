@@ -272,9 +272,11 @@ public class Game {
                 if (myGameBoard.getBoard()[row][col] == 'S') {
                     System.out.println("A ship");
                     myGameBoard.getBoard()[row][col] = '0';
+
                 } else if (myGameBoard.getBoard()[row][col] == ' ') {
                     System.out.println("No ship");
                     myGameBoard.getBoard()[row][col] = 'X';
+
                 }
 
                 myGameBoard.displayBoard();
@@ -318,9 +320,9 @@ public class Game {
         private boolean checkIfGameOver (String message){
             //GB-35-AA (Alertbox och .exit)
             if (iLose) {
+                //GB-50-AA
                 Platform.runLater(() -> {
-                    AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\n When you klick OK you will exit the application ");
-                    Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+                    GameView.showGameOverOverlay("GAME OVER\n\nYOU LOSE!\n\n" );
                 });
                 return true;
             } else {
@@ -329,10 +331,10 @@ public class Game {
                     updateEnemyMap(lastMove);
                     // Får game over från motståndaren och uppdaterar deras karta så sista skottet på dem syns
 
-                    //GB-35-AA (Alertbox och .exit())
+
+                    //GB-50-AA
                     Platform.runLater(() -> {
-                        AlertBox.display( "Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
-                        Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+                        GameView.showGameOverOverlay("GAME OVER\n\nYOU WIN!\n\n" );
                     });
 
                     return true;
