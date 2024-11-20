@@ -113,7 +113,7 @@ public class SceneServer {
             } else if (!login.isInt(port2, port2.getText())) {
                 System.out.println("Can't play at that port");
                 //GB-35-AA (AlertBox - meddelandet)
-                AlertBox.display("Warning", "Invalid port! \nA valid port must be 4 digits and a number between 1025-9999.\nPlease try again!");
+                AlertBox.display( "Warning", "Invalid port! \nA valid port must be 4 digits and a number between 1025-9999.\nPlease try again!");
                 port2.clear();
             }
         });

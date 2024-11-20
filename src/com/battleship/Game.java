@@ -70,28 +70,28 @@ public class Game {
         enemyGameBoard.displayBoard();*/
     }
 
-    private boolean waitForReady() {
+  /*  private boolean waitForReady() {
         String readySignal = player.handleIncomingMessages();
         if (readySignal.equals("ready")) {
-            return true;
+           return true;
         }
         return false;
-    }
+    }*/
 
-    private void sendReady() {
+  /*  private void sendReady() {
         player.handleSendingMessages("ready");
-    }
+    }*/
 
 
     //GB-13-AA //GB-25-AA //GB-30-AA //GB-43-AA
     public void startGame() {
         //createBoards();
 
-        if (!isClient) {
+       /* if (!isClient) {
             waitForReady();
         } else {
             sendReady();
-        }
+        }*/
 
         System.out.println("Game started!");
 
@@ -121,7 +121,7 @@ public class Game {
             counter++;
         }
         //GB-45-AA
-        System.out.println("Game Over! (game-loopen avslutad.");
+        System.out.println("Game Over! (game-loopen) avslutad.");
         try {
             player.close();
             System.out.println("Socket closed");
@@ -638,7 +638,7 @@ public class Game {
 
                     //GB-35-AA (Alertbox och .exit())
                     Platform.runLater(() -> {
-                        AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
+                        AlertBox.display( "Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
                         Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
                     });
 
