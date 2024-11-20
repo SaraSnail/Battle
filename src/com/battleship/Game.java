@@ -621,9 +621,12 @@ public class Game {
 
             //GB-35-AA (Alertbox och .exit)
             if (iLose) { // iLose kommer fungera när makeMove är mergeat!
-                Platform.runLater(() -> {
+       /*         Platform.runLater(() -> {
                     AlertBox.display("Game Over", "GAME OVER\nYOU LOSE!\n\n When you klick OK you will exit the application ");
                     Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+                });*/
+                Platform.runLater(() -> {
+                    GameView.showGameOverOverlay("GAME OVER\\nYOU LOSE!" );
                 });
                 return true;
             } else {
@@ -635,9 +638,13 @@ public class Game {
                     //lastShot fixa
 
                     //GB-35-AA (Alertbox och .exit())
-                    Platform.runLater(() -> {
+/*                    Platform.runLater(() -> {
                         AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
                         Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
+                    });*/
+
+                    Platform.runLater(() -> {
+                        GameView.showGameOverOverlay("GAME OVER\nYOU WIN!" );
                     });
 
                     return true;

@@ -4,12 +4,17 @@ import com.battleship.GameBoard;
 import com.battleship.Ship;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -278,6 +283,37 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         battleGroundFX(enemyGame, enemyGameBoard,true);
 
         gameBoardGrid(enemyGame,enemyGameBoard,true);
+    }
+
+    //GB-50-AA
+    public static void showGameOverOverlay(String gameOverMessage) {
+        // Skapa overlay med meddelandet och knappen
+        Text gameOverText = new Text(gameOverMessage);
+        gameOverText.getStyleClass().add("titel-small");
+
+        Button closeButton = new Button("Exit game");
+        closeButton.getStyleClass().add("button-standard");
+        closeButton.setOnAction(e -> Platform.exit()); // Stänger fönstret när knappen klickas
+
+        VBox overlayContent = new VBox(10, gameOverText, closeButton);
+        overlayContent.setAlignment(Pos.CENTER);
+        overlayContent.getStyleClass().add("background-blue");
+        overlayContent.setMinSize(200, 150);
+
+        AnchorPane overlay = new AnchorPane();
+        AnchorPane.setTopAnchor(overlayContent, null);
+        AnchorPane.setRightAnchor(overlayContent, null);
+        AnchorPane.setBottomAnchor(overlayContent, null);
+        AnchorPane.setLeftAnchor(overlayContent, null);
+        overlay.getChildren().add(overlayContent);
+
+        overlayContent.layoutXProperty().bind(overlay.widthProperty().subtract(overlayContent.widthProperty()).divide(2));
+        overlayContent.layoutYProperty().bind(overlay.heightProperty().subtract(overlayContent.heightProperty()).divide(2));
+
+        AnchorPane rootLayout = (AnchorPane) scene.getRoot(); // Hämta root som AnchorPane
+        rootLayout.getChildren().add(overlay);
+        overlay.getStylesheets().add("com/battleship/graphic/BattleShip.css");
+
     }
 
     //GB-18-SA, kan ta bort om aws gjort något som fungerar
