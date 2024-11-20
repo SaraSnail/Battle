@@ -2,6 +2,9 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -11,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.Scanner;
 
@@ -24,6 +28,8 @@ public class SceneServer {
     private static TextField port2;
     private static Button submit2;
     private static Button back2;
+
+    private static Game game;
 
 
     //GB-15-SA
@@ -59,40 +65,9 @@ public class SceneServer {
             if(login.isInt(port2, port2.getText())){
                 //GB-46-SA
                 back2.setOnAction(Event::consume);
-
-                //SA, gav Thread ett namn
-                //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
-                Thread threadServer = new Thread (() -> {
-                    try{
-                        CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                        port2.clear();
-                        Game game = new Game(communicationHandler, false, login);
-                        game.createBoards();
-                        //game.startGame();
-
-                        //GB-18-SA
-
-                        try{
-                            Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
-                            //GB-37-SA, la till Platform.runLater
-                            Platform.runLater(()->{
-                                window.setScene(view);
-                                //game.startGame();
-                            });
-
-                            game.startGame();
-
-
-                        }catch(Exception ex){
-                            ex.printStackTrace();
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                });
-                threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-                threadServer.start();
-
+                //GB-39-SA, fick hjälp av Micke
+                Platform.runLater(WaitToConnect::display);
+                startThread(window, login);
 
 
 
@@ -150,6 +125,46 @@ public class SceneServer {
 
         return scene;
     }
+
+    //SA, fick hjälp av Micke. Starta Thread:en i en metod
+    private static void startThread(Stage window, LoginView login) {
+        //SA, gav Thread:en ett namn
+        //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
+        Thread threadServer = new Thread(() -> {
+            //AA
+            try {
+                //SA
+                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                port2.clear();
+                Game game = new Game(communicationHandler, false, login);
+                game.createBoards();
+                //game.startGame();
+
+                //GB-18-SA
+                try {
+                    Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+
+                    //GB-37-SA, la till Platform.runLater
+                    //SA, hjälp av Micke. Två Platform.runLater istället för en
+                    Platform.runLater(()-> window.setScene(view));
+                    Platform.runLater(WaitToConnect::close);
+
+                    //AA flyttade ner startGame
+                    game.startGame();
+
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+        threadServer.start();
+    }
+
     //GB-15-SA
     //Om man vill gå tillbaka
     //GB-18-SA, bytte från goBack till goTo
