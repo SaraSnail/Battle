@@ -2,6 +2,8 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
+import javafx.animation.PauseTransition;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -12,8 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.ConnectException;
+import java.net.Socket;
+import java.util.Scanner;
 
 //GB-15-SA
 public class SceneClient {
@@ -76,55 +81,9 @@ public class SceneClient {
                 //GB-46-SA
                 back1.setOnAction(Event::consume);
 
-                //SA, gav Thread ett namn
-                //GB-Debug-AA-2.0
-                //skapar tråd för kommunication i bakgrunden.
-                Thread threadClient = new Thread (() -> {
-                    try{
-                        //Denna CommunicationHandler ska ha vilken spelare det är, host och port
-                        //GB-34-AA (try-catch - AA skrev catch connection refused)
-                        try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
-                            host.clear();
-                            port1.clear();
+                //GB-39-SA, hjälp av Micke. Skapar Thread i en metod
+                startThread(window, login);
 
-                            Game game = new Game(communicationHandler, true, login);
-                            game.setDelay(delaySec);
-                            game.createBoards();
-                            //game.startGame();
-
-
-                            //GB-18-SA
-                            try{
-                                Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
-                                //GB-37-SA, la till Platform.runLater
-                                Platform.runLater(()->{
-                                    window.setScene(view);
-                                    //game.startGame();
-                                });
-
-
-                                game.startGame();
-
-                            }catch(Exception ex){
-                                ex.printStackTrace();
-                            }
-
-                        } catch (ConnectException ex) {
-                            // Om ConnectionRefusedException uppstår, visa en alertbox
-                            System.out.println("Connection refused!");
-                            AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
-                            host.clear();
-                            port1.clear();
-                        } catch (Exception exep) {
-                            System.out.println("An error occurred: " + exep.getMessage());
-                            exep.printStackTrace();
-                        }
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                });
-                threadClient.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-                threadClient.start();
 
 
             }else if (!login.isInt(port1, port1.getText())){
@@ -191,6 +150,59 @@ public class SceneClient {
 
         return scene;
     }
+    //GB-39-SA, fick hjälp av Micke. Skapar tråden i en metod istället
+    private static void startThread(Stage window, LoginView login) {
+        //GB-39-SA, gav Thread ett namn
+        //GB-Debug-AA-2.0
+        //skapar tråd för kommunication i bakgrunden.
+        Thread threadClient = new Thread (() -> {
+            try{
+                //Denna CommunicationHandler ska ha vilken spelare det är, host och port
+                //GB-34-AA (try-catch - AA skrev catch connection refused)
+                try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
+                    //SA
+                    host.clear();
+                    port1.clear();
+
+                    Game game = new Game(communicationHandler, true, login);
+                    game.setDelay(delaySec);
+                    game.createBoards();
+                    //game.startGame();
+
+
+                    //GB-18-SA
+                    try{
+                        Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+                        //GB-37-SA, la till Platform.runLater
+                        //SA, hjälp av Micke att skriva det kortare
+                        Platform.runLater(()->window.setScene(view));
+
+
+
+                        game.startGame();
+
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+
+                } catch (ConnectException ex) {
+                    // Om ConnectionRefusedException uppstår, visa en alertbox
+                    System.out.println("Connection refused!");
+                    AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                    host.clear();
+                    port1.clear();
+                } catch (Exception exep) {
+                    System.out.println("An error occurred: " + exep.getMessage());
+                    exep.printStackTrace();
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+        threadClient.setDaemon(true);//GB-39-SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+        threadClient.start();
+    }
+
 
     //GB-15-SA
     //Om man vill gå tillbaka
