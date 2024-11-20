@@ -8,8 +8,9 @@ import java.util.Random;
 public class GameBoard {
     private char[][] board;
    private List<Ship> ships;
+    //GB-49-SA, ändra från public till default
     // GB-8-AWS
-    public GameBoard(boolean myBoard){
+    GameBoard(boolean myBoard){
         board = new char[10][10];
         ships = new ArrayList<>();
         initializeBoard();
@@ -122,7 +123,7 @@ public class GameBoard {
         return true;
     }
 
-    // GB-8-AWS metod för att testa i intellij hur det ser ut kommer att tas bort senare när grafisk funktion är inlagd.
+    // GB-8-AWS metod för att se gameBoard i terminalen
     public void displayBoard(){
         System.out.println("------------GameBoard------------");
         System.out.println("   0 1 2 3 4 5 6 7 8 9");
@@ -144,19 +145,6 @@ public class GameBoard {
     //GB-36-AWS
     public List<Ship> getShips() {
         return ships;
-    }
-    //D.E
-    public boolean isBoardEmpty() {
-        // Iterera genom alla rutor på brädet.
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                // Kontrollera om det finns träffar ('X') eller missar ('O') på brädet.
-                if (board[i][j] == 'X' || board[i][j] == 'O') {
-                    return false; // Brädet är inte tomt.
-                }
-            }
-        }
-        return true; // Brädet är tomt om inga träffar eller missar hittades.
     }
 
 }

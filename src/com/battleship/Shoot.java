@@ -26,8 +26,8 @@ public class Shoot {
 
     static Random random = new Random();
 
-
-    public static String randomShot(GameBoard enemyGameBoard ) {
+    //GB-49-SA, ändra från public till default
+    static String randomShot(GameBoard enemyGameBoard ) {
 
 
 
@@ -61,7 +61,8 @@ public class Shoot {
         }
         return "No valid shot";
     }
-    public static String hitShot(GameBoard enemyGameBoard, String lastHitShot) {
+    //GB-49-SA, ändra från public till default
+    static String hitShot(GameBoard enemyGameBoard, String lastHitShot) {
 
 
         boolean randomShotTaken = false;

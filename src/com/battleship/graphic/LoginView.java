@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,29 +14,32 @@ import javafx.stage.Stage;
 //GB-15-SA
 public class LoginView extends Application{
 
-    public Stage window;
+    //Skapar nodes och variabler här uppe
+    //GB-49-SA, ändra från public till default
+    Stage window;
+    Scene startScene;
 
-    public Scene loginView;
     private Button clientButton;
     private Button serverButton;
 
-    public Image startBackground = new Image("file:recourses/images/ship.jpg");
+    Image startBackground = new Image("file:recourses/images/ship.jpg");
     //Credit "Dorian Mongel" på unsplash
     // https://unsplash.com/photos/white-and-black-ship-5Rgr_zI7pBw
 
     private final Text choosePlayer = new Text("Choose player");
     private final Text titel = new Text("Battleship");
 
-    public final int windowSizeHeight = 700; // 1080, debug-SA, ändra fönster storleken
-    public final int windowSizeWidth = 1450; // 1920
+    //GB-49-SA, ändra från public till default
+    final int windowSizeHeight = 700; // 1080, debug-SA, ändra fönster storleken
+    final int windowSizeWidth = 1450; // 1920
 
-    public final int COLUMN = 25;
+    final int COLUMN = 25;
 
     @Override//GB-15-SA
     public void start(Stage primaryStage) throws Exception {
-        //Sätter primaryStage i window, gör att fönstrets storlek inte går att ändra och anger titel
+        //Sätter primaryStage i window
         window = primaryStage;
-        //window.setResizable(false);
+        window.setResizable(false);
         window.setTitle("Login View");
 
         //Klasser för sceneClient och sceneServer
@@ -46,8 +48,8 @@ public class LoginView extends Application{
 
 
 //----------------------------------------------------------------------------------------------------------------------
+        //Startsida
         //Ändrar utseende text, buttons
-        //Start
         titel.getStyleClass().add("titel-big");
         choosePlayer.getStyleClass().add("titel-small");
 
@@ -69,28 +71,21 @@ public class LoginView extends Application{
         //Action för knapparna
         clientButton.setOnAction(e->{
             System.out.println("Player 1");
-            //Lägg in att användaren får skriva in localhost och port
-            //New Scene
             //GB-37-SA, la till Platform.runLater
             Platform.runLater(()->{
-                window.setScene(sceneClient);
+                window.setScene(sceneClient);//Ny scene
             });
-
-            //window.setFullScreen(true);
         });
 
         serverButton.setOnAction(e->{
             System.out.println("Player 2");
             //GB-37-SA, la till Platform.runLater
             Platform.runLater(()->{
-                window.setScene(sceneServer);
+                window.setScene(sceneServer);//Ny scene
             });
-
-            //window.setFullScreen(true);
         });
 
-
-        //Förhindrar att fönstret stängs utan möjlighet att gå tillbaka
+        //Metod closeProgram för close knapp och om användaren klickar på krysset
         close.setOnAction(e->{
             e.consume();
             closeProgram();
@@ -104,24 +99,25 @@ public class LoginView extends Application{
 
         //Start-scene
         //Skapar gridpane
-        GridPane start = new GridPane();
-        start.setPadding(new Insets(10));
-        start.setVgap(8);
-        start.setHgap(10);
+        GridPane startGridPane = new GridPane();
+        startGridPane.setPadding(new Insets(10));
+        startGridPane.setVgap(8);
+        startGridPane.setHgap(10);
 
-        //Lägger till all Nodes på gridpane "start"
-        start.getChildren().addAll(titel, choosePlayer, clientButton, serverButton, close);
+        //Lägger till all Nodes på gridpane "startGridPane"
+        startGridPane.getChildren().addAll(titel, choosePlayer, clientButton, serverButton, close);
 
         //Sätter platser för alla Nodes
+        //Text
         GridPane.setConstraints(titel, COLUMN,13);
         GridPane.setConstraints(choosePlayer, COLUMN,15);
-
+        //Knappar
         GridPane.setConstraints(clientButton, COLUMN, 17);
         GridPane.setConstraints(serverButton, COLUMN, 19);
         GridPane.setConstraints(close, COLUMN, 25);
 
-        //Backgrund för gridpaneen
-        start.setBackground(
+        //Background för "startGridPane"
+        startGridPane.setBackground(
                 new Background(
                         new BackgroundImage(
                                 startBackground,
@@ -133,24 +129,19 @@ public class LoginView extends Application{
                 )
         );
 
-        //Skapar scenen med gridpane och fönsterstorlek
-        loginView = new Scene(start, windowSizeWidth,windowSizeHeight);
+        //Skapar scenen med gridpane och fönsterstorlekarna
+        startScene = new Scene(startGridPane, windowSizeWidth,windowSizeHeight);
         //Stil på scenen
-        loginView.getStylesheets().add("com/battleship/graphic/BattleShip.css");
+        startScene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
-//----------------------------------------------------------------------------------------------------------------------
-        //Ställer in så att fönstret är helskärm och inte går att ändra på
-        //window.setFullScreen(true);
-        //window.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-
-
-        window.setScene(loginView);
+        //Sätter scenen för Stagen
+        window.setScene(startScene);
         window.show();
-
 
     }
 
 //----------------------------------------------------------------------------------------------------------------------
+
 //Metoder
     //GB-15-SA
     //Den skickar tillbaka om användaren verkligen vill stäga programmet eller inte, anger svar i ConfirmBox klassen
@@ -161,28 +152,12 @@ public class LoginView extends Application{
             window.close();
         }
     }
-    //GB-15-SA
-    //Kollar om porten användaren skrivir in är en Int och om den är över 1024 vilket är portar som redan används
-/*                    public boolean isInt(TextField input, String message){
-                        try{
-                            int port = Integer.parseInt(input.getText());
-                            if(port<1024){
-                                System.out.println("Port not available");
-                                return false;
-                            } else {
-                                System.out.println("Port is: " + message);
-                                return true;
-                            }
 
-                        }catch (NumberFormatException e){
-                            System.out.println(message + " is not a number");
-                            return false;
-
-                        }
-                    }*/
+    //GB-49-SA, ändra från public till default
+    //GB-15-SA hade skrivit tidigare version. Metoden, inparametrarna, return true/false, parseInt, port < 1024.
     //GB-34-AA
     //Uppdaterar metoden så att den kontrollerar antal tecken och att det är siffror mellan 1025-9999.
-    public boolean isInt(TextField input, String message) {
+    boolean isInt(TextField input, String message) {
         String textInput = input.getText().trim();
         if (textInput.length() == 4 && textInput.matches("\\d+") ) { //kontrollerar om strängen består av 4 siffror
             int port = Integer.parseInt(input.getText());
@@ -199,9 +174,10 @@ public class LoginView extends Application{
         }
     }
 
+    //GB-49-SA, ändra från public till default
     //GB-15-SA
     //Skickar med vilken spelare det är
-    public String whichPlayer(int player){
+    String whichPlayer(int player){
         if(player == 1){
             return "Player 1";
         } else if (player == 2) {

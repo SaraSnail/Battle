@@ -18,7 +18,7 @@ public class AlertBox {
     //GB-34-AA
     public static void display(String title, String messange){
         Stage window = new Stage(); //nytt fönster
-        window.initModality(Modality.APPLICATION_MODAL); //Gör att Fönstret måste klickas ner innan anv. kan göra något annat på skrämen
+        window.initModality(Modality.APPLICATION_MODAL); //Gör att Fönstret måste klickas ner innan anv. kan göra något annat på skärmen
         window.setTitle(title); //titel på fönstret
 
         //samma som ConfirmBox

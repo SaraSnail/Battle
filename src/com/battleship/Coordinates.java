@@ -8,16 +8,18 @@ public class Coordinates {
     private int row;
     private int col;
 
+    //GB-49-SA, ändra från public till default
     //GB-26-SA
-    public Coordinates(int col, int row) {
+    Coordinates(int col, int row) {
         this.col = col;
         this.row = row;
     }
 
+    //GB-49-SA, ändra från public till default
     //GB-26-SA
-    public static Coordinates getValueAtCoordinates(String message) {
+    static Coordinates getValueAtCoordinates(String message) {
         List<Character> letters = new ArrayList<Character>();
-        //Kanske ska ha lower case?
+        //Lista på bokstäver a-j
         letters.add('a');//0
         letters.add('b');//1
         letters.add('c');//2
@@ -32,27 +34,26 @@ public class Coordinates {
         //Får in typ "i shot 4b" och delar upp den med mellanslag, så vi får 3 arrayer
         String[] splitMessage = message.split(" ");
 
-        //Tar sen storleken på arrayen -1, för arrayen är storlek 3 men sista array elementet är på plats 2
+        //Tar sista arrayen och sätter i coordinates
         String coordinates = splitMessage[splitMessage.length - 1];
 
-        int boardSize = 10;// Spelplanen är 10x10, börjar på 0 och A och går till 9 och J
+        int boardSize = 10;// Spelplanen är 10x10, A-J, 0-9
 
-        //Tar char på plats 0 och sätter det som row. I ex 4b är 4:ran row, gör om det från char till ett siffer tal
+        //Tar char på plats 0 och sätter det som row
         int col  = Character.getNumericValue(coordinates.charAt(0));
 
-        //Tar char på plats 1 som ska bli column. I ex 4b är b column. Gör om till LowerCase så det stämmer med listan
+        //Tar char på plats 1 som ska bli column. Gör om till LowerCase så det stämmer med listan
         char letter = coordinates.toLowerCase().charAt(1);
 
-        //Tar listan och den bokstav som är den samma på listan dens index säts som column
+        //Tar listan och den bokstav som är den samma på listan dens index siffra säts som column
         int row = letters.indexOf(letter);
 
-        //Kollar att row och col är inom board storleken
-        //Så om row eller col är mindre än 0 eller större eller lika som boardSize (10) ska den kasta "IllegalArgumentException"
+        //Kollar att row och col är inom board storleken kasta annars "IllegalArgumentException"
         if(row < 0 || row >= boardSize || col < 0 || col >= boardSize){
             throw new IllegalArgumentException("Coordinates out of bounds");
         }
 
-        //Skickar tillbaka det som finns på koordinaterna
+        //Skapar Coordinates objekt med dessa col och row
         return new Coordinates(col, row);
     }
 

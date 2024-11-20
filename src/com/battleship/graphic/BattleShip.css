@@ -4,7 +4,7 @@
     -fx-font-family: "Comic Sans MS";
 }
 .titel-big{
-    -fx-font-size: 70;/*debug-SA ändra storlek*/
+    -fx-font-size: 70;/*debug-SA ändra storlek till mindre*/
     -fx-font-family: Broadway;
     -fx-fill: #2c2a4a;
 }
@@ -35,7 +35,7 @@
     -fx-text-fill: #ffffff;
     -fx-border-radius: 6;
 }
-.background-blue{
+.background-blue{/*Gradient bakgrund som går från ljus till mörk, toppen till botten*/
     -fx-background-color: linear-gradient(to bottom, #0077b6, #03045e);
 }
 /*GB-36-AWS*/

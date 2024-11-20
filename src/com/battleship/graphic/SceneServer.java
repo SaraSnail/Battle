@@ -2,9 +2,6 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -15,30 +12,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.util.Scanner;
 
 //GB-15-SA
 public class SceneServer {
-
-    public static Scene scene;
+    //GB-49-SA, ändra från public till default
+    static Scene scene;
 
     private static Text player2Label;
-
     private static TextField port2;
     private static Button submit2;
     private static Button back2;
-
-    private static Game game;
 
     //GB-47-AA
     private static ComboBox<Double> delay;
     private static double delaySec;
 
+    //GB-49-SA, ändra från public till default
     //GB-15-SA
-    public static Scene getScene(Stage window) {
-        LoginView login = new LoginView();
+    static Scene getScene(Stage window) {
+        LoginView login = new LoginView();//Nå metoder i loginView
 
         //Skapat textField där användaren kan skriva in port
         port2 = new TextField();
@@ -53,7 +45,7 @@ public class SceneServer {
             delaySec = delay.getSelectionModel().getSelectedItem();
         });
 
-        //Knappar för att samla infon från TextFields eller om man vill gå tillbaka
+        //Knappar för att samla info från TextFields eller om man vill gå tillbaka
         submit2 = new Button("Submit");
         submit2.getStyleClass().add("button-standard");
 
@@ -75,10 +67,9 @@ public class SceneServer {
             //SA
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
-                //GB-46-SA
-                back2.setOnAction(Event::consume);
                 //GB-39-SA, fick hjälp av Micke
                 Platform.runLater(WaitToConnect::display);
+                window.setTitle(login.whichPlayer(2));
                 startThread(window, login);
 
             } else if (!login.isInt(port2, port2.getText())) {
@@ -89,10 +80,9 @@ public class SceneServer {
             }
         });
 
-        //SA
-        //Går tillbaka till start
+        //SA. Går tillbaka till start
         back2.setOnAction(e->{
-            goTo(login, window);
+            goBack(login, window);
         });
 
         //Scene-Server
@@ -145,11 +135,12 @@ public class SceneServer {
             try {
                 //SA
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                back2.setOnAction(Event::consume);
                 port2.clear();
-                Game game = new Game(communicationHandler, false, login);
+                //GB-49-SA, tog bort LoginView som inparameter
+                Game game = new Game(communicationHandler, false);
                 game.setDelay(delaySec); //GB-47-AA
                 game.createBoards();
-                //game.startGame();
 
                 //GB-18-SA
                 try {
@@ -160,7 +151,7 @@ public class SceneServer {
                     Platform.runLater(()-> window.setScene(view));
                     Platform.runLater(WaitToConnect::close);
 
-                    //AA flyttade ner startGame
+                    //AA
                     game.startGame();
 
 
@@ -173,19 +164,16 @@ public class SceneServer {
         });
 
         threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-        threadServer.start();
+        threadServer.start();//AA
     }
 
-    //GB-15-SA
-    //Om man vill gå tillbaka
-    //GB-18-SA, bytte från goBack till goTo
-    private static void goTo(LoginView login, Stage window) {
+    //GB-15-SA. Om man vill gå tillbaka
+    private static void goBack(LoginView login, Stage window) {
         //GB-37-SA, la till Platform.runLater
         Platform.runLater(()->{
             try{
                 //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
                 login.start(window);
-                //window.setFullScreen(true);
 
             }catch (Exception exception){
                 exception.printStackTrace();

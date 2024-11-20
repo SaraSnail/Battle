@@ -2,8 +2,7 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
-import javafx.animation.PauseTransition;
-import javafx.application.Application;
+
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -14,15 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.net.ConnectException;
-import java.net.Socket;
-import java.util.Scanner;
 
 //GB-15-SA
 public class SceneClient {
-    public static Scene scene;
+    //GB-49-SA, ändra från public till default
+    static Scene scene;
 
     private static TextField host;
     private static TextField port1;
@@ -36,8 +33,9 @@ public class SceneClient {
 
 
     //GB-15-SA
-    public static Scene getScene(Stage window) {
-        LoginView login = new LoginView();
+    //GB-49-SA, ändra getScene från public till default
+    static Scene getScene(Stage window) {
+        LoginView login = new LoginView();//SA, så man kan nå metoder i LoginView
 
         //Skapat textField där användaren kan skriva in host och port
         host = new TextField();
@@ -76,11 +74,9 @@ public class SceneClient {
                 return;
             }
 
-
+            //SA
             if(login.isInt(port1, port1.getText())){
-                //GB-46-SA
-                back1.setOnAction(Event::consume);
-
+                window.setTitle(login.whichPlayer(1));//GB-49-SA
                 //GB-39-SA, hjälp av Micke. Skapar Thread i en metod
                 startThread(window, login);
 
@@ -96,13 +92,10 @@ public class SceneClient {
 
         });
 
-        //SA
-        //Går tillbaka till start
+        //SA. Går tillbaka till start
         back1.setOnAction(e->{
            goBack(login, window);
-
         });
-
 
 
         //Scene-Client
@@ -148,6 +141,7 @@ public class SceneClient {
 
         return scene;
     }
+
     //GB-39-SA, fick hjälp av Micke. Skapar tråden i en metod istället
     private static void startThread(Stage window, LoginView login) {
         //GB-39-SA, gav Thread ett namn
@@ -159,14 +153,14 @@ public class SceneClient {
                 //GB-34-AA (try-catch - AA skrev catch connection refused)
                 try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
                     //SA
+                    back1.setOnAction(Event::consume);
                     host.clear();
                     port1.clear();
 
-                    Game game = new Game(communicationHandler, true, login);
+                    //GB-49-SA, tog bort LoginView som inparameter
+                    Game game = new Game(communicationHandler, true);
                     game.setDelay(delaySec); //GB-47-AA
                     game.createBoards();
-                    //game.startGame();
-
 
                     //GB-18-SA
                     try{
@@ -179,14 +173,17 @@ public class SceneClient {
 
                         game.startGame();
 
+                        //AA
                     }catch(Exception ex){
                         ex.printStackTrace();
                     }
-
+                //AA
                 } catch (ConnectException ex) {
                     // Om ConnectionRefusedException uppstår, visa en alertbox
                     System.out.println("Connection refused!");
-                    AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                    Platform.runLater(()->{
+                        AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                    });
                     host.clear();
                     port1.clear();
                 } catch (Exception exep) {
@@ -198,19 +195,18 @@ public class SceneClient {
             }
         });
         threadClient.setDaemon(true);//GB-39-SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-        threadClient.start();
+        threadClient.start();//AA
     }
 
 
     //GB-15-SA
-    //Om man vill gå tillbaka
+    //Om man vill gå tillbaka till loginView
     private static void goBack(LoginView login, Stage window) {
         //GB-37-SA, la till Platform.runLater
         Platform.runLater(()->{
             try{
                 //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
                 login.start(window);
-                //window.setFullScreen(true);
 
             }catch (Exception exception){
                 exception.printStackTrace();

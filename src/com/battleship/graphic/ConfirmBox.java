@@ -10,8 +10,9 @@ import javafx.stage.Stage;
 
 //GB-15-SA
 public class ConfirmBox {
-    //Kommar samla svaret användaren väljer här
-    public static boolean answer;
+    //Kommer samla svaret användaren väljer här
+    //GB-49-SA, ändra från public till default
+    static boolean answer;
 
     //GB-15-SA
     public static boolean display(String titel, String message){
@@ -20,7 +21,7 @@ public class ConfirmBox {
         //Man ska inte kunna interagera med spelet medan detta fönstret är öppet
         window.initModality(Modality.APPLICATION_MODAL);
 
-        //Titel och storlek på fönstret
+        //Titel (inparameter) och storlek på fönstret
         window.setTitle(titel.toUpperCase());
         window.setMinWidth(400);
         window.setMinHeight(300);
@@ -39,12 +40,12 @@ public class ConfirmBox {
 
         //Action för knapparna
         yesButton.setOnAction(e->{
-            answer = true;
+            answer = true;//Vill stänga spelet
             window.close();
         });
 
         noButton.setOnAction(e->{
-            answer = false;
+            answer = false;//vill INTE stänga spelet
             window.close();
         });
 
@@ -65,6 +66,7 @@ public class ConfirmBox {
         window.setScene(scene);
         //Ska vänta
         window.showAndWait();
+
         //Ger tillbaka svar från knapparna till metoden i LoginView
         return answer;
     }

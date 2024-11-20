@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.ConnectException;
 
 public class CommunicationHandler implements AutoCloseable{
-    //GB-34-AA  implements Auto.... För att kunna använda tryCatch i SceneClient om det inte finns någon server
+    //GB-34-AA implements AutoCloseable för att kunna använda tryCatch i SceneClient om det inte finns någon server
 
     private String name; // kan skrivas ut på skärmen över kartan
     private String host;
@@ -17,14 +17,6 @@ public class CommunicationHandler implements AutoCloseable{
     private ServerSocket serverSocket;
     private BufferedReader reader;
     private PrintWriter writer;
-
-
-
-    //GB-26-SA
-    //Tom constructor för testning
-    public CommunicationHandler(){
-
-    }
 
 
     //BG-10-AA (konstruktorn) //GB-34-AA (throws...)
@@ -52,13 +44,6 @@ public class CommunicationHandler implements AutoCloseable{
             this.writer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-/*            String message = "hallo server!";
-            writer.println(message);
-            System.out.println("sent: " + message);*/
-
-            handleSendingMessages("hej serven!"); // funkar
-
-
             //GB-34-AA (connectionExpectation)
         } catch (java.net.ConnectException e) {
             throw new ConnectException("Connection refused: " + e.getMessage());
@@ -82,14 +67,6 @@ public class CommunicationHandler implements AutoCloseable{
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
-/*            String message;
-            while ((message = reader.readLine()) != null) {
-                System.out.println(message);
-            }*/
-
-            String me = handleIncomingMessages();
-            System.out.println(me); // funkar!
-
 
         } catch (Exception e) {
             System.out.println("Could not start server on port " + this.port );
@@ -97,13 +74,13 @@ public class CommunicationHandler implements AutoCloseable{
         }
     }
 
+    //GB-49-SA, ändra från public till default
     //GB-10-AA
-    public String handleIncomingMessages (){
+    String handleIncomingMessages (){
         String incomingMessage;
         try{
             while ((incomingMessage = String.valueOf(reader.readLine())) != null){
-                System.out.println("Mottaget: " + incomingMessage); // ska nog göras om och flyttas till grafisk vy
-                //Uppdatera spel, vet ej om metoden ska ligga här eller på annan plats
+                System.out.println("Mottaget: " + incomingMessage);
                 return incomingMessage;
             }
 
@@ -113,11 +90,12 @@ public class CommunicationHandler implements AutoCloseable{
         return null;
     }
 
+    //GB-49-SA, ändra från public till default
     //GB-10-AA
-    public void handleSendingMessages(String message){
+    void handleSendingMessages(String message){
         if (message != null && !message.trim().isEmpty()){
             writer.println(message);
-            //Uppdatera egen spelplan (vet ej om metoden ska ligga här eller på annan plats)
+            System.out.println("Sending message: " + message);//SA
         }
     }
 

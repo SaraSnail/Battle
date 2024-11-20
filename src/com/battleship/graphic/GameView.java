@@ -21,24 +21,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import java.util.List;
 //GB-14-aws
-public class GameView {//GB-18-SA, tog bort "extends applications"
-    //GB-18-SA, gjorde dem static
+public class GameView {
+    //GB-18-SA, tog bort "extends applications"
+    //GB-18-SA, gjorde variablerna till static
     //aws
-    private static GameBoard myGameBoard;
-    private static GameBoard enemyGameBoard;
     public static AnchorPane myGame;
     public static AnchorPane enemyGame;
 
     //GB-18-SA, la till scene
-    public static Scene scene;
+    static Scene scene;
 
-    //GB-14-aws
-   /* @Override
-    public void start(Stage primaryStage) throws Exception {*/
-    //aws hade skrivit detta som en start metod, GB-18-SA, behövde göra om den till en scene istället
+    //GB-14-aws, hade skrivit detta med en start och med en Stage. GB-18-SA, gjorde om den till en scene istället
 
-                                                //GB-42-SA, la till gameboard som inparametrar så vi når rätt spelplaner
-    public static Scene gameView (Stage window, GameBoard myGameBoard, GameBoard enemyGameBoard){
+    //GB-49-SA, ändra från public till default
+    //GB-42-SA, la till gameboard som inparametrar så vi når rätt spelplaner istället för att GameBoard skapas i denna klass
+    static Scene gameView (Stage window, GameBoard myGameBoard, GameBoard enemyGameBoard){
         //GB-44-AWS
         myGame = new AnchorPane();        // Min Spelplan
         enemyGame = new AnchorPane();    // Motståndare Spelplan
@@ -82,25 +79,17 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
         //GB-18-SA, gjorde att den "skapas" utanför metoden
         scene = new Scene(stack, 1450, 700);
+        //GB-18-SA, tog bort setScene och setTitel då den inte är en Stage längre
 
-        //GB-18-SA, kommenterade ut detta
-        /*
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("BattleShips");
-
-
-        primaryStage.show();*/
         stack.getStylesheets().add("com/battleship/graphic/BattleShip.css");
-        //myGameBoard.displayBoard();
-
-
 
         //GB-18-SA
         return scene;
     }
 
+    //GB-49-SA, ändra från public till private
     //GB-14-aws
-    public static void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
+    private static void battleGroundFX(AnchorPane boardPane, GameBoard board, boolean isEnemy) {
         char[][] gameBoardFX = board.getBoard();
         //GB-36-AWS
         Image carrierImage = new Image("file:recourses/images/Hangarfartyg.png");       //PNGEGG
@@ -139,14 +128,14 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         }
 
         //GB-18-SA.part3
-        Image fire = new Image("file:recourses/images/fire.png");
         //Icon by Freepik
+        Image fire = new Image("file:recourses/images/fire.png");
         // https://www.freepik.com/icon/bonfire_4646371#fromView=keyword&page=3&position=67&uuid=d9fe8eef-aa10-481f-9a66-a65a1043582a
         ImagePattern fireImage = new ImagePattern(fire);
         //Gör om till ImagePattern så jag kan sätta den på en rektangel
 
-        Image water = new Image("file:recourses/images/water.png");
         //Icon by Freepik
+        Image water = new Image("file:recourses/images/water.png");
         // https://www.freepik.com/icon/splash_1027308
         ImagePattern waterImage = new ImagePattern(water);
 
@@ -162,33 +151,29 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
                 if(isEnemy){
                     if (gameBoardFX[r][c] == 'X') {      //Miss
-                        //GB-18-SA.part3
-                        cell.setFill(waterImage);//Miss, bild av vatten på den rektangeln
+                        //GB-18-SA.part3. Ändrade till bild istället för halvgenomskinlig färg som aws gjort
+                        cell.setFill(waterImage);//Bild av vatten på den rektangeln
 
                         //aws
-                        //cell.setFill(Color.color(0.0,1.0,1.0,0.5));         //Färgerna kommer att ändras/bytas till bilder.
                     } else if (gameBoardFX[r][c] == '0') {      //Träff
-                        //GB-18-SA.part3
-                        cell.setFill(fireImage);//Träff, bild av eld på den rektangeln
+                        //GB-18-SA.part3. Ändrade till bild istället för halvgenomskinlig färg som aws gjort
+                        cell.setFill(fireImage);//Bild av eld på den rektangeln
 
                         //aws
-                        //cell.setFill(Color.color(0.8,0.6,0.6,0.5));         //Färgerna kommer att ändras/bytas till bilder.
                     } else{
                         continue;
                     }
             } else{
                     if (gameBoardFX[r][c] == 'X') {      //Miss
                         //GB-18-SA.part3
-                        cell.setFill(waterImage);//Miss, bild av vatten på den rektangeln
+                        cell.setFill(waterImage);//Bild vatten
 
                         //aws
-                    //cell.setFill(Color.color(0.0,0.0,1.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
                 } else if (gameBoardFX[r][c] == '0') {      //Träff
                         //GB-18-SA.part3
-                        cell.setFill(fireImage);//Träff, bild av eld på den rektangeln
+                        cell.setFill(fireImage);//Bild eld
 
                         //aws
-                        //cell.setFill(Color.color(1.0,0.0,0.0,0.5));             //Färgerna kommer att ändras/bytas till bilder.
                 } else{
                     continue;
                 }
@@ -201,7 +186,6 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     }
     //GB-36-AWS
     private static void gameBoardGrid(AnchorPane boardPane, GameBoard board,boolean isEnemy){
-        char[][] gameBoardGrid = board.getBoard();
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {
@@ -274,7 +258,7 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
         gameBoardGrid(myGame, myGameBoard,false);
 
     }
-
+    //aws
     public static void updateEnemyGameView(GameBoard enemyGameBoard, AnchorPane enemyGame ){
         enemyGame.getChildren().clear();
 
@@ -320,37 +304,6 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
 
     }
 
-    //GB-18-SA, kan ta bort om aws gjort något som fungerar
-    /*
-    public static void updateMapFX(int row, int col, GameBoard gameBoard){
-        char[][] boardFX = gameBoard.getBoard();
-        Image fire = new Image("file:recourses/images/fire.png");
-        //Designed by Freepik
-
-        for (int r = 0; r < 10; r++) {
-            for (int c = 0; c < 10; c++) {
-                Rectangle cell = new Rectangle(50, 50);
-                cell.setX(c * 50);
-                cell.setY(r * 50);
-
-
-                try {
-                    if (boardFX[row][col] == 'X') {//A miss
-                        //cell.setFill(new ImagePattern(fire));//Kanske fungerar?
-                        cell.setFill(Color.BLUE);
-                    } else if (boardFX[row][col] == '0') {//A hit
-                        cell.setFill(Color.RED);
-                    } else {
-                        System.out.println("No X or 0");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                }
-                //GB-SA-18, har ingen borderPane eller liknande
-            }
-        }
-    }*/
 
 }
 
