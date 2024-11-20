@@ -135,7 +135,7 @@ public class Shoot {
 
         return "No valid shot";
     }
-    public void String (String lastHitShot){
+    public void markDiagonaly(String lastHitShot){
 
         String xString = lastHitShot.substring(0, lastHitShot.length() -1);
         String yString = lastHitShot.substring(lastHitShot.length() - 1);
