@@ -29,7 +29,7 @@ public class Shoot {
     //GB-49-SA, ändra från public till default
     static String randomShot(GameBoard enemyGameBoard ) {
 
-        char[][] enemyBoard = enemyGameBoard.getBoard();
+
 
 
         boolean randomShotTaken = false;
@@ -40,7 +40,6 @@ public class Shoot {
 
             int randomX = random.nextInt(10);
             int randomY = random.nextInt(10);
-
 
 
 
@@ -65,7 +64,7 @@ public class Shoot {
     //GB-49-SA, ändra från public till default
     static String hitShot(GameBoard enemyGameBoard, String lastHitShot) {
 
-        char[][] enemyBoard = enemyGameBoard.getBoard();
+
         boolean randomShotTaken = false;
 
         int attempts = 0;
@@ -87,7 +86,7 @@ public class Shoot {
 
             int randomSpace = random.nextInt(4);
 
-            int randomX = lastShotX + fireFieldX[randomSpace];
+            int randomX = lastShotX + fireFieldX[randomSpace]+1;
             int randomY = lastShotY + fireFieldY[randomSpace];
 
 
@@ -95,8 +94,6 @@ public class Shoot {
                 attempts++;
                 continue;
             }
-
-
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX );
@@ -107,7 +104,6 @@ public class Shoot {
                     randomShotTaken = true;
                     return result;
                 }
-
 
             attempts++;
         }
