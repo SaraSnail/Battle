@@ -94,8 +94,6 @@ public class SceneClient {
                 host.clear();
             }
 
-
-
         });
 
         //SA
@@ -165,7 +163,7 @@ public class SceneClient {
                     port1.clear();
 
                     Game game = new Game(communicationHandler, true, login);
-                    game.setDelay(delaySec);
+                    game.setDelay(delaySec); //GB-47-AA
                     game.createBoards();
                     //game.startGame();
 

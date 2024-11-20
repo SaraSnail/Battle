@@ -28,8 +28,6 @@ public class Game {
     //GB-47-AA
     private double delay;
 
-    //private boolean iLose; - använt för testning
-
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
 
@@ -94,8 +92,6 @@ public class Game {
         }*/
 
         System.out.println("Game started!");
-
-
         int counter = 1;
 
         //Denna loop körs till game-over.
@@ -225,7 +221,7 @@ public class Game {
         System.out.println("Game over!");
     }*/
 
-    //GB-31-AA //GB-47-AA
+    //GB-31-AA //GB-47-AA (inport från view)
     private void delayInSec() {
         double millisecond = delay * 1000;
         long milisec = (long) millisecond;
@@ -490,7 +486,7 @@ public class Game {
             return "m";
         }
 
-//GB-26-SA
+        //GB-26-SA
         private void updateMyMap (String message){
 
             //Får in typ "i shot 4b" i message
@@ -538,7 +534,7 @@ public class Game {
             }
         }
 
-//GB-18-SA.part2
+        //GB-18-SA.part2
         private void updateEnemyMap (String message){
             //Får in m/h/s eller null
             System.out.println("I shot last at: " + message);
@@ -683,11 +679,11 @@ public class Game {
             this.enemyGameBoard = enemyGameBoard;
         }
 
-    public double getDelay() {
+        public double getDelay() {
         return delay;
-    }
+        }
 
-    public void setDelay(double delay) {
+        public void setDelay(double delay) {
         this.delay = delay;
-    }
+        }
 }

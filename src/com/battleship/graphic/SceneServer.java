@@ -81,9 +81,6 @@ public class SceneServer {
                 Platform.runLater(WaitToConnect::display);
                 startThread(window, login);
 
-
-
-
             } else if (!login.isInt(port2, port2.getText())) {
                 System.out.println("Can't play at that port");
                 //GB-35-AA (AlertBox - meddelandet)
@@ -150,7 +147,7 @@ public class SceneServer {
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
                 Game game = new Game(communicationHandler, false, login);
-                game.setDelay(delaySec);
+                game.setDelay(delaySec); //GB-47-AA
                 game.createBoards();
                 //game.startGame();
 
