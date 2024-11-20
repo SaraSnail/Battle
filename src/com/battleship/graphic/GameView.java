@@ -177,7 +177,6 @@ public class GameView {
     }
     //GB-36-AWS
     private static void gameBoardGrid(AnchorPane boardPane, GameBoard board,boolean isEnemy){
-        char[][] gameBoardGrid = board.getBoard();
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 10; c++) {

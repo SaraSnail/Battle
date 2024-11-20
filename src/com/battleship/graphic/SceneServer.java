@@ -23,8 +23,6 @@ public class SceneServer {
     private static Button submit2;
     private static Button back2;
 
-    private static Game game;
-
     //GB-47-AA
     private static ComboBox<Double> delay;
     private static double delaySec;

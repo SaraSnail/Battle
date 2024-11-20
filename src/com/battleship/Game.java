@@ -50,28 +50,9 @@ public class Game {
         enemyGameBoard = new GameBoard(false);
     }
 
-  /*  private boolean waitForReady() {
-        String readySignal = player.handleIncomingMessages();
-        if (readySignal.equals("ready")) {
-           return true;
-        }
-        return false;
-    }*/
-
-  /*  private void sendReady() {
-        player.handleSendingMessages("ready");
-    }*/
-
 
     //GB-13-AA //GB-25-AA //GB-30-AA //GB-43-AA
     public void startGame() {
-        //createBoards();
-
-       /* if (!isClient) {
-            waitForReady();
-        } else {
-            sendReady();
-        }*/
 
         System.out.println("Game started!");
         int counter = 1;
@@ -132,7 +113,7 @@ public class Game {
         double millisecond = delay * 1000;
         long milisec = (long) millisecond;
         try {
-            Thread.sleep(500); //Vänta 0.5 sek / AWS
+            Thread.sleep(milisec);
             //GB-31-AA
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -143,8 +124,6 @@ public class Game {
     private void firstMove(CommunicationHandler player) {
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
-        String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
-        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
         myShotCoordinates = Shoot.randomShot(enemyGameBoard);
         myMove = "i " + myMove + myShotCoordinates;
