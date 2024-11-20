@@ -88,14 +88,17 @@ public class Shoot {
             lastShotX = Integer.parseInt(xString) - 1;
             lastShotY = yString.charAt(0) - 'a';
 
-            if (lastShotX - 1 >= 0 && lastShotY - 1 >= 0)
-                shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY - 1 + 'a'));
-            if (lastShotX + 1 <= 9 && lastShotY - 1 >= 0)
-                shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY - 1 + 'a')); // Top-right
-            if (lastShotX - 1 >= 0 && lastShotY + 1 <= 9)
-                shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY + 1 + 'a')); // Bottom-left
-            if (lastShotX + 1 <= 9 && lastShotY + 1 <= 9)
-                shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY + 1 + 'a')); // Bottom-right
+
+            String shot1=(Integer.toString(lastShotX - 1) + yAxis[(lastShotY-1)]);
+            String shot2=(Integer.toString(lastShotX + 1) + yAxis[(lastShotY-1)]);
+            String shot3=(Integer.toString(lastShotX + 1) + yAxis[(lastShotY+1)]);
+            String shot4=(Integer.toString(lastShotX - 1) + yAxis[(lastShotY+1)]);
+
+            shotsFired.add(shot1);
+            shotsFired.add(shot2);
+            shotsFired.add(shot3);
+            shotsFired.add(shot4);
+            System.out.println("Shot1: "+shot1+"Shot2: "+shot2+"Shot3: "+shot3+"Shot4: "+shot4);
 
 
             int randomSpace = random.nextInt(4);
@@ -135,24 +138,7 @@ public class Shoot {
 
         return "No valid shot";
     }
-    public void markDiagonaly(String lastHitShot){
 
-        String xString = lastHitShot.substring(0, lastHitShot.length() -1);
-        String yString = lastHitShot.substring(lastHitShot.length() - 1);
-
-        lastShotX = Integer.parseInt(xString) - 1;
-        lastShotY = yString.charAt(0) - 'a';
-
-        if (lastShotX - 1 >= 0 && lastShotY - 1 >= 0)
-            shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY - 1 + 'a'));
-        if (lastShotX + 1 <= 9 && lastShotY - 1 >= 0)
-            shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY - 1 + 'a'));
-        if (lastShotX - 1 >= 0 && lastShotY + 1 <= 9)
-            shotsFired.add((lastShotX - 1) + "" + (char) (lastShotY + 1 + 'a'));
-        if (lastShotX + 1 <= 9 && lastShotY + 1 <= 9)
-            shotsFired.add((lastShotX + 1) + "" + (char) (lastShotY + 1 + 'a'));
-
-    }
 
 
 }
