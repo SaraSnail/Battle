@@ -3,12 +3,14 @@ package com.battleship.graphic;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+
+import java.awt.*;
 
 //GB-34-AA
 public class AlertBox {
@@ -42,7 +44,11 @@ public class AlertBox {
         Scene scene = new Scene(layout);
         scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
         window.setScene(scene);
+
+
         window.showAndWait(); // för att koden efter alertboxen ska pausas tills den klickas ner innan den kan fortsätta
+
+
 
 
     }

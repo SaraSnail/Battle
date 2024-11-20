@@ -5,8 +5,6 @@ import com.battleship.graphic.GameView;
 import com.battleship.graphic.LoginView;
 import javafx.application.Platform;
 
-import java.util.Arrays;
-
 import static com.battleship.Coordinates.getValueAtCoordinates;
 import static com.battleship.graphic.GameView.enemyGame;
 import static com.battleship.graphic.GameView.myGame;
@@ -27,8 +25,8 @@ public class Game {
     private boolean gameOver;
     private boolean firstMove;
 
-
-    //private boolean iLose; - använt för testning
+    //GB-47-AA
+    private double delay;
 
     //GB-18-SA, så man kan nå samma Stage i updateGameView
     private LoginView loginView;
@@ -70,32 +68,30 @@ public class Game {
         enemyGameBoard.displayBoard();*/
     }
 
-    private boolean waitForReady() {
+  /*  private boolean waitForReady() {
         String readySignal = player.handleIncomingMessages();
         if (readySignal.equals("ready")) {
-            return true;
+           return true;
         }
         return false;
-    }
+    }*/
 
-    private void sendReady() {
+  /*  private void sendReady() {
         player.handleSendingMessages("ready");
-    }
+    }*/
 
 
     //GB-13-AA //GB-25-AA //GB-30-AA //GB-43-AA
     public void startGame() {
         //createBoards();
 
-        if (!isClient) {
+       /* if (!isClient) {
             waitForReady();
         } else {
             sendReady();
-        }
+        }*/
 
         System.out.println("Game started!");
-
-
         int counter = 1;
 
         //Denna loop körs till game-over.
@@ -121,7 +117,7 @@ public class Game {
             counter++;
         }
         //GB-45-AA
-        System.out.println("Game Over! (game-loopen avslutad.");
+        System.out.println("Game Over! (game-loopen) avslutad.");
         try {
             player.close();
             System.out.println("Socket closed");
@@ -225,12 +221,14 @@ public class Game {
         System.out.println("Game over!");
     }*/
 
-    //GB-31-AA
-    private void waitOneSec() {
+    //GB-31-AA //GB-47-AA (inport från view)
+    private void delayInSec() {
+        double millisecond = delay * 1000;
+        long milisec = (long) millisecond;
         try {
             // Testar ändra från 1 sek till 0.5 sek delay.
             /*Thread.sleep(1000); //vänta 1 sek*/
-            Thread.sleep(500); //Vänta 0.5 sek / AWS
+            Thread.sleep(milisec); //Vänta 0.5 sek / AWS
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -281,7 +279,7 @@ public class Game {
 
         char myShotHitOrMiss = setShotOutcome(enemyMove);
         updateMyMap(enemyMove);
-        waitOneSec();
+        delayInSec();
         Platform.runLater(() -> {
             GameView.updateMyGameView(myGameBoard, myGame);
         });
@@ -303,7 +301,7 @@ public class Game {
             lastMove = myShotHitOrMiss + " " + myMove + lastShot;
             updateEnemyMap(lastMove);
             //AA
-            waitOneSec();
+            delayInSec();
             Platform.runLater(() -> {
                 GameView.updateEnemyGameView(enemyGameBoard, enemyGame);
             });
@@ -488,7 +486,7 @@ public class Game {
             return "m";
         }
 
-//GB-26-SA
+        //GB-26-SA
         private void updateMyMap (String message){
 
             //Får in typ "i shot 4b" i message
@@ -536,7 +534,7 @@ public class Game {
             }
         }
 
-//GB-18-SA.part2
+        //GB-18-SA.part2
         private void updateEnemyMap (String message){
             //Får in m/h/s eller null
             System.out.println("I shot last at: " + message);
@@ -688,4 +686,11 @@ public class Game {
             this.enemyGameBoard = enemyGameBoard;
         }
 
-    }
+        public double getDelay() {
+        return delay;
+        }
+
+        public void setDelay(double delay) {
+        this.delay = delay;
+        }
+}
