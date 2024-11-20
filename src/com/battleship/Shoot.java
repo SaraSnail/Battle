@@ -29,7 +29,7 @@ public class Shoot {
 
     public static String randomShot(GameBoard enemyGameBoard ) {
 
-        char[][] enemyBoard = enemyGameBoard.getBoard();
+
 
 
         boolean randomShotTaken = false;
@@ -40,13 +40,12 @@ public class Shoot {
 
             int randomX = random.nextInt(10);
             int randomY = random.nextInt(10);
-            //char randomCoordinate = enemyBoard[randomX][randomY];
 
 
 
 
 
-            //if(randomCoordinate==' ') {
+
 
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX);
@@ -58,13 +57,13 @@ public class Shoot {
                     return result;
                 }
 
-            //}
+
         }
         return "No valid shot";
     }
     public static String hitShot(GameBoard enemyGameBoard, String lastHitShot) {
 
-        char[][] enemyBoard = enemyGameBoard.getBoard();
+
         boolean randomShotTaken = false;
 
         int attempts = 0;
@@ -95,11 +94,6 @@ public class Shoot {
                 continue;
             }
 
-
-            //char randomSecondShotCoordinate = enemyBoard[randomX][randomY];
-
-
-            /*if (randomSecondShotCoordinate == ' ') {*/
                 String letterCoordinate = Character.toString(yAxis[randomY]);
                 String numberCoordinate = Integer.toString(randomX );
                 String result = numberCoordinate + letterCoordinate;
@@ -109,7 +103,6 @@ public class Shoot {
                     randomShotTaken = true;
                     return result;
                 }
-            //}
 
             attempts++;
         }
