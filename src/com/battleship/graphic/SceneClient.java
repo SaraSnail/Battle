@@ -9,6 +9,7 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -29,6 +30,10 @@ public class SceneClient {
     private static Button back1;
     private static Text player1Label;
 
+    //GB-47-AA
+    private static ComboBox<Double> delay;
+    private static double delaySec;
+
 
     //GB-15-SA
     public static Scene getScene(Stage window) {
@@ -43,6 +48,15 @@ public class SceneClient {
         port1.setPromptText("port");
         port1.setPrefSize(100,20);
 
+        //GB-47-AA
+        delay = new ComboBox<>();
+        delay.setPromptText("Set delay between shots in sec");
+        delay.getItems().addAll( 0.0,0.5, 1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0);
+        delay.setOnAction(event -> {
+            delaySec = delay.getSelectionModel().getSelectedItem();
+        });
+
+        //SA
         //Knappar för att samla infon från TextFields eller om man vill gå tillbaka
         submit1 = new Button("Submit");
         submit1.getStyleClass().add("button-standard");
@@ -80,8 +94,6 @@ public class SceneClient {
                 host.clear();
             }
 
-
-
         });
 
         //SA
@@ -106,14 +118,15 @@ public class SceneClient {
         player1Label.getStyleClass().add("titel-small");
 
         //Sätter alla nodes på gridpane
-        gridPane1.getChildren().addAll(player1Label,host, port1, submit1, back1);
+        gridPane1.getChildren().addAll(player1Label,host, port1,delay, submit1, back1);
 
         //Sätter ut placering på allt
         GridPane.setConstraints(player1Label, login.COLUMN, 15);
         GridPane.setConstraints(host, login.COLUMN, 17);
         GridPane.setConstraints(port1, login.COLUMN, 19);
-        GridPane.setConstraints(submit1, login.COLUMN, 21);
-        GridPane.setConstraints(back1, login.COLUMN,23);
+        GridPane.setConstraints(delay, login.COLUMN, 21);
+        GridPane.setConstraints(submit1, login.COLUMN, 23);
+        GridPane.setConstraints(back1, login.COLUMN,25);
 
         //Sätter bakgrund
         gridPane1.setBackground(
@@ -150,6 +163,7 @@ public class SceneClient {
                     port1.clear();
 
                     Game game = new Game(communicationHandler, true, login);
+                    game.setDelay(delaySec); //GB-47-AA
                     game.createBoards();
                     //game.startGame();
 
