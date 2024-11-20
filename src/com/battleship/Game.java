@@ -24,6 +24,9 @@ public class Game {
     private boolean gameOver;
     private boolean firstMove;
 
+    //GB-47-AA
+    private double delay;
+
     //SA
     private String lastMove;
 
@@ -47,30 +50,30 @@ public class Game {
         enemyGameBoard = new GameBoard(false);
     }
 
-    private boolean waitForReady() {
+  /*  private boolean waitForReady() {
         String readySignal = player.handleIncomingMessages();
         if (readySignal.equals("ready")) {
-            return true;
+           return true;
         }
         return false;
-    }
+    }*/
 
-    private void sendReady() {
+  /*  private void sendReady() {
         player.handleSendingMessages("ready");
-    }
+    }*/
 
 
     //GB-13-AA //GB-25-AA //GB-30-AA //GB-43-AA
     public void startGame() {
-        if (!isClient) {
+        //createBoards();
+
+       /* if (!isClient) {
             waitForReady();
         } else {
             sendReady();
-        }
+        }*/
 
         System.out.println("Game started!");
-
-
         int counter = 1;
 
         //Denna loop körs till game-over.
@@ -89,7 +92,7 @@ public class Game {
             counter++;
         }
         //GB-45-AA
-        System.out.println("Game Over!");
+        System.out.println("Game Over! (game-loopen) avslutad");
         try {
             player.close();
             System.out.println("Socket closed");
@@ -124,8 +127,10 @@ public class Game {
     }
 
 
-    //GB-31-AA
-    private void waitOneSec() {
+    //GB-31-AA //GB-47-AA (inport från view)
+    private void delayInSec() {
+        double millisecond = delay * 1000;
+        long milisec = (long) millisecond;
         try {
             Thread.sleep(500); //Vänta 0.5 sek / AWS
             //GB-31-AA
@@ -138,6 +143,8 @@ public class Game {
     private void firstMove(CommunicationHandler player) {
         String myMove = "shot "; //sträng att bygga på till den färdiga sträng som skickas till motspelaren
         String myShotCoordinates = ""; //sträng med tex "2g" från någon av shoot-metoderna
+        String enemyMove = ""; //Sträng från motspelaren tex "h shot 3c"
+        String enemyHitOrMiss = ""; //sträng från getShotOutCome - "h", "m", "s" eller "game over"
 
         myShotCoordinates = Shoot.randomShot(enemyGameBoard);
         myMove = "i " + myMove + myShotCoordinates;
@@ -156,7 +163,7 @@ public class Game {
 
         char myShotHitOrMiss = setShotOutcome(enemyMove);
         updateMyMap(enemyMove);
-        waitOneSec();
+        delayInSec();
         Platform.runLater(() -> {
             GameView.updateMyGameView(myGameBoard, myGame);
         });
@@ -176,7 +183,7 @@ public class Game {
             lastMove = myShotHitOrMiss + " " + myMove + lastShot;
             updateEnemyMap(lastMove);
             //AA
-            waitOneSec();
+            delayInSec();
             Platform.runLater(() -> {
                 GameView.updateEnemyGameView(enemyGameBoard, enemyGame);
             });
@@ -345,7 +352,7 @@ public class Game {
 
                     //GB-35-AA (Alertbox och .exit())
                     Platform.runLater(() -> {
-                        AlertBox.display("Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
+                        AlertBox.display( "Game Over", "GAME OVER\nYOU WIN!\n\n When you klick OK you vill exit the application ");
                         Platform.exit(); //Stänger ner hela applikationen när spelaren trycker OK!
                     });
 
@@ -390,4 +397,11 @@ public class Game {
             this.enemyGameBoard = enemyGameBoard;
         }
 
-    }
+        public double getDelay() {
+        return delay;
+        }
+
+        public void setDelay(double delay) {
+        this.delay = delay;
+        }
+}

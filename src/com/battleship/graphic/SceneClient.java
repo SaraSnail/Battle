@@ -8,6 +8,7 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -26,6 +27,10 @@ public class SceneClient {
     private static Button back1;
     private static Text player1Label;
 
+    //GB-47-AA
+    private static ComboBox<Double> delay;
+    private static double delaySec;
+
 
     //GB-15-SA
     //GB-49-SA, ändra getScene från public till default
@@ -41,6 +46,15 @@ public class SceneClient {
         port1.setPromptText("port");
         port1.setPrefSize(100,20);
 
+        //GB-47-AA
+        delay = new ComboBox<>();
+        delay.setPromptText("Set delay between shots in sec");
+        delay.getItems().addAll( 0.0,0.5, 1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0);
+        delay.setOnAction(event -> {
+            delaySec = delay.getSelectionModel().getSelectedItem();
+        });
+
+        //SA
         //Knappar för att samla infon från TextFields eller om man vill gå tillbaka
         submit1 = new Button("Submit");
         submit1.getStyleClass().add("button-standard");
@@ -53,7 +67,6 @@ public class SceneClient {
         submit1.setOnAction(e->{
 
             System.out.println("Submit");
-
             //GB-34-AA (if satsen)
             String portText = port1.getText().trim();
             if (portText.isEmpty()){
@@ -70,14 +83,15 @@ public class SceneClient {
                 startThread(window, login);
 
 
+
             }else if (!login.isInt(port1, port1.getText())){
                 System.out.println("Can't play at that port");
-
                 //GB-34-AA (AlertBox - meddelandet)
                 AlertBox.display("Warning", "Invalid port! \nPlease try again!");
                 port1.clear();
                 host.clear();
             }
+
         });
 
         //SA. Går tillbaka till start
@@ -98,15 +112,16 @@ public class SceneClient {
         player1Label.setText("Enter host and port");
         player1Label.getStyleClass().add("titel-small");
 
-        //Sätter alla nodes på gridpane1
-        gridPane1.getChildren().addAll(player1Label,host, port1, submit1, back1);
+        //Sätter alla nodes på gridpane
+        gridPane1.getChildren().addAll(player1Label,host, port1,delay, submit1, back1);
 
         //Sätter ut placering på allt
         GridPane.setConstraints(player1Label, login.COLUMN, 15);
         GridPane.setConstraints(host, login.COLUMN, 17);
         GridPane.setConstraints(port1, login.COLUMN, 19);
-        GridPane.setConstraints(submit1, login.COLUMN, 21);
-        GridPane.setConstraints(back1, login.COLUMN,23);
+        GridPane.setConstraints(delay, login.COLUMN, 21);
+        GridPane.setConstraints(submit1, login.COLUMN, 23);
+        GridPane.setConstraints(back1, login.COLUMN,25);
 
         //Sätter bakgrund
         gridPane1.setBackground(
@@ -125,6 +140,7 @@ public class SceneClient {
         scene = new Scene(gridPane1, login.windowSizeWidth, login.windowSizeHeight);
         scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
 
+
         return scene;
     }
 
@@ -141,8 +157,10 @@ public class SceneClient {
                     //SA
                     host.clear();
                     port1.clear();
+
                     //GB-49-SA, tog bort LoginView som inparameter
                     Game game = new Game(communicationHandler, true);
+                    game.setDelay(delaySec); //GB-47-AA
                     game.createBoards();
 
                     //GB-18-SA
@@ -152,7 +170,8 @@ public class SceneClient {
                         //SA, hjälp av Micke att skriva det kortare
                         Platform.runLater(()->window.setScene(view));
 
-                        //AA, flytta startGame från första tryCatch
+
+
                         game.startGame();
 
                         //AA
