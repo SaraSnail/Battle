@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -289,26 +290,29 @@ public class GameView {//GB-18-SA, tog bort "extends applications"
     public static void showGameOverOverlay(String gameOverMessage) {
         // Skapa overlay med meddelandet och knappen
         Text gameOverText = new Text(gameOverMessage);
+        gameOverText.setTextAlignment(TextAlignment.CENTER);
         gameOverText.getStyleClass().add("titel-small");
 
         Button closeButton = new Button("Exit game");
         closeButton.getStyleClass().add("button-standard");
         closeButton.setOnAction(e -> Platform.exit()); // Stänger fönstret när knappen klickas
 
-        VBox overlayContent = new VBox(10, gameOverText, closeButton);
-        overlayContent.setAlignment(Pos.CENTER);
-        overlayContent.getStyleClass().add("background-blue");
-        overlayContent.setMinSize(200, 150);
+
+
 
         AnchorPane overlay = new AnchorPane();
-        AnchorPane.setTopAnchor(overlayContent, null);
-        AnchorPane.setRightAnchor(overlayContent, null);
-        AnchorPane.setBottomAnchor(overlayContent, null);
-        AnchorPane.setLeftAnchor(overlayContent, null);
+        overlay.setPrefSize(1450,700);
+
+        VBox overlayContent = new VBox(10, gameOverText, closeButton);
+        overlayContent.setAlignment(Pos.CENTER);
+        overlayContent.setPrefSize(200,150);
+        overlayContent.setLayoutX((double) 1450 /2.5);
+        overlayContent.setLayoutY((double) 700 /2.5);
+        overlayContent.getStyleClass().add("background-blue");
+        overlayContent.setStyle("-fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;");
+
         overlay.getChildren().add(overlayContent);
 
-        overlayContent.layoutXProperty().bind(overlay.widthProperty().subtract(overlayContent.widthProperty()).divide(2));
-        overlayContent.layoutYProperty().bind(overlay.heightProperty().subtract(overlayContent.heightProperty()).divide(2));
 
         AnchorPane rootLayout = (AnchorPane) scene.getRoot(); // Hämta root som AnchorPane
         rootLayout.getChildren().add(overlay);
