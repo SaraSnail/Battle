@@ -85,7 +85,7 @@ public class Shoot {
 
             int randomSpace = random.nextInt(4);
 
-            int randomX = lastShotX + fireFieldX[randomSpace];
+            int randomX = lastShotX + fireFieldX[randomSpace]+1;
             int randomY = lastShotY + fireFieldY[randomSpace];
 
 
