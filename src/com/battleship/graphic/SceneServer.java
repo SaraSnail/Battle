@@ -65,91 +65,10 @@ public class SceneServer {
             if(login.isInt(port2, port2.getText())){
                 //GB-46-SA
                 back2.setOnAction(Event::consume);
-                //GB-39-SA
-                /*
-                //I Platform.runLater visar jag först WaitToConnect fönstret
-                Platform.runLater(()->{
-                    WaitToConnect.display();
+                //GB-39-SA, fick hjälp av Micke
+                Platform.runLater(WaitToConnect::display);
+                startThread(window, login);
 
-                    //Skapar en "PauseTransition" med försening på 2 sekunder
-                    PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                    //I pause skapas view Scenen
-                    pause.setOnFinished(event -> {
-
-                        //Scene för spelplanen som ska vara i samma Stage som LoginView
-
-                        //GB-37-SA, la till Platform.runLater
-                        Platform.runLater(()->{
-                    */
-                            //Platform.runLater i pause för att uppdatera till spelplanen efter den visat WaitToConnect
-/*
-                            //Skapar först CommunicationHandler som väntar på kontakt med Client
-                            //GB-18-SA
-                            CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                            port2.clear();
-                            Game game = new Game(communicationHandler, false, login);
-                            game.startGame();
-
-                            Scene view = GameView.gameView(window);
-                            //Byter scene till spelplanen
-                            window.setScene(view);
-                            //GB-39-SA
-                            //Stänger WaitToConnect
-                            WaitToConnect.close();
-
-                        });
-
-                    });
-                    //Startar förseningen mellan WaitToConnect.display och CommunicationHandler
-                    pause.play();
-                });
-                */
-
-                //SA, gav Thread ett namn
-                //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
-                Thread threadServer = new Thread (() -> {
-                    //GB-39-SA
-                    Platform.runLater(()-> {
-                        WaitToConnect.display();
-                        PauseTransition pause = new PauseTransition();
-                        pause.setOnFinished(p-> {
-
-                            Platform.runLater(()-> {
-
-                                //AA
-                                try {
-                                    CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
-                                    port2.clear();
-                                    Game game = new Game(communicationHandler, false, login);
-                                    game.createBoards();//SA
-                                    //game.startGame();
-
-                                    //GB-18-SA
-                                    try {
-                                        Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
-                                        //GB-37-SA, la till Platform.runLater
-
-                                            window.setScene(view);
-                                            //game.startGame();
-                                            WaitToConnect.close();
-
-
-                                        game.startGame();
-
-
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
-                                    }
-                                } catch (Exception e1) {
-                                    e1.printStackTrace();
-                                }
-                            });
-                        });
-                        pause.play();////GB-39-SA
-                    });
-                });
-                threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-                threadServer.start();
 
 
 
@@ -206,6 +125,46 @@ public class SceneServer {
 
         return scene;
     }
+
+    //SA, fick hjälp av Micke. Starta Thread:en i en metod
+    private static void startThread(Stage window, LoginView login) {
+        //SA, gav Thread:en ett namn
+        //GB-Debug-AA-2.0 implementering av thread för bakgrundskommunikation..
+        Thread threadServer = new Thread(() -> {
+            //AA
+            try {
+                //SA
+                CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                port2.clear();
+                Game game = new Game(communicationHandler, false, login);
+                game.createBoards();
+                //game.startGame();
+
+                //GB-18-SA
+                try {
+                    Scene view = GameView.gameView(window, game.getMyGameBoard(), game.getEnemyGameBoard());
+
+                    //GB-37-SA, la till Platform.runLater
+                    //SA, hjälp av Micke. Två Platform.runLater istället för en
+                    Platform.runLater(()-> window.setScene(view));
+                    Platform.runLater(WaitToConnect::close);
+
+                    //AA flyttade ner startGame
+                    game.startGame();
+
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
+        threadServer.start();
+    }
+
     //GB-15-SA
     //Om man vill gå tillbaka
     //GB-18-SA, bytte från goBack till goTo
