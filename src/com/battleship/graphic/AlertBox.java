@@ -3,7 +3,6 @@ package com.battleship.graphic;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -16,7 +15,7 @@ public class AlertBox {
     //GB-34-AA
     public static void display(String title, String messange){
         Stage window = new Stage(); //nytt fönster
-        window.initModality(Modality.APPLICATION_MODAL); //Gör att Fönstret måste klickas ner innan anv. kan göra något annat på skrämen
+        window.initModality(Modality.APPLICATION_MODAL); //Gör att Fönstret måste klickas ner innan anv. kan göra något annat på skärmen
         window.setTitle(title); //titel på fönstret
 
         //samma som ConfirmBox

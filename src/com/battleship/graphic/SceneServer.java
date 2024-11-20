@@ -2,9 +2,6 @@ package com.battleship.graphic;
 
 import com.battleship.CommunicationHandler;
 import com.battleship.Game;
-import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -14,34 +11,28 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.util.Scanner;
 
 //GB-15-SA
 public class SceneServer {
-
-    public static Scene scene;
+    //GB-49-SA, ändra från public till default
+    static Scene scene;
 
     private static Text player2Label;
-
     private static TextField port2;
     private static Button submit2;
     private static Button back2;
 
-    private static Game game;
-
-
+    //GB-49-SA, ändra från public till default
     //GB-15-SA
-    public static Scene getScene(Stage window) {
-        LoginView login = new LoginView();
+    static Scene getScene(Stage window) {
+        LoginView login = new LoginView();//Nå metoder i loginView
 
         //Skapat textField där användaren kan skriva in port
         port2 = new TextField();
         port2.setPromptText("port");
         port2.setPrefSize(100,20);
 
-        //Knappar för att samla infon från TextFields eller om man vill gå tillbaka
+        //Knappar för att samla info från TextFields eller om man vill gå tillbaka
         submit2 = new Button("Submit");
         submit2.getStyleClass().add("button-standard");
 
@@ -67,27 +58,25 @@ public class SceneServer {
                 back2.setOnAction(Event::consume);
                 //GB-39-SA, fick hjälp av Micke
                 Platform.runLater(WaitToConnect::display);
+                window.setTitle(login.whichPlayer(2));
                 startThread(window, login);
-
-
-
 
             } else if (!login.isInt(port2, port2.getText())) {
                 System.out.println("Can't play at that port");
+
                 //GB-35-AA (AlertBox - meddelandet)
                 AlertBox.display("Warning", "Invalid port! \nA valid port must be 4 digits and a number between 1025-9999.\nPlease try again!");
                 port2.clear();
             }
         });
 
-        //SA
-        //Går tillbaka till start
+        //SA. Går tillbaka till start
         back2.setOnAction(e->{
-            goTo(login, window);
+            goBack(login, window);
         });
 
         //Scene-Server
-        //Skapar gridpane
+        //Skapar gridpane2
         GridPane gridPane2 = new GridPane();
         gridPane2.setPadding(new Insets(10));
         gridPane2.setVgap(8);
@@ -98,7 +87,7 @@ public class SceneServer {
         player2Label.setText("Enter port");
         player2Label.getStyleClass().add("titel-small");
 
-        //Sätter alla nodes på gridpane
+        //Sätter alla nodes på gridpane2
         gridPane2.getChildren().addAll(player2Label, port2, submit2, back2);
 
         //Sätter ut placering på allt
@@ -119,6 +108,7 @@ public class SceneServer {
                         )
                 )
         );
+
         //Skapar scenen och ger den Stylesheet
         scene = new Scene(gridPane2, login.windowSizeWidth, login.windowSizeHeight);
         scene.getStylesheets().add("com/battleship/graphic/BattleShip.css");
@@ -136,9 +126,9 @@ public class SceneServer {
                 //SA
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
                 port2.clear();
-                Game game = new Game(communicationHandler, false, login);
+                //GB-49-SA, tog bort LoginView som inparameter
+                Game game = new Game(communicationHandler, false);
                 game.createBoards();
-                //game.startGame();
 
                 //GB-18-SA
                 try {
@@ -149,7 +139,7 @@ public class SceneServer {
                     Platform.runLater(()-> window.setScene(view));
                     Platform.runLater(WaitToConnect::close);
 
-                    //AA flyttade ner startGame
+                    //AA flyttade ner startGame från första tryCatch
                     game.startGame();
 
 
@@ -162,19 +152,16 @@ public class SceneServer {
         });
 
         threadServer.setDaemon(true);//SA, satte Daemon = true. Så det är bakgrunds thread som inte hindrar JVM att avsluta
-        threadServer.start();
+        threadServer.start();//AA
     }
 
-    //GB-15-SA
-    //Om man vill gå tillbaka
-    //GB-18-SA, bytte från goBack till goTo
-    private static void goTo(LoginView login, Stage window) {
+    //GB-15-SA. Om man vill gå tillbaka
+    private static void goBack(LoginView login, Stage window) {
         //GB-37-SA, la till Platform.runLater
         Platform.runLater(()->{
             try{
                 //Tar klassen LoginView, metoden "start" och sätter igång "window" vilket är primaryStage medskickat från LoginView
                 login.start(window);
-                //window.setFullScreen(true);
 
             }catch (Exception exception){
                 exception.printStackTrace();

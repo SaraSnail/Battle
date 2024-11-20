@@ -11,7 +11,8 @@ public class Ship {
         private int numberOfHits;
         private List<int[]> coordinates;  //GB-36-AWS
 
-        public Ship(String kind, int size, boolean sunk, int numberOfHits) {
+    //GB-49-SA, ändra från public till default
+        Ship(String kind, int size, boolean sunk, int numberOfHits) {
             this.kind = kind;
             this.size = size;
             this.sunk = sunk;
