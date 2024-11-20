@@ -67,8 +67,6 @@ public class SceneServer {
             //SA
             System.out.println("Sumbit");
             if(login.isInt(port2, port2.getText())){
-                //GB-46-SA
-                back2.setOnAction(Event::consume);
                 //GB-39-SA, fick hjälp av Micke
                 Platform.runLater(WaitToConnect::display);
                 window.setTitle(login.whichPlayer(2));
@@ -137,6 +135,7 @@ public class SceneServer {
             try {
                 //SA
                 CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(2), Integer.parseInt(port2.getText()));
+                back2.setOnAction(Event::consume);
                 port2.clear();
                 //GB-49-SA, tog bort LoginView som inparameter
                 Game game = new Game(communicationHandler, false);

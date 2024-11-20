@@ -76,8 +76,6 @@ public class SceneClient {
 
             //SA
             if(login.isInt(port1, port1.getText())){
-                //GB-46-SA
-                back1.setOnAction(Event::consume);
                 window.setTitle(login.whichPlayer(1));//GB-49-SA
                 //GB-39-SA, hjälp av Micke. Skapar Thread i en metod
                 startThread(window, login);
@@ -155,6 +153,7 @@ public class SceneClient {
                 //GB-34-AA (try-catch - AA skrev catch connection refused)
                 try (CommunicationHandler communicationHandler = new CommunicationHandler(login.whichPlayer(1), host.getText(), Integer.parseInt(port1.getText()))){
                     //SA
+                    back1.setOnAction(Event::consume);
                     host.clear();
                     port1.clear();
 
@@ -182,7 +181,9 @@ public class SceneClient {
                 } catch (ConnectException ex) {
                     // Om ConnectionRefusedException uppstår, visa en alertbox
                     System.out.println("Connection refused!");
-                    AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                    Platform.runLater(()->{
+                        AlertBox.display("Connection Refused", "Could not connect to the server at the specified host and port. \nPlease try again.");
+                    });
                     host.clear();
                     port1.clear();
                 } catch (Exception exep) {
